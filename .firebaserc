@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "clinicaonline-5cc5c": {
+      "hosting": {
+        "clinica": [
+          "clinicaonline-5cc5c"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "clinicaonline-5cc5c"
+  }
+}
