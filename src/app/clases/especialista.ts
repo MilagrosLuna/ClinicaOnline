@@ -1,21 +1,21 @@
 export class Especialista {
-  uid: number;
+  uid: string;
   nombre: string;
   apellido: string;
   edad: number;
   dni: number;
   especialidad: string;
   foto1: string;
-  verificado:boolean;
+  verificado:string;
   constructor(
-    uid: number,
+    uid: string,
     nombre: string,
     apellido: string,
     edad: number,
     dni: number,
     especialidad: string,
     foto1: string,
-    verificado:boolean
+    verificado:string
   ) {
     this.uid = uid;
     this.nombre = nombre;

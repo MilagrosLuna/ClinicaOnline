@@ -8,9 +8,9 @@ import { HomeComponent } from './components/home/home.component';
 const routes: Routes = [
   { path: 'bienvenida', component: BienvenidaComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
   { path: 'home', component: HomeComponent },  
   { path: 'homeAdmin', loadChildren: () => import('./modulos/usuarios/usuarios.module').then(m => m.UsuariosModule) },
+  { path: 'register', loadChildren: () => import('./modulos/register/register.module').then(m => m.RegisterModule) },
   { path: '', redirectTo: '/bienvenida', pathMatch: 'full' },
 ];
 

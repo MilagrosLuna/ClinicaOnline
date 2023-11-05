@@ -1,5 +1,5 @@
 export class Paciente {
-  uid: number;
+  uid: string;
   nombre: string;
   apellido: string;
   edad: number;
@@ -8,7 +8,7 @@ export class Paciente {
   foto1: string;
   foto2: string;
   constructor(
-    uid: number,
+    uid: string,
     nombre: string,
     apellido: string,
     edad: number,

@@ -37,11 +37,13 @@ export class LoginComponent {
         });
         this.router.navigate(['/homeAdmin']);
       } else {
+        
         const especialista = await this.authService.getEspecialistasByUid(
           user.user.uid
         );
+
         if (especialista != null) {
-          if (especialista.verificado) {
+          if (especialista.verificado === 'true') {
             if (user.user.emailVerified) {
               Swal.fire({
                 icon: 'success',
@@ -52,13 +54,41 @@ export class LoginComponent {
               });
               this.router.navigate(['/home']);
             }
+          } else if (especialista.verificado === 'null') {
+            Swal.fire({
+              icon: 'error',
+              title: 'Su cuenta ha sido rechazada',
+              text: 'Por favor, comuniquese con administración.',
+              timer: 4000,
+            });
+          } else if (
+            user.user.emailVerified &&
+            especialista.verificado === 'true'
+          ) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Inicio de sesión exitoso',
+              text: '¡Bienvenido!',
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            this.router.navigate(['/home']);
+          } else if (especialista.verificado === 'false') {
+            await this.authService.logout();
+            Swal.fire({
+              icon: 'warning',
+              title: 'Su cuenta aun no ha sido aprobada',
+              text: 'Por favor, comuniquese con administración.',
+              timer: 4000,
+            });
+          } else {
+            Swal.fire({
+              icon: 'warning',
+              title: 'Verifique su email',
+              text: 'Por favor, verifique su correo electrónico para continuar.',
+              timer: 4000,
+            });
           }
-          Swal.fire({
-            icon: 'warning',
-            title: 'Su cuenta aun no fue aprobada',
-            text: 'Por favor, espere que la aprueben.',
-            timer: 4000,
-          });
         } else {
           if (user.user.emailVerified) {
             Swal.fire({
@@ -89,7 +119,22 @@ export class LoginComponent {
       });
     }
   }
-
+  accesoRapido(number: number) {
+    switch (number) {
+      case 1:
+        this.form.controls['email'].setValue('milivictoria2004@gmail.com');
+        this.form.controls['password'].setValue('123456');
+        break;
+      case 2:
+        this.form.controls['email'].setValue('mililuna3197@gmail.com');
+        this.form.controls['password'].setValue('123456');
+        break;
+      case 3:
+        this.form.controls['email'].setValue('xiffoddoxetro-1126@yopmail.com');
+        this.form.controls['password'].setValue('123456');
+        break;
+    }
+  }
   async onSubmit() {
     if (this.form.valid) {
       try {

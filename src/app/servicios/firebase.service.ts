@@ -15,10 +15,12 @@ import {
   addDoc,
   collection,
   collectionData,
+  doc,
   getDocs,
   getFirestore,
   orderBy,
   query,
+  updateDoc,
   where,
 } from '@angular/fire/firestore';
 import { initializeApp } from '@angular/fire/app';
@@ -137,7 +139,7 @@ export class FirebaseService {
         dni: especialista.dni,
         especialidad: especialista.especialidad,
         foto1: especialista.foto1,
-        verificado:false
+        verificado:'false'
       });
       console.log('Document written with ID: ', docRef.id);
       return true;
@@ -233,6 +235,27 @@ export class FirebaseService {
     }
   }
 
+  async actualizarVerificadoEspecialista(uid: string, valor: string): Promise<void> {
+    try {
+      const especialistasCollection = collection(this.db, 'especialistas');
+      const querys = query(especialistasCollection, where('uid', '==', uid));
+      const querySnapshot = await getDocs(querys);
+  
+      if (querySnapshot.size === 0) {
+        console.log('No se encontró ningún especialista con el UID interno proporcionado');
+        return;
+      }
+
+      querySnapshot.forEach((docSnapshot) => {
+        const especialistaRef = doc(this.db, 'especialistas', docSnapshot.id);
+        updateDoc(especialistaRef, { verificado: valor });
+      });
+  
+    } catch (error) {
+      console.error('Error al actualizar el campo verificado del especialista: ', error);
+      throw error;
+    }
+  }
 
   async guardarEspecialidad(especialidadNombre: string): Promise<void> {
     const especialidades = await this.obtenerEspecialidades();

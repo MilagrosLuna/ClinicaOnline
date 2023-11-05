@@ -1,12 +1,12 @@
 export class Admin {
-  uid: number;
+  uid: string;
   nombre: string;
   apellido: string;
   edad: number;
   dni: number;
   foto1: string;
   constructor(
-    uid: number,
+    uid: string,
     nombre: string,
     apellido: string,
     edad: number,

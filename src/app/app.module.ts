@@ -4,11 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BienvenidaComponent } from './components/bienvenida/bienvenida.component';
 import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
-import { RegisterEspecialistaComponent } from './components/register-especialista/register-especialista.component';
-import { RegisterPacienteComponent } from './components/register-paciente/register-paciente.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RegisterAdministradorComponent } from './components/register-administrador/register-administrador.component';
 import { provideFirestore } from '@angular/fire/firestore';
 import { getFirestore } from 'firebase/firestore';
 import { provideAuth, getAuth } from '@angular/fire/auth';
@@ -23,10 +19,6 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     AppComponent,
     BienvenidaComponent,
     LoginComponent,
-    RegisterComponent,
-    RegisterEspecialistaComponent,
-    RegisterPacienteComponent,
-    RegisterAdministradorComponent,
     HomeComponent,
     NavbarComponent,
   ],

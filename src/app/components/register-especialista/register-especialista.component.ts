@@ -136,7 +136,7 @@ export class RegisterEspecialistaComponent {
         this.form.controls['especialistaDni'].value,
         this.especialidadSeleccionada.uid,
         this.imagenURL,
-        false
+        'false'
       );
       await this.authService.guardarEspecialistaBD(usuario);
       Swal.fire({
