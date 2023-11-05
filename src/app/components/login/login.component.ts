@@ -35,7 +35,7 @@ export class LoginComponent {
           showConfirmButton: false,
           timer: 1500,
         });
-        this.router.navigate(['/home']);
+        this.router.navigate(['/homeAdmin']);
       } else {
         const especialista = await this.authService.getEspecialistasByUid(
           user.user.uid

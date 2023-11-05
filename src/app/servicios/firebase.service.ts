@@ -52,7 +52,6 @@ export class FirebaseService {
       );
       const user = userCredential.user;
       await updateProfile(user, { displayName: nick });    
-      console.log(user);
       return user;
     } catch (error) {
       throw error;
@@ -76,7 +75,6 @@ export class FirebaseService {
         timer: 1500,
       });
       await sendEmailVerification(user);
-      console.log(user);
       return user;
     } catch (error) {
       throw error;
@@ -169,7 +167,6 @@ export class FirebaseService {
         adminData['dni'],
         adminData['foto1']
       );
-      console.log("paso aca");
       return admin;
     } catch (error) {
       console.error('Error al buscar el administrador por UID: ', error);
@@ -197,7 +194,6 @@ export class FirebaseService {
         especialistaData['foto1'],
         especialistaData['verificado'],
       );
-      console.log("paso aca");
       return admin;
     } catch (error) {
       console.error('Error al buscar el especialista por UID: ', error);

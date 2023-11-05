@@ -3,14 +3,16 @@ import { Especialista } from 'src/app/clases/especialista';
 import { FirebaseService } from 'src/app/servicios/firebase.service';
 
 @Component({
-  selector: 'app-administrar-especialistas',
-  templateUrl: './administrar-especialistas.component.html',
-  styleUrls: ['./administrar-especialistas.component.css']
+  selector: 'app-admistrar-especialistass',
+  templateUrl: './admistrar-especialistass.component.html',
+  styleUrls: ['./admistrar-especialistass.component.css']
 })
-export class AdministrarEspecialistasComponent {
+export class AdmistrarEspecialistassComponent {
   especialistas: Especialista[] = [];
 
-  constructor(private authService: FirebaseService) { }
+  constructor(
+    private authService: FirebaseService,
+  ) {}
 
   ngOnInit(): void {
     this.cargarEspecialistas();

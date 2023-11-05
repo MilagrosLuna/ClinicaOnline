@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Admin } from 'src/app/clases/admin';
 import { FirebaseService } from 'src/app/servicios/firebase.service';
+import { UserService } from 'src/app/servicios/user.service';
 
 @Component({
   selector: 'app-home',
@@ -9,13 +10,6 @@ import { FirebaseService } from 'src/app/servicios/firebase.service';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent {
-  usuarioAdmin: Admin | null = null;
   constructor(private authService: FirebaseService, private router: Router) {}
-  async ngOnInit(): Promise<void> {
-    const user = this.authService.getCurrentUser();
-    console.log(user);
-    if (user) {
-      this.usuarioAdmin = await this.authService.getAdminByUid(user.uid);
-    }
-  }
+  ngOnInit(): void {}
 }

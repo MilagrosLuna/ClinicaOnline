@@ -2,13 +2,12 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FirebaseService } from 'src/app/servicios/firebase.service';
 import Swal from 'sweetalert2';
-
 @Component({
-  selector: 'app-navbar-admin',
-  templateUrl: './navbar-admin.component.html',
-  styleUrls: ['./navbar-admin.component.css']
+  selector: 'app-navbar-adm',
+  templateUrl: './navbar-adm.component.html',
+  styleUrls: ['./navbar-adm.component.css'],
 })
-export class NavbarAdminComponent {
+export class NavbarAdmComponent {
   constructor(private authService: FirebaseService, private router: Router) {}
   logOut() {
     Swal.fire({
