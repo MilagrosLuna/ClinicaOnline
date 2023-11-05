@@ -27,10 +27,6 @@ export class LoginComponent {
     try {
       const admin = await this.authService.getAdminByUid(user.user.uid);
 
-      console.log(admin);
-      console.log(user);
-      console.log(user.user.uid);
-
       if (admin !== null) {
         Swal.fire({
           icon: 'success',
@@ -40,28 +36,51 @@ export class LoginComponent {
           timer: 1500,
         });
         this.router.navigate(['/home']);
-        console.log('35');
-      } else if (user.user.emailVerified) {
-        console.log('37');
-        Swal.fire({
-          icon: 'success',
-          title: 'Inicio de sesión exitoso',
-          text: '¡Bienvenido!',
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        this.router.navigate(['/home']);
       } else {
-        await this.authService.logout();
-        Swal.fire({
-          icon: 'warning',
-          title: 'Verifique su email',
-          text: 'Por favor, verifique su correo electrónico para continuar.',
-          timer: 4000,
-        });
+        const especialista = await this.authService.getEspecialistasByUid(
+          user.user.uid
+        );
+        if (especialista != null) {
+          if (especialista.verificado) {
+            if (user.user.emailVerified) {
+              Swal.fire({
+                icon: 'success',
+                title: 'Inicio de sesión exitoso',
+                text: '¡Bienvenido!',
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              this.router.navigate(['/home']);
+            }
+          }
+          Swal.fire({
+            icon: 'warning',
+            title: 'Su cuenta aun no fue aprobada',
+            text: 'Por favor, espere que la aprueben.',
+            timer: 4000,
+          });
+        } else {
+          if (user.user.emailVerified) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Inicio de sesión exitoso',
+              text: '¡Bienvenido!',
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            this.router.navigate(['/home']);
+          } else {
+            await this.authService.logout();
+            Swal.fire({
+              icon: 'warning',
+              title: 'Verifique su email',
+              text: 'Por favor, verifique su correo electrónico para continuar.',
+              timer: 4000,
+            });
+          }
+        }
       }
     } catch (error: any) {
-      console.error('Error al verificar el administrador: ', error);
       Swal.fire({
         icon: 'error',
         title: 'Hubo un problema',
@@ -75,7 +94,6 @@ export class LoginComponent {
     if (this.form.valid) {
       try {
         let user = await this.authService.login(this.form.value);
-        console.log(user.user);
         await this.verificarMails(user);
       } catch (error: any) {
         this.checkError = true;

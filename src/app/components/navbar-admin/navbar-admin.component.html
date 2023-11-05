@@ -1,17 +1,17 @@
 <nav
-  class="navbar navbar-light navbar-expand-lg"
+  class="navbar navbar-light navbar-expand-lg "
   style="background-color: #e3f2fd"
 >
-  <div class="m-1">
+<div class="m-1">
     <img
-      class="navbar-brand"
-      src="../assets/logoClinica.png"
-      alt=""
-      width="90"
-      height="50"
-    />
-  </div>
-
+    class="navbar-brand"
+    src="../assets/logoClinica.png"
+    alt=""
+    width="90"
+    height="50"
+  />
+</div>
+  
   <button
     class="navbar-toggler"
     type="button"
@@ -28,14 +28,16 @@
       <li class="nav-item active">
         <a class="nav-link" href="/home">Home (actual)</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/home/registerAdmin">agregar admins</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/home/administrarEspec">administrar especialistas</a>
+      </li>
     </ul>
   </div>
   <div class="m-1">
-    <button
-      class="btn btn-sm btn-outline-secondary"
-      type="button"
-      (click)="logOut()"
-    >
+    <button class="btn btn-sm btn-outline-secondary" type="button"  (click)="logOut()">
       cerrar sesión
     </button>
   </div>

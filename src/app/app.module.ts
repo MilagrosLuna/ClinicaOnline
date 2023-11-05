@@ -18,6 +18,9 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { UsuariosComponent } from './components/usuarios/usuarios.component';
+import { AdministrarEspecialistasComponent } from './components/administrar-especialistas/administrar-especialistas.component';
+import { NavbarAdminComponent } from './components/navbar-admin/navbar-admin.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,6 +32,9 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     RegisterAdministradorComponent,
     HomeComponent,
     NavbarComponent,
+    UsuariosComponent,
+    AdministrarEspecialistasComponent,
+    NavbarAdminComponent,
   ],
   imports: [
     BrowserModule,

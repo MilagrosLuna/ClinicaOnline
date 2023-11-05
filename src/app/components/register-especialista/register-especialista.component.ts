@@ -6,6 +6,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Especialidad } from 'src/app/clases/especialidad';
+import { Especialista } from 'src/app/clases/especialista';
 import { FirebaseService } from 'src/app/servicios/firebase.service';
 import Swal from 'sweetalert2';
 @Component({
@@ -16,10 +18,13 @@ import Swal from 'sweetalert2';
 export class RegisterEspecialistaComponent {
   selectedImage: any = null;
   imagenURL: string = '';
-
   form!: FormGroup;
-  checkError: boolean = false;
-  errorMessage: string = '';
+  errorCheck: boolean = false;
+  Message: string = '';
+  user: any;
+  especialidadSeleccionada: Especialidad = new Especialidad('', '');
+  nuevaEspecialidad: string = '';
+  especialidades: Especialidad[] = [];
 
   constructor(private authService: FirebaseService, private router: Router) {}
 
@@ -47,8 +52,9 @@ export class RegisterEspecialistaComponent {
         Validators.minLength(6),
       ]),
       fotoespecialista: new FormControl(''),
-      fotoespecialista2: new FormControl(''),
     });
+
+    this.cargarEspecialidades();
   }
 
   onImageSelected(event: any) {
@@ -71,15 +77,91 @@ export class RegisterEspecialistaComponent {
     ) as HTMLInputElement;
     inputElement.value = '';
   }
+
+  async cargarEspecialidades() {
+    const especialidadesData = await this.authService.obtenerEspecialidades();
+    this.especialidades = especialidadesData.map((especialidadData: any) => {
+      return new Especialidad(especialidadData.id, especialidadData.nombre);
+    });
+  }
+
+  seleccionarEspecialidad(especialidad: Especialidad) {
+    this.especialidadSeleccionada = especialidad;
+    this.form.controls['especialistaEspecialidad'].setValue(
+      especialidad.nombre
+    );
+  }
+
+  async agregarEspecialidad() {
+    const especialidadNombre = this.form.controls['especialistaEspecialidad'].value.trim();
+    if (especialidadNombre !== '') {
+      await this.authService.guardarEspecialidad(especialidadNombre);
+      this.form.controls['especialistaEspecialidad'].setValue(''); 
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al registrar',
+        text: 'La especialidad ya existe en la lista.',
+        timer: 4000,
+      });
+    }
+    this.cargarEspecialidades();
+  }
   onSubmit() {
     if (this.form.valid) {
-      // this.especialistaGenerado.emit(especialista);
-      //this.form.reset();
+      this.cargarUsuario();
     } else {
       Swal.fire({
         icon: 'error',
         title: 'Error, complete los datos correctamente',
         timer: 2500,
+      });
+    }
+  }
+
+  async cargarUsuario() {
+    try {
+      let data = {
+        email: this.form.controls['especialistaEmail'].value,
+        password: this.form.controls['especialistaClave'].value,
+        nick: this.form.controls['especialistaNombre'].value,
+      };
+      this.user = await this.authService.register(data);
+
+      let usuario = new Especialista(
+        this.user.uid,
+        this.form.controls['especialistaNombre'].value,
+        this.form.controls['especialistaApellido'].value,
+        this.form.controls['especialistaEdad'].value,
+        this.form.controls['especialistaDni'].value,
+        this.especialidadSeleccionada.uid,
+        this.imagenURL,
+        false
+      );
+      await this.authService.guardarEspecialistaBD(usuario);
+      Swal.fire({
+        icon: 'success',
+        title: 'Registro exitoso',
+        text: '¡Bienvenido!',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      this.router.navigate(['/login']);
+    } catch (error: any) {
+      this.errorCheck = true;
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          this.Message = 'Ya se encuentra un usuario registrado con ese email';
+          break;
+        default:
+          this.Message = 'Hubo un problema al registrar.';
+          break;
+      }
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al registrar',
+        text: this.Message,
+        timer: 4000,
       });
     }
   }

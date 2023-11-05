@@ -2,18 +2,6 @@
   <h4 class="mb-3">Datos del especialista</h4>
   <form (ngSubmit)="onSubmit()" [formGroup]="form" class="needs-validation">
     <div class="row g-3">
-      <div class="row g-3">
-        <div class="col-sm-6" *ngIf="imagenURL">
-          <img
-            [src]="imagenURL"
-            alt="Imagen seleccionada"
-            id="foto"
-            class="image"
-            style="width: 100px; height: 100px"
-          />
-        </div>
-      </div>
-
       <div class="col-sm-6">
         <label for="especialistaNombre" class="form-label"
           >Nombre del especialista:</label
@@ -191,6 +179,42 @@
       </div>
 
       <div class="col-sm-6">
+        <label for="especialistaEspecialidad" class="form-label"
+          >Especialidades:</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          id="especialistaEspecialidad"
+          placeholder="Buscar o agregar especialidad"
+          formControlName="especialistaEspecialidad"
+        />
+        <div *ngIf="form.controls['especialistaEspecialidad'].errors != null">
+          <small
+            class="invalid"
+            *ngIf="
+              form.controls['especialistaEspecialidad'].errors!['required'] &&
+              form.controls['especialistaEspecialidad'].touched
+            "
+          >
+            Debe seleccionar o agregar una especialidad.
+          </small>
+        </div>
+        
+        <button  type="button" class="btn btn-primary m-2" (click)="agregarEspecialidad()">Agregar</button>
+      </div>
+
+      <div class="col-sm-6">
+        <ul class="list-group mt-3">
+          <li *ngFor="let especialidad of especialidades" class="list-group-item">
+            <button  type="button" (click)="seleccionarEspecialidad(especialidad)" class="btn btn-link">
+              {{ especialidad.nombre }}
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-sm-6">
         <label for="fotoespecialista">1° Foto del especialista:</label>
         <input
           type="file"
@@ -198,6 +222,16 @@
           formControlName="fotoespecialista"
           (change)="onImageSelected($event)"
           (click)="resetImageInput()"
+        />
+      </div>
+
+      <div class="col-sm-6" *ngIf="imagenURL">
+        <img
+          [src]="imagenURL"
+          alt="Imagen seleccionada"
+          id="foto"
+          class="image"
+          style="width: 100px; height: 100px"
         />
       </div>
     </div>

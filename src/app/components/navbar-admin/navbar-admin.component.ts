@@ -4,11 +4,11 @@ import { FirebaseService } from 'src/app/servicios/firebase.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css'],
+  selector: 'app-navbar-admin',
+  templateUrl: './navbar-admin.component.html',
+  styleUrls: ['./navbar-admin.component.css']
 })
-export class NavbarComponent {
+export class NavbarAdminComponent {
   constructor(private authService: FirebaseService, private router: Router) {}
   logOut() {
     Swal.fire({

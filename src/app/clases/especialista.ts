@@ -6,6 +6,7 @@ export class Especialista {
   dni: number;
   especialidad: string;
   foto1: string;
+  verificado:boolean;
   constructor(
     uid: number,
     nombre: string,
@@ -13,7 +14,8 @@ export class Especialista {
     edad: number,
     dni: number,
     especialidad: string,
-    foto1: string
+    foto1: string,
+    verificado:boolean
   ) {
     this.uid = uid;
     this.nombre = nombre;
@@ -22,5 +24,6 @@ export class Especialista {
     this.dni = dni;
     this.especialidad = especialidad;
     this.foto1 = foto1;
+    this.verificado = verificado;
   }
 }

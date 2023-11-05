@@ -196,6 +196,32 @@
       </div>
 
       <div class="col-sm-6">
+        <label for="pacienteObraSocial" class="form-label"
+          >Obra Social del paciente:</label
+        >
+        <input
+          type="text"
+          class="form-control"
+          id="pacienteObraSocial"
+          placeholder=""
+          formControlName="pacienteObraSocial"
+        />
+        <div *ngIf="form.controls['pacienteObraSocial'].errors != null">
+          <small
+            class="invalid"
+            *ngIf="
+              form.controls['pacienteObraSocial'].errors!['required'] &&
+              form.controls['pacienteObraSocial'].touched
+            "
+          >
+            Debe ingresar la obra social del paciente.
+          </small>
+        </div>
+      </div>
+
+      <div class="col-sm-6"></div>
+
+      <div class="col-sm-6">
         <label for="fotoPaciente">1° Foto del paciente:</label>
         <input
           type="file"

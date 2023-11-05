@@ -40,7 +40,7 @@ export class RegisterPacienteComponent {
         Validators.min(1),
         Validators.max(100000000),
       ]),
-      pacienteObraSocial: new FormControl('',),
+      pacienteObraSocial: new FormControl('',[Validators.required]),
       pacienteEmail: new FormControl('', [
         Validators.required,
         Validators.email,
@@ -89,7 +89,6 @@ export class RegisterPacienteComponent {
   }
 
   onSubmit() {
-    console.log(this.form);
     if (this.form.valid) {
       this.cargarUsuario();
     } else {
@@ -116,7 +115,7 @@ export class RegisterPacienteComponent {
         this.form.controls['pacienteApellido'].value,
         this.form.controls['pacienteEdad'].value,
         this.form.controls['pacienteDni'].value,
-        'obra social',
+        this.form.controls['pacienteObraSocial'].value,
         this.imagenURL,
         this.imagenURL2
       );
@@ -131,7 +130,6 @@ export class RegisterPacienteComponent {
       this.router.navigate(['/login']);
     } catch (error: any) {
       this.errorCheck = true;
-      console.log(error.code);
       switch (error.code) {
         case 'auth/email-already-in-use':
           this.Message = 'Ya se encuentra un usuario registrado con ese email';

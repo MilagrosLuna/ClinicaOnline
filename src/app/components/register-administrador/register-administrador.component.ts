@@ -108,7 +108,6 @@ export class RegisterAdministradorComponent {
       this.router.navigate(['/login']);
     } catch (error: any) {
       this.errorCheck = true;
-      console.log(error.code);
       switch (error.code) {
         case 'auth/email-already-in-use':
           this.Message = 'Ya se encuentra un usuario registrado con ese email';
