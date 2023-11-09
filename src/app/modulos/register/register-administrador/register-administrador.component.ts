@@ -87,6 +87,8 @@ export class RegisterAdministradorComponent {
         password: this.form.controls['adminClave'].value,
         nick: this.form.controls['adminNombre'].value,
       };
+      
+      console.log(this.authService.getCurrentUser());
       this.user = await this.authService.registerAdmin(data);      
 
       let usuario = new Admin(
@@ -105,7 +107,7 @@ export class RegisterAdministradorComponent {
         showConfirmButton: false,
         timer: 1500,
       });
-      this.router.navigate(['/login']);
+      console.log(this.authService.getCurrentUser());
     } catch (error: any) {
       this.errorCheck = true;
       switch (error.code) {

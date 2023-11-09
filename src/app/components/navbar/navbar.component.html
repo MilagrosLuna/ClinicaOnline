@@ -30,7 +30,19 @@
       </li>
     </ul>
   </div>
+
   <div class="m-1">
+    <a id="userProfile" class="navbar-brand" *ngIf="loggedUser | async as user">
+      <img
+        *ngIf="user.photoURL"
+        [src]="user.photoURL"
+        width="30"
+        height="30"
+        class="d-inline-block align-top"
+        alt=""
+      />
+      {{ user.email }}
+    </a>
     <button
       class="btn btn-sm btn-outline-secondary"
       type="button"

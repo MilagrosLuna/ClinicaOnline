@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FirebaseService } from 'src/app/servicios/firebase.service';
 import Swal from 'sweetalert2';
@@ -8,8 +8,10 @@ import Swal from 'sweetalert2';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
 })
-export class NavbarComponent {
+export class NavbarComponent{
+  loggedUser = this.authService.getLoggedUser();
   constructor(private authService: FirebaseService, private router: Router) {}
+
   logOut() {
     Swal.fire({
       title: '¿Cerrar sesión?',

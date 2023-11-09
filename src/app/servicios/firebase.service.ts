@@ -8,6 +8,7 @@ import {
   updateProfile,
   User,
   sendEmailVerification,
+  getAuth,
 } from '@angular/fire/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import {
@@ -16,6 +17,7 @@ import {
   collection,
   collectionData,
   doc,
+  getDoc,
   getDocs,
   getFirestore,
   orderBy,
@@ -35,17 +37,25 @@ import { Especialista } from '../clases/especialista';
 export class FirebaseService {
   db: Firestore;
   user: User | null = null;
-  constructor(public auth: Auth) {
+  constructor(private afAuth: AngularFireAuth, public auth: Auth) {
     this.db = getFirestore();
     initializeApp(environment.firebase);
     onAuthStateChanged(this.auth, (user) => {
       this.user = user;
     });
   }
+
+  getLoggedUser() {
+    return this.afAuth.authState;
+  }
+
   getCurrentUser(): User | null {
     return this.user;
   }
   async registerAdmin({ email, password, nick }: any) {
+    const auth = getAuth();
+    const currentUser = auth.currentUser; // Guarda el usuario actual
+
     try {
       const userCredential = await createUserWithEmailAndPassword(
         this.auth,
@@ -53,7 +63,13 @@ export class FirebaseService {
         password
       );
       const user = userCredential.user;
-      await updateProfile(user, { displayName: nick });    
+      await updateProfile(user, { displayName: nick });
+
+      if (currentUser) {
+        // Vuelve a establecer el usuario original como el usuario actual
+        await auth.updateCurrentUser(currentUser);
+      }
+
       return user;
     } catch (error) {
       throw error;
@@ -139,7 +155,7 @@ export class FirebaseService {
         dni: especialista.dni,
         especialidad: especialista.especialidad,
         foto1: especialista.foto1,
-        verificado:'false'
+        verificado: 'false',
       });
       console.log('Document written with ID: ', docRef.id);
       return true;
@@ -149,15 +165,15 @@ export class FirebaseService {
     }
   }
 
-
-
-  async getAdminByUid(uid: string): Promise<Admin | null> {
+  async getAdminByUid(uid: string|undefined): Promise<Admin | null> {
     try {
       const q = query(collection(this.db, 'admins'), where('uid', '==', uid));
       const querySnapshot = await getDocs(q);
 
       if (querySnapshot.size === 0) {
-        console.log('No se encontró ningún administrador con el UID proporcionado');
+        console.log(
+          'No se encontró ningún administrador con el UID proporcionado'
+        );
         return null;
       }
       const adminData = querySnapshot.docs[0].data();
@@ -176,13 +192,46 @@ export class FirebaseService {
     }
   }
 
-  async getEspecialistasByUid(uid: string): Promise<Especialista | null> {
+  async getPacientesByUid(uid: string): Promise<Admin | null> {
     try {
-      const q = query(collection(this.db, 'especialistas'), where('uid', '==', uid));
+      const q = query(
+        collection(this.db, 'pacientes'),
+        where('uid', '==', uid)
+      );
       const querySnapshot = await getDocs(q);
 
       if (querySnapshot.size === 0) {
-        console.log('No se encontró ningún especialista con el UID proporcionado');
+        console.log('No se encontró ningún paciente con el UID proporcionado');
+        return null;
+      }
+      const adminData = querySnapshot.docs[0].data();
+      const admin = new Admin(
+        adminData['uid'],
+        adminData['nombre'],
+        adminData['apellido'],
+        adminData['edad'],
+        adminData['dni'],
+        adminData['foto1']
+      );
+      return admin;
+    } catch (error) {
+      console.error('Error al buscar el paciente por UID: ', error);
+      return null;
+    }
+  }
+
+  async getEspecialistasByUid(uid: string): Promise<Especialista | null> {
+    try {
+      const q = query(
+        collection(this.db, 'especialistas'),
+        where('uid', '==', uid)
+      );
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.size === 0) {
+        console.log(
+          'No se encontró ningún especialista con el UID proporcionado'
+        );
         return null;
       }
       const especialistaData = querySnapshot.docs[0].data();
@@ -194,7 +243,7 @@ export class FirebaseService {
         especialistaData['dni'],
         especialistaData['especialidad'],
         especialistaData['foto1'],
-        especialistaData['verificado'],
+        especialistaData['verificado']
       );
       return admin;
     } catch (error) {
@@ -207,11 +256,11 @@ export class FirebaseService {
     try {
       const especialidadesRef = collection(this.db, 'especialidades');
       const querySnapshot = await getDocs(especialidadesRef);
-  
+
       const especialidades = querySnapshot.docs.map((doc) => {
         return { id: doc.id, ...doc.data() };
       });
-  
+
       return especialidades;
     } catch (error) {
       console.error('Error al obtener las especialidades: ', error);
@@ -223,11 +272,11 @@ export class FirebaseService {
     try {
       const especialistasRef = collection(this.db, 'especialistas');
       const querySnapshot = await getDocs(especialistasRef);
-  
+
       const especialistas = querySnapshot.docs.map((doc) => {
         return { id: doc.id, ...doc.data() };
       });
-  
+
       return especialistas;
     } catch (error) {
       console.error('Error al obtener los especialistas: ', error);
@@ -235,14 +284,19 @@ export class FirebaseService {
     }
   }
 
-  async actualizarVerificadoEspecialista(uid: string, valor: string): Promise<void> {
+  async actualizarVerificadoEspecialista(
+    uid: string,
+    valor: string
+  ): Promise<void> {
     try {
       const especialistasCollection = collection(this.db, 'especialistas');
       const querys = query(especialistasCollection, where('uid', '==', uid));
       const querySnapshot = await getDocs(querys);
-  
+
       if (querySnapshot.size === 0) {
-        console.log('No se encontró ningún especialista con el UID interno proporcionado');
+        console.log(
+          'No se encontró ningún especialista con el UID interno proporcionado'
+        );
         return;
       }
 
@@ -250,26 +304,46 @@ export class FirebaseService {
         const especialistaRef = doc(this.db, 'especialistas', docSnapshot.id);
         updateDoc(especialistaRef, { verificado: valor });
       });
-  
     } catch (error) {
-      console.error('Error al actualizar el campo verificado del especialista: ', error);
+      console.error(
+        'Error al actualizar el campo verificado del especialista: ',
+        error
+      );
       throw error;
     }
   }
 
   async guardarEspecialidad(especialidadNombre: string): Promise<void> {
     const especialidades = await this.obtenerEspecialidades();
-    const especialidadExistente = especialidades.find((especialidad) => especialidad.nombre === especialidadNombre);  
+    const especialidadExistente = especialidades.find(
+      (especialidad) => especialidad.nombre === especialidadNombre
+    );
     if (!especialidadExistente) {
       try {
         const docRef = await addDoc(collection(this.db, 'especialidades'), {
-          nombre: especialidadNombre
+          nombre: especialidadNombre,
         });
         console.log('Nueva especialidad guardada con ID: ', docRef.id);
       } catch (error) {
         console.error('Error al guardar la especialidad: ', error);
       }
     }
-  }  
+  }
 
+  save(data: any, path: string) {
+    const col = collection(this.db, path);
+    return addDoc(col, { ...data });
+  }
+
+  get(path: string) {
+    const col = collection(this.db, path);
+    const observable = collectionData(col);
+
+    return observable;
+  }
+
+  getDocument(path: string, documentId: string) {
+    const documentRef = doc(this.db, path, documentId);
+    return getDoc(documentRef);
+  }
 }

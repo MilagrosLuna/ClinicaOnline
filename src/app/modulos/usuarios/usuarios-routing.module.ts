@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { RegisterAdministradorComponent } from 'src/app/components/register-administrador/register-administrador.component';
+import { RegisterAdministradorComponent } from 'src/app/modulos/register/register-administrador/register-administrador.component';
 import { AdmistradorComponent } from './admistrador/admistrador.component';
 import { AdmistrarEspecialistassComponent } from './admistrar-especialistass/admistrar-especialistass.component';
 

@@ -11,7 +11,7 @@ import { NavbarAdmComponent } from './navbar-adm/navbar-adm.component';
   declarations: [
     AdmistradorComponent,
     AdmistrarEspecialistassComponent,
-    NavbarAdmComponent
+    NavbarAdmComponent,
   ],
   imports: [
     CommonModule,
