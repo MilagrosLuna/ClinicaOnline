@@ -34,12 +34,12 @@ export class LoginComponent {
       password: new FormControl('', [Validators.required]),
     });
     this.loadingImages = true;
-    // await this.cargarFotos(1);
-    // await this.cargarFotos(2);
-    // await this.cargarFotos(3);
-    // await this.cargarFotos(4);
-    // await this.cargarFotos(5);
-    // await this.cargarFotos(6);
+    await this.cargarFotos(1);
+    await this.cargarFotos(2);
+    await this.cargarFotos(3);
+    await this.cargarFotos(4);
+    await this.cargarFotos(5);
+    await this.cargarFotos(6);
     this.loadingImages = false;
   }
 
