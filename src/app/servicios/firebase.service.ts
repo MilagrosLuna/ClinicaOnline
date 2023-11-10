@@ -192,7 +192,7 @@ export class FirebaseService {
     }
   }
 
-  async getPacientesByUid(uid: string): Promise<Admin | null> {
+  async getPacientesByUid(uid: string): Promise<Paciente | null> {
     try {
       const q = query(
         collection(this.db, 'pacientes'),
@@ -205,13 +205,15 @@ export class FirebaseService {
         return null;
       }
       const adminData = querySnapshot.docs[0].data();
-      const admin = new Admin(
+      const admin = new Paciente(
         adminData['uid'],
         adminData['nombre'],
         adminData['apellido'],
         adminData['edad'],
         adminData['dni'],
-        adminData['foto1']
+        adminData['obraSocial'],
+        adminData['foto1'],
+        adminData['foto2']
       );
       return admin;
     } catch (error) {
