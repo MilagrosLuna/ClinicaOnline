@@ -7,9 +7,11 @@ import { HomeComponent } from './components/home/home.component';
 const routes: Routes = [
   { path: 'bienvenida', component: BienvenidaComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'home', component: HomeComponent },  
+  { path: 'home', component: HomeComponent,children:[
+    { path: 'turnos', loadChildren: () => import('./modulos/turnos/turnos.module').then(m => m.TurnosModule) }
+  ] },  
   { path: 'homeAdmin', loadChildren: () => import('./modulos/usuarios/usuarios.module').then(m => m.UsuariosModule) },
-  { path: 'register', loadChildren: () => import('./modulos/register/register.module').then(m => m.RegisterModule) },
+  { path: 'register', loadChildren: () => import('./modulos/register/register.module').then(m => m.RegisterModule) },  
   { path: '', redirectTo: '/bienvenida', pathMatch: 'full' },
 ];
 

@@ -4,7 +4,6 @@ import { FirebaseService } from 'src/app/servicios/firebase.service';
 import Swal from 'sweetalert2';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/servicios/user.service';
-import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -35,12 +34,12 @@ export class LoginComponent {
       password: new FormControl('', [Validators.required]),
     });
     this.loadingImages = true;
-    await this.cargarFotos(1);
-    await this.cargarFotos(2);
-    await this.cargarFotos(3);
-    await this.cargarFotos(4);
-    await this.cargarFotos(5);
-    await this.cargarFotos(6);
+    // await this.cargarFotos(1);
+    // await this.cargarFotos(2);
+    // await this.cargarFotos(3);
+    // await this.cargarFotos(4);
+    // await this.cargarFotos(5);
+    // await this.cargarFotos(6);
     this.loadingImages = false;
   }
 
@@ -50,12 +49,10 @@ export class LoginComponent {
       const especialista = await this.authService.getEspecialistasByUid(
         user.user.uid
       );
-
       if (admin !== null) {
         this.userservice.showSuccessMessageAndNavigate(['/homeAdmin']);
         return;
       }
-
       if (especialista !== null) {
         if (especialista.verificado === 'true' && user.user.emailVerified) {
           this.userservice.showSuccessMessageAndNavigate(['/home']);
@@ -87,7 +84,7 @@ export class LoginComponent {
         email = 'milivictoria2004@gmail.com';
         password = '123456';
         let user = await this.authService.login({ email, password });
-        let admidBd = await this.authService.getAdminByUid(user.user.uid);       
+        let admidBd = await this.authService.getAdminByUid(user.user.uid);
         this.fotoAdmin = admidBd?.foto1;
         await this.authService.logout();
         break;
@@ -98,7 +95,7 @@ export class LoginComponent {
         let paceinte1 = await this.authService.login({ email, password });
         let paceinte1bd = await this.authService.getPacientesByUid(
           paceinte1.user.uid
-        );       
+        );
         this.foto1 = paceinte1bd?.foto1;
         await this.authService.logout();
         break;
@@ -108,7 +105,7 @@ export class LoginComponent {
         let paceinte2 = await this.authService.login({ email, password });
         let paceinte2bd = await this.authService.getPacientesByUid(
           paceinte2.user.uid
-        );      
+        );
         this.foto2 = paceinte2bd?.foto1;
         await this.authService.logout();
         break;
@@ -118,7 +115,7 @@ export class LoginComponent {
         let paceinte3 = await this.authService.login({ email, password });
         let paceinte3bd = await this.authService.getPacientesByUid(
           paceinte3.user.uid
-        );      
+        );
         this.foto3 = paceinte3bd?.foto1;
         await this.authService.logout();
         break;
@@ -129,7 +126,7 @@ export class LoginComponent {
         let esp1 = await this.authService.login({ email, password });
         let esp1bd = await this.authService.getEspecialistasByUid(
           esp1.user.uid
-        );      
+        );
         this.fotoE1 = esp1bd?.foto1;
         await this.authService.logout();
         break;
@@ -139,7 +136,7 @@ export class LoginComponent {
         let esp2 = await this.authService.login({ email, password });
         let esp2bd = await this.authService.getEspecialistasByUid(
           esp2.user.uid
-        );      
+        );
         this.fotoE2 = esp2bd?.foto1;
         await this.authService.logout();
         break;
