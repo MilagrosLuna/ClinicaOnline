@@ -31,6 +31,7 @@ import Swal from 'sweetalert2';
 import { Admin } from '../clases/admin';
 import { Paciente } from '../clases/paciente';
 import { Especialista } from '../clases/especialista';
+import { Turno } from '../clases/turno';
 @Injectable({
   providedIn: 'root',
 })
@@ -221,6 +222,34 @@ export class FirebaseService {
       return null;
     }
   }
+  async getAllPacientes(): Promise<Paciente[]> {
+    try {
+      const q = query(collection(this.db, 'pacientes'));
+      const querySnapshot = await getDocs(q);
+
+      const pacientes: Paciente[] = [];
+
+      querySnapshot.forEach((doc) => {
+        const pacienteData = doc.data();
+        const paciente = new Paciente(
+          pacienteData['uid'],
+          pacienteData['nombre'],
+          pacienteData['apellido'],
+          pacienteData['edad'],
+          pacienteData['dni'],
+          pacienteData['obraSocial'],
+          pacienteData['foto1'],
+          pacienteData['foto2']
+        );
+        pacientes.push(paciente);
+      });
+
+      return pacientes;
+    } catch (error) {
+      console.error('Error al obtener todos los pacientes: ', error);
+      return [];
+    }
+  }
 
   async getEspecialistasByUid(uid: string): Promise<Especialista | null> {
     try {
@@ -332,7 +361,48 @@ export class FirebaseService {
     }
   }
 
-  
+  public async guardarTurno(turno: Turno) {
+    try {
+      const docRef = await addDoc(collection(this.db, 'turnos'), {
+        especialidad: turno.idEspecialidad,
+        especialista: turno.idEspecialista,
+        paciente: turno.idPaciente,
+        estado: turno.estado,
+        fecha: turno.fecha,
+        hora: turno.hora,
+      });
+      console.log('Document written with ID: ', docRef.id);
+      return true;
+    } catch (e) {
+      console.error('Error adding document: ', e);
+      return false;
+    }
+  }
+
+  public async obtenerTurnos(especialistaId: string): Promise<Turno[]> {
+    const q = query(
+      collection(this.db, 'turnos'),
+      where('especialista', '==', especialistaId)
+    );
+    const querySnapshot = await getDocs(q);
+    const turnos: Turno[] = [];
+
+    querySnapshot.forEach((doc) => {
+      const turnoData = doc.data();
+      const turno = new Turno(
+        doc.id,
+        turnoData['especialidad'],
+        turnoData['especialista'],
+        turnoData['paciente'],
+        turnoData['estado'],
+        turnoData['fecha'],
+        turnoData['hora']
+      );
+      turnos.push(turno);
+    });
+
+    return turnos;
+  }
 
   save(data: any, path: string) {
     const col = collection(this.db, path);

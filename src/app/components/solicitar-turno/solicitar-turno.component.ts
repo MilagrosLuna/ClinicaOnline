@@ -8,6 +8,7 @@ import {
 import { Router } from '@angular/router';
 import { Especialidad } from 'src/app/clases/especialidad';
 import { Especialista } from 'src/app/clases/especialista';
+import { Paciente } from 'src/app/clases/paciente';
 import { Turno } from 'src/app/clases/turno';
 import { FirebaseService } from 'src/app/servicios/firebase.service';
 import Swal from 'sweetalert2';
@@ -27,9 +28,11 @@ export class SolicitarTurnoComponent {
   especialidades: Especialidad[] = [];
   especialistas: Especialista[] = [];
   especialistasFiltrados: Especialista[] = [];
+  pacientes: Paciente[] = [];
   especialidadSeleccionada: string = '';
-
-  especialista: Especialista|undefined = undefined;
+  esAdmin: boolean = false;
+  fechaObtenida: boolean = false;
+  especialista: string | undefined = undefined;
 
   constructor(private authService: FirebaseService, private router: Router) {}
 
@@ -37,24 +40,34 @@ export class SolicitarTurnoComponent {
     this.form = new FormGroup({
       especialidad: new FormControl('', [Validators.required]),
       especialista: new FormControl('', [Validators.required]),
+      paciente: new FormControl('', [Validators.required]),
+      hora: new FormControl('', [Validators.required]),
       fecha: new FormControl('', [Validators.required]),
     });
     this.cargarEspecialidades();
+    let id = localStorage.getItem('logueado');
+    this.esAdmin = localStorage.getItem('admin') === 'true';
+    if (id) {
+      let admin = this.authService.getAdminByUid(id);
+      if (admin != null) {
+        this.esAdmin = true;
+        this.cargarPacientes();
+        localStorage.setItem('admin', 'true');
+      }
+    }
   }
+
   onEspecialidadChange(event: any) {
     this.especialidadSeleccionada = this.form.controls['especialidad'].value;
     this.filtrarEspecialistas();
     this.especialista = undefined;
   }
-  
   onEspecialistaChange(event: any) {
     this.especialista = this.form.controls['especialista'].value;
   }
-
-  onTurnoSeleccionado(turno: { dia: Date; hora: string }) {
-    console.log('Turno seleccionado:', turno);
+  async cargarPacientes() {
+    this.pacientes = await this.authService.getAllPacientes();
   }
-
   async cargarEspecialidades() {
     const especialidadesData = await this.authService.obtenerEspecialidades();
     this.especialidades = especialidadesData.map((especialidadData: any) => {
@@ -102,6 +115,22 @@ export class SolicitarTurnoComponent {
         especialista.especialidades.includes(this.especialidadSeleccionada)
     );
   }
+  onTurnoSeleccionado(turno: { dia: Date; hora: string }) {
+    console.log('Turno seleccionado:', turno);
+    const fechaSeleccionada: Date = turno.dia;
+    const horaSeleccionada: string = turno.hora;
+    const fechaCompleta: Date = new Date(
+      fechaSeleccionada.getFullYear(),
+      fechaSeleccionada.getMonth(),
+      fechaSeleccionada.getDate(),
+      parseInt(horaSeleccionada.split(':')[0]),
+      parseInt(horaSeleccionada.split(':')[1])
+    );
+    console.log(fechaCompleta);
+    this.form.controls['fecha'].setValue(fechaCompleta);
+    this.form.controls['hora'].setValue(horaSeleccionada);
+    this.fechaObtenida = true;
+  }
 
   onSubmit() {
     if (this.form.valid) {
@@ -117,19 +146,20 @@ export class SolicitarTurnoComponent {
 
   async cargarTurno() {
     try {
-      // let turno = new Turno(
-      //   '',
-      //   this.form.controls['especialista'].value,
-      //   this.form.controls['especialidad'].value,
-      //   this.form.controls['paciente'].value,
-      //   'espera',
-      //  'fecha'
-      // );
-
+      let turno = new Turno(
+        '',
+        this.form.controls['especialista'].value,
+        this.form.controls['especialidad'].value,
+        this.form.controls['paciente'].value,
+        'espera',
+        this.form.controls['fecha'].value,
+        this.form.controls['hora'].value
+      );
+      await this.authService.guardarTurno(turno);
       Swal.fire({
         icon: 'success',
-        title: 'Registro exitoso',
-        text: '¡Bienvenido!',
+        text: 'debera esperar que el especialista acepte!',
+        title: '¡Turno solicitado!',
         showConfirmButton: false,
         timer: 1500,
       });

@@ -5,6 +5,7 @@ export class Turno {
   idPaciente: string;
   estado: string;
   fecha: string;
+  hora: string;
   constructor(
     uid: string,
     idEspecialista: string,
@@ -12,6 +13,7 @@ export class Turno {
     idPaciente: string,
     estado: string,
     fecha: string,
+    hora: string,
   ) {
     this.uid = uid;
     this.idEspecialista = idEspecialista;
@@ -19,5 +21,6 @@ export class Turno {
     this.idPaciente = idPaciente;
     this.estado = estado;
     this.fecha = fecha;
+    this.hora = hora;
   }
 }
