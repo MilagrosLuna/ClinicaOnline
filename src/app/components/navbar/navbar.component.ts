@@ -51,6 +51,7 @@ export class NavbarComponent implements OnInit {
       if (result.isConfirmed) {
         // Si el usuario confirma, cerramos la sesión
         this.authService.logout();
+        localStorage.removeItem('logueado');
         this.router.navigate(['/bienvenida']);
       }
     });

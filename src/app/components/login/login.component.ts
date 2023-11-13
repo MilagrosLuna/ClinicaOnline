@@ -34,12 +34,12 @@ export class LoginComponent {
       password: new FormControl('', [Validators.required]),
     });
     this.loadingImages = true;
-    await this.cargarFotos(1);
-    await this.cargarFotos(2);
-    await this.cargarFotos(3);
-    await this.cargarFotos(4);
-    await this.cargarFotos(5);
-    await this.cargarFotos(6);
+    // await this.cargarFotos(1);
+    // await this.cargarFotos(2);
+    // await this.cargarFotos(3);
+    // await this.cargarFotos(4);
+    // await this.cargarFotos(5);
+    // await this.cargarFotos(6);
     this.loadingImages = false;
   }
 
@@ -121,7 +121,7 @@ export class LoginComponent {
         break;
       //esp
       case 5:
-        email = 'xiffoddoxetro-1126@yopmail.com';
+        email = 'tecukuxeufa-3067@yopmail.com';
         password = '123456';
         let esp1 = await this.authService.login({ email, password });
         let esp1bd = await this.authService.getEspecialistasByUid(
@@ -131,7 +131,7 @@ export class LoginComponent {
         await this.authService.logout();
         break;
       case 6:
-        email = 'hocrelouhiru-9335@yopmail.com';
+        email = 'sereiyutosseu-4719@yopmail.com';
         password = '123456';
         let esp2 = await this.authService.login({ email, password });
         let esp2bd = await this.authService.getEspecialistasByUid(
@@ -171,11 +171,11 @@ export class LoginComponent {
         break;
       //esp
       case 5:
-        this.form.controls['email'].setValue('xiffoddoxetro-1126@yopmail.com');
+        this.form.controls['email'].setValue('tecukuxeufa-3067@yopmail.com');
         this.form.controls['password'].setValue('123456');
         break;
       case 6:
-        this.form.controls['email'].setValue('hocrelouhiru-9335@yopmail.com');
+        this.form.controls['email'].setValue('sereiyutosseu-4719@yopmail.com');
         this.form.controls['password'].setValue('123456');
         break;
     }
@@ -184,6 +184,7 @@ export class LoginComponent {
     if (this.form.valid) {
       try {
         let user = await this.authService.login(this.form.value);
+        localStorage.setItem('logueado', user.user.uid);
         await this.verificarMails(user);
       } catch (error: any) {
         this.checkError = true;

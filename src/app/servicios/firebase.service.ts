@@ -165,7 +165,7 @@ export class FirebaseService {
     }
   }
 
-  async getAdminByUid(uid: string|undefined): Promise<Admin | null> {
+  async getAdminByUid(uid: string | undefined): Promise<Admin | null> {
     try {
       const q = query(collection(this.db, 'admins'), where('uid', '==', uid));
       const querySnapshot = await getDocs(q);
@@ -243,7 +243,7 @@ export class FirebaseService {
         especialistaData['apellido'],
         especialistaData['edad'],
         especialistaData['dni'],
-        especialistaData['especialidad'],
+        especialistaData['especialidades'],
         especialistaData['foto1'],
         especialistaData['verificado']
       );
@@ -331,6 +331,8 @@ export class FirebaseService {
       }
     }
   }
+
+  
 
   save(data: any, path: string) {
     const col = collection(this.db, path);

@@ -1,1 +1,43 @@
-<p>mi-perfil works!</p>
+<div *ngIf="usuario" class="">   
+  
+    <div *ngIf="identidad === 'admin'">
+      <div class="card m-5" style="width: 32rem">
+        <img class="card-img-top" src="{{ usuario.foto1 }}" alt="Foto de perfil" height="300">
+        <div class="card-body">
+          <h5 class="card-title">{{ usuario.nombre }} {{ usuario.apellido }}</h5>
+          <p class="card-text">DNI: {{ usuario.dni }}</p>
+          <p class="card-text">Edad: {{ usuario.edad }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <div *ngIf="identidad === 'paciente'">
+      <div class="card m-5" style="width: 32rem">
+        <div class="row"> 
+            <img class="col-md-6 rounded-10" src="{{ usuario.foto1 }}" alt="Foto de perfil"  height="300" width="300">
+            <img class="col-md-6" src="{{ usuario.foto2 }}" alt="Foto de perfil"   height="300" width="300">
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{ usuario.nombre }} {{ usuario.apellido }}</h5>
+          <p class="card-text">DNI: {{ usuario.dni }}</p>
+          <p class="card-text">Edad: {{ usuario.edad }}</p>
+          <p class="card-text">Obra Social: {{ usuario.obraSocial }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <div *ngIf="identidad === 'especialista'">
+      <div class="card m-5" style="width: 32rem">
+        <img class="card-img-top" src="{{ usuario.foto1 }}" alt="Foto de perfil"  height="300">
+        <div class="card-body">
+          <h5 class="card-title">{{ usuario.nombre }} {{ usuario.apellido }}</h5>
+          <p class="card-text">DNI: {{ usuario.dni }}</p>
+          <p class="card-text">Edad: {{ usuario.edad }}</p>
+          <p class="card-text">Especialidades:</p>
+          <ul>
+            <li *ngFor="let especialidad of usuario.especialidades">{{ especialidad }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
