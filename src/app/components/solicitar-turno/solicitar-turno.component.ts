@@ -33,7 +33,7 @@ export class SolicitarTurnoComponent {
   esAdmin: boolean = false;
   fechaObtenida: boolean = false;
   especialista: string | undefined = undefined;
-
+  especialistaFalso:boolean = false;
   constructor(
     private authService: FirebaseService,
     private router: Router,
@@ -123,6 +123,17 @@ export class SolicitarTurnoComponent {
     );
   }
   onTurnoSeleccionado(turno: { dia: Date; hora: string }) {
+    if(turno.hora == ''){
+      this.fechaObtenida = false;
+      this.especialista = undefined;
+      this.especialistaFalso =  true;
+      Swal.fire({
+        icon: 'error',
+        title: 'Error, el especialista no tiene horarios cargados...',
+        timer: 2500,
+      })
+      return;
+    }
     const fechaSeleccionada: Date = turno.dia;
     const horaSeleccionada: string = turno.hora;
     const fechaCompleta: Date = new Date(
@@ -160,7 +171,7 @@ export class SolicitarTurnoComponent {
   }
 
   async onSubmit() {
-    if (this.form.valid) {
+    if (this.form.valid && this.especialistaFalso == false) {
       let paciente = localStorage.getItem('logueado');
       if (this.esAdmin) {
         paciente = this.form.controls['paciente'].value;
