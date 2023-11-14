@@ -407,6 +407,52 @@ export class FirebaseService {
     }
   }
 
+  public async obtenerTodosLosTurnos(): Promise<Turno[]> {
+    const querySnapshot = await getDocs(collection(this.db, 'turnos'));
+    const turnos: Turno[] = [];
+
+    querySnapshot.forEach((doc) => {
+      const turnoData = doc.data();
+      const turno = new Turno(
+        doc.id,
+        turnoData['especialidad'],
+        turnoData['especialista'],
+        turnoData['paciente'],
+        turnoData['estado'],
+        turnoData['fecha'],
+        turnoData['hora']
+      );
+      turnos.push(turno);
+    });
+
+    return turnos;
+}
+
+public async obtenerTurnosDelPaciente(pacienteid: string): Promise<Turno[]> {
+  const q = query(
+    collection(this.db, 'turnos'),
+    where('paciente', '==', pacienteid)
+  );
+  const querySnapshot = await getDocs(q);
+  const turnos: Turno[] = [];
+
+  querySnapshot.forEach((doc) => {
+    const turnoData = doc.data();
+    const turno = new Turno(
+      doc.id,
+      turnoData['especialista'],
+      turnoData['especialidad'],
+      turnoData['paciente'],
+      turnoData['estado'],
+      turnoData['fecha'],
+      turnoData['hora']
+    );
+    turnos.push(turno);
+  });
+
+  return turnos;
+}
+
   public async obtenerTurnos(especialistaId: string): Promise<Turno[]> {
     const q = query(
       collection(this.db, 'turnos'),
