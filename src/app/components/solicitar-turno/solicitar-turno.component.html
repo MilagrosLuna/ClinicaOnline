@@ -3,6 +3,7 @@
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
     <div class="row g-3">
       <div class="col-sm-6">
+        <label for="especialidad" class="form-label">Especialidad:</label>
         <select
           class="form-select"
           id="especialidad"
@@ -72,7 +73,7 @@
             ></app-listado-dias-turno>
           </div>
           <div *ngIf="fechaObtenida">
-            <div *ngIf="esAdmin">
+            <div *ngIf="esAdmin == true">
               <div class="col-sm-6">
                 <label for="paciente" class="form-label">Paciente:</label>
                 <select

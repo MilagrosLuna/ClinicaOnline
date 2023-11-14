@@ -34,21 +34,29 @@ export class SolicitarTurnoComponent {
   fechaObtenida: boolean = false;
   especialista: string | undefined = undefined;
 
-  constructor(private authService: FirebaseService, private router: Router,private cdr: ChangeDetectorRef) {}
+  constructor(
+    private authService: FirebaseService,
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.form = new FormGroup({
       especialidad: new FormControl('', [Validators.required]),
       especialista: new FormControl('', [Validators.required]),
-      paciente: new FormControl('', [Validators.required]),
+      paciente: new FormControl('', this.esAdmin ? [Validators.required] : []),
       hora: new FormControl('', [Validators.required]),
       fecha: new FormControl('', [Validators.required]),
     });
     this.cargarEspecialidades();
     let id = localStorage.getItem('logueado');
+
     this.esAdmin = localStorage.getItem('admin') === 'true';
+    console.log(this.esAdmin);
+    console.log(localStorage.getItem('admin'));
     if (id) {
-      let admin = this.authService.getAdminByUid(id);
+      let admin = await this.authService.getAdminByUid(id);
+      console.log(admin);
       if (admin != null) {
         this.esAdmin = true;
         this.cargarPacientes();
@@ -62,12 +70,12 @@ export class SolicitarTurnoComponent {
     this.especialista = undefined;
     this.fechaObtenida = false;
   }
-  onEspecialistaChange(event: any) {   
-    console.log("sdafasfa"); 
+  onEspecialistaChange(event: any) {
+    console.log('sdafasfa');
     this.especialista = undefined;
     this.especialista = this.form.controls['especialista'].value;
-    this.fechaObtenida = false;    
-     this.cdr.detectChanges();
+    this.fechaObtenida = false;
+    this.cdr.detectChanges();
   }
   async cargarPacientes() {
     this.pacientes = await this.authService.getAllPacientes();
@@ -99,17 +107,17 @@ export class SolicitarTurnoComponent {
             return especialidad ? especialidad.uid : 'Especialidad Desconocida';
           })
         : [];
-        let esp = new Especialista(
-          especialistaData.uid,
-          especialistaData.nombre,
-          especialistaData.apellido,
-          especialistaData.edad,
-          especialistaData.dni,
-          especialidadesDelEspecialista,
-          especialistaData.foto1,
-          especialistaData.verificado
-        );
-        esp.turnos = especialistaData.turnos
+      let esp = new Especialista(
+        especialistaData.uid,
+        especialistaData.nombre,
+        especialistaData.apellido,
+        especialistaData.edad,
+        especialistaData.dni,
+        especialidadesDelEspecialista,
+        especialistaData.foto1,
+        especialistaData.verificado
+      );
+      esp.turnos = especialistaData.turnos;
       return esp;
     });
   }
@@ -132,6 +140,28 @@ export class SolicitarTurnoComponent {
     this.form.controls['fecha'].setValue(fechaCompleta);
     this.form.controls['hora'].setValue(horaSeleccionada);
     this.fechaObtenida = true;
+    // Formatear la fecha y la hora
+    const fechaFormateada = fechaCompleta.toLocaleDateString('es-ES', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+    const horaFormateada = fechaCompleta.toLocaleTimeString('es-ES', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
+    Swal.fire({
+      icon: 'warning',
+      text:
+        'La fecha seleccionada es ' +
+        fechaFormateada +
+        ' y la hora es ' +
+        horaFormateada,
+      title: '¡Fecha!',
+      showConfirmButton: false,
+      timer: 5000,
+    });
   }
 
   onSubmit() {
@@ -148,23 +178,32 @@ export class SolicitarTurnoComponent {
 
   async cargarTurno() {
     try {
-      let turno = new Turno(
-        '',
-        this.form.controls['especialista'].value,
-        this.form.controls['especialidad'].value,
-        this.form.controls['paciente'].value,
-        'espera',
-        this.form.controls['fecha'].value,
-        this.form.controls['hora'].value
-      );
-      await this.authService.guardarTurno(turno);
-      Swal.fire({
-        icon: 'success',
-        text: 'debera esperar que el especialista acepte!',
-        title: '¡Turno solicitado!',
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      let paciente = localStorage.getItem('logueado');
+      if (this.esAdmin) {
+        paciente = this.form.controls['paciente'].value;
+      }
+      if (paciente) {
+        let turno = new Turno(
+          '',
+          this.form.controls['especialista'].value,
+          this.form.controls['especialidad'].value,
+          paciente,
+          'espera',
+          this.form.controls['fecha'].value,
+          this.form.controls['hora'].value
+        );
+        await this.authService.guardarTurno(turno);
+        Swal.fire({
+          icon: 'success',
+          text: 'debera esperar que el especialista acepte!',
+          title: '¡Turno solicitado!',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        this.form.reset();
+        this.especialista = undefined;
+        this.fechaObtenida = false;
+      }
     } catch (error: any) {
       Swal.fire({
         icon: 'error',
