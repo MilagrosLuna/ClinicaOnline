@@ -10,7 +10,5 @@ import { FirebaseService } from 'src/app/servicios/firebase.service';
 export class HomeComponent {
   constructor(private authService: FirebaseService, private router: Router) {}
   ngOnInit(): void {
-    let user = this.authService.getCurrentUser();
-    console.log(user);
   }
 }

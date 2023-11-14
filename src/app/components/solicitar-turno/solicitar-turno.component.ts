@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -34,7 +34,7 @@ export class SolicitarTurnoComponent {
   fechaObtenida: boolean = false;
   especialista: string | undefined = undefined;
 
-  constructor(private authService: FirebaseService, private router: Router) {}
+  constructor(private authService: FirebaseService, private router: Router,private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -56,14 +56,18 @@ export class SolicitarTurnoComponent {
       }
     }
   }
-
   onEspecialidadChange(event: any) {
     this.especialidadSeleccionada = this.form.controls['especialidad'].value;
     this.filtrarEspecialistas();
     this.especialista = undefined;
+    this.fechaObtenida = false;
   }
-  onEspecialistaChange(event: any) {
+  onEspecialistaChange(event: any) {   
+    console.log("sdafasfa"); 
+    this.especialista = undefined;
     this.especialista = this.form.controls['especialista'].value;
+    this.fechaObtenida = false;    
+     this.cdr.detectChanges();
   }
   async cargarPacientes() {
     this.pacientes = await this.authService.getAllPacientes();
@@ -95,19 +99,19 @@ export class SolicitarTurnoComponent {
             return especialidad ? especialidad.uid : 'Especialidad Desconocida';
           })
         : [];
-
-      return new Especialista(
-        especialistaData.uid,
-        especialistaData.nombre,
-        especialistaData.apellido,
-        especialistaData.edad,
-        especialistaData.dni,
-        especialidadesDelEspecialista,
-        especialistaData.foto1,
-        especialistaData.verificado
-      );
+        let esp = new Especialista(
+          especialistaData.uid,
+          especialistaData.nombre,
+          especialistaData.apellido,
+          especialistaData.edad,
+          especialistaData.dni,
+          especialidadesDelEspecialista,
+          especialistaData.foto1,
+          especialistaData.verificado
+        );
+        esp.turnos = especialistaData.turnos
+      return esp;
     });
-    console.log(this.especialistas);
   }
   filtrarEspecialistas() {
     this.especialistasFiltrados = this.especialistas.filter(
@@ -116,7 +120,6 @@ export class SolicitarTurnoComponent {
     );
   }
   onTurnoSeleccionado(turno: { dia: Date; hora: string }) {
-    console.log('Turno seleccionado:', turno);
     const fechaSeleccionada: Date = turno.dia;
     const horaSeleccionada: string = turno.hora;
     const fechaCompleta: Date = new Date(
@@ -126,7 +129,6 @@ export class SolicitarTurnoComponent {
       parseInt(horaSeleccionada.split(':')[0]),
       parseInt(horaSeleccionada.split(':')[1])
     );
-    console.log(fechaCompleta);
     this.form.controls['fecha'].setValue(fechaCompleta);
     this.form.controls['hora'].setValue(horaSeleccionada);
     this.fechaObtenida = true;

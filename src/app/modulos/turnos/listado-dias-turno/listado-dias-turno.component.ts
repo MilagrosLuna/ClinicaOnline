@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Especialista } from 'src/app/clases/especialista';
 import { Turno } from 'src/app/clases/turno';
 import { FirebaseService } from 'src/app/servicios/firebase.service';
@@ -8,12 +8,14 @@ import { FirebaseService } from 'src/app/servicios/firebase.service';
   templateUrl: './listado-dias-turno.component.html',
   styleUrls: ['./listado-dias-turno.component.css'],
 })
-export class ListadoDiasTurnoComponent implements OnInit {
+export class ListadoDiasTurnoComponent implements OnInit, OnChanges {
   @Input() especialista: string | undefined;
+  @Input() especialidad: string | undefined;
   @Output() turnoSeleccionado = new EventEmitter<{ dia: Date; hora: string }>();
+  especialistaData: any;
 
-  diasDisponibles: { dia: Date; horarios: string[]; }[] = [];
-  
+  diasDisponibles: { dia: Date; horarios: string[] }[] = [];
+  loading: boolean = false;
   selectedDay: Date | undefined;
   selectedHour: string | undefined;
   periodos = ['mañana', 'tarde'];
@@ -21,7 +23,30 @@ export class ListadoDiasTurnoComponent implements OnInit {
   constructor(private auth: FirebaseService) {}
 
   async ngOnInit(): Promise<void> {
+    this.loading = true;
+    if (this.especialista) {
+      this.especialistaData = await this.auth.getEspecialistasByUid(
+        this.especialista
+      );
+    }
     this.diasDisponibles = await this.obtenerDiasDisponibles();
+    this.loading = false;
+  }
+
+  async ngOnChanges(changes: SimpleChanges){
+    if (changes['especialista']) {
+     // const previo = changes['especialista'].previousValue;
+      const actual = changes['especialista'].currentValue;
+      this.especialista = actual;
+      this.loading = true;
+      if (this.especialista) {
+        this.especialistaData = await this.auth.getEspecialistasByUid(
+          this.especialista
+        );
+      }
+      this.diasDisponibles = await this.obtenerDiasDisponibles();
+      this.loading = false;
+    }
   }
 
   seleccionarTurno() {
@@ -43,39 +68,47 @@ export class ListadoDiasTurnoComponent implements OnInit {
     return fecha.toLocaleDateString('es-ES', opcionesFecha);
   }
 
-  // Método para seleccionar la hora
   seleccionarHora(dia: Date, hora: string): void {
     this.selectedDay = dia;
     this.selectedHour = hora;
   }
 
-  async obtenerDiasDisponibles(): Promise<{ dia: Date, horarios: string[] }[]> {
+  async obtenerDiasDisponibles(): Promise<{ dia: Date; horarios: string[] }[]> {
     const today = new Date();
     const diasDisponibles = [];
-  
+    // Obtener todos los turnos del especialista a la vez
+    const todosLosTurnos = this.especialista
+      ? await this.auth.obtenerTurnos(this.especialista)
+      : [];
+    // Calcular los horarios disponibles para la 'mañana' y la 'tarde'
+    const horariosManana = this.obtenerHorariosDisponibles('mañana');
+    const horariosTarde = this.obtenerHorariosDisponibles('tarde');
+    const horariosPosibles = horariosManana.concat(horariosTarde);
+
     for (let i = 0; i < 15; i++) {
       const dia = new Date(today);
       dia.setDate(today.getDate() + i);
-  
-      // Obtener turnos del especialista para el día actual
-      const turnosDelDia = await this.obtenerTurnosDelEspecialista(dia);
-  
-      // Crear una lista de todos los horarios posibles
-      const horariosPosibles = this.obtenerHorariosDisponibles('manana').concat(this.obtenerHorariosDisponibles('tarde'));
-  
+
+      // Filtrar los turnos del especialista para el día actual
+      const turnosDelDia = todosLosTurnos.filter((turno) =>
+        this.mismoDia(turno.fecha, dia)
+      );
+
+      // Convertir los horarios tomados en un Set para acelerar las búsquedas
+      const horariosTomados = new Set(turnosDelDia.map((turno) => turno.hora));
+
       // Filtrar los horarios que ya están tomados
-      const horariosTomados = turnosDelDia.map(turno => turno.hora);
-      const horariosDisponibles = horariosPosibles.filter(horario => !horariosTomados.includes(horario));
-  
+      const horariosDisponibles = horariosPosibles.filter(
+        (horario) => !horariosTomados.has(horario)
+      );
+
       // Solo agregar el día a la lista si hay al menos un horario disponible
       if (horariosDisponibles.length > 0) {
         diasDisponibles.push({ dia, horarios: horariosDisponibles });
       }
     }
-  
     return diasDisponibles;
   }
-  
 
   mismoDia(timestamp: any, dia: Date): boolean {
     const turnoFecha = this.convertirTimestampADate(timestamp);
@@ -109,16 +142,23 @@ export class ListadoDiasTurnoComponent implements OnInit {
 
   obtenerHorariosDisponibles(periodo: string): string[] {
     let horariosDisponibles: string[] = [];
-    if (periodo === 'manana') {
-      horariosDisponibles = Array.from({ length: 5 }, (_, index) => {
-        const hora = 9 + index;
-        return `${hora}:00`;
-      });
-    } else if (periodo === 'tarde') {
-      horariosDisponibles = Array.from({ length: 5 }, (_, index) => {
-        const hora = 14 + index;
-        return `${hora}:00`;
-      });
+    if (this.especialistaData && this.especialistaData.turnos) {
+      const turnoEspecialista = this.especialistaData.turnos.find(
+        (turno: any) => turno.especialidad === this.especialidad
+      );
+      if (turnoEspecialista && turnoEspecialista.turno === periodo) {
+        if (periodo === 'mañana') {
+          horariosDisponibles = Array.from({ length: 5 }, (_, index) => {
+            const hora = 9 + index;
+            return `${hora}:00`;
+          });
+        } else if (periodo === 'tarde') {
+          horariosDisponibles = Array.from({ length: 5 }, (_, index) => {
+            const hora = 14 + index;
+            return `${hora}:00`;
+          });
+        }
+      }
     }
     return horariosDisponibles;
   }
