@@ -32,6 +32,7 @@ import { Admin } from '../clases/admin';
 import { Paciente } from '../clases/paciente';
 import { Especialista } from '../clases/especialista';
 import { Turno } from '../clases/turno';
+import { Horario } from '../clases/horario';
 @Injectable({
   providedIn: 'root',
 })
@@ -274,8 +275,9 @@ export class FirebaseService {
         especialistaData['dni'],
         especialistaData['especialidades'],
         especialistaData['foto1'],
-        especialistaData['verificado']
+        especialistaData['verificado'],
       );
+      admin.turnos = especialistaData['turnos'];
       return admin;
     } catch (error) {
       console.error('Error al buscar el especialista por UID: ', error);
@@ -343,6 +345,32 @@ export class FirebaseService {
       throw error;
     }
   }
+
+  async actualizarHorariosEspecialista(uid: string, turnos: Horario[]): Promise<void> {
+    try {
+      const especialistasCollection = collection(this.db, 'especialistas');
+      const querys = query(especialistasCollection, where('uid', '==', uid));
+      const querySnapshot = await getDocs(querys);
+  
+      if (querySnapshot.size === 0) {
+        console.log('No se encontró ningún especialista con el UID interno proporcionado');
+        return;
+      }
+  
+      querySnapshot.forEach((docSnapshot) => {
+        const especialistaRef = doc(this.db, 'especialistas', docSnapshot.id);
+        updateDoc(especialistaRef, { turnos: turnos });
+      });
+    } catch (error) {
+      console.error('Error al actualizar los horarios del especialista: ', error);
+      throw error;
+    }
+  }
+  
+
+
+
+
 
   async guardarEspecialidad(especialidadNombre: string): Promise<void> {
     const especialidades = await this.obtenerEspecialidades();
