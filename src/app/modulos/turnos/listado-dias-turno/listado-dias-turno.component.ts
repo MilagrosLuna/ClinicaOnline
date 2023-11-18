@@ -33,8 +33,8 @@ export class ListadoDiasTurnoComponent implements OnInit, OnChanges {
   async ngOnInit(): Promise<void> {
     this.loading = true;
     if (this.especialista) {
-      this.especialistaData = await this.auth.getEspecialistasByUid(
-        this.especialista
+      this.especialistaData = await this.auth.getUserByUidAndType(
+        this.especialista,'especialistas'
       );
     }
     this.diasDisponibles = await this.obtenerDiasDisponibles();
@@ -54,8 +54,8 @@ export class ListadoDiasTurnoComponent implements OnInit, OnChanges {
       this.especialista = actual;
       this.loading = true;
       if (this.especialista) {
-        this.especialistaData = await this.auth.getEspecialistasByUid(
-          this.especialista
+        this.especialistaData = await this.auth.getUserByUidAndType(
+          this.especialista,'especialistas'
         );
       }
       this.diasDisponibles = await this.obtenerDiasDisponibles();

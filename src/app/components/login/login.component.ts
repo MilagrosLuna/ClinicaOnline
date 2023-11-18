@@ -4,6 +4,8 @@ import { FirebaseService } from 'src/app/servicios/firebase.service';
 import Swal from 'sweetalert2';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/servicios/user.service';
+import { DocumentData } from '@angular/fire/firestore';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-login',
@@ -14,18 +16,16 @@ export class LoginComponent {
   form!: FormGroup;
   checkError: boolean = false;
   errorMessage: string = '';
-  fotoAdmin: string | undefined = '';
-  foto1: string | undefined = '';
-  foto2: string | undefined = '';
-  foto3: string | undefined = '';
-  fotoE1: string | undefined = '';
-  fotoE2: string | undefined = '';
+  admins: any[] = [];
+  pacientes: any[] = [];
+  especialistas: any[] = [];
   loadingImages: boolean = false;
 
   constructor(
     private authService: FirebaseService,
     private router: Router,
-    private userservice: UserService
+    private userservice: UserService,
+    private spinner: NgxSpinnerService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -33,21 +33,22 @@ export class LoginComponent {
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required]),
     });
-    this.loadingImages = true;
-    // await this.cargarFotos(1);
-    // await this.cargarFotos(2);
-    // await this.cargarFotos(3);
-    // await this.cargarFotos(4);
-    // await this.cargarFotos(5);
-    // await this.cargarFotos(6);
-    this.loadingImages = false;
+    this.spinner.show();
+    await this.CargarAccesos();
+    setTimeout(() => {
+      this.spinner.hide();
+    }, 2000);
   }
 
   async verificarMails(user: any) {
     try {
-      const admin = await this.authService.getAdminByUid(user.user.uid);
-      const especialista = await this.authService.getEspecialistasByUid(
-        user.user.uid
+      const admin = await this.authService.getUserByUidAndType(
+        user.user.uid,
+        'admins'
+      );
+      const especialista = await this.authService.getUserByUidAndType(
+        user.user.uid,
+        'especialistas'
       );
       if (admin !== null) {
         this.userservice.showSuccessMessageAndNavigate(['/homeAdmin']);
@@ -76,109 +77,29 @@ export class LoginComponent {
       this.userservice.showErrorMessage(error.text);
     }
   }
-  async cargarFotos(number: Number) {
-    let email = 'milivictoria2004@gmail.com';
-    let password = '123456';
-    switch (number) {
-      case 1:
-        email = 'milivictoria2004@gmail.com';
-        password = '123456';
-        let user = await this.authService.login({ email, password });
-        let admidBd = await this.authService.getAdminByUid(user.user.uid);
-        this.fotoAdmin = admidBd?.foto1;
-        await this.authService.logout();
-        break;
-      //pac
-      case 2:
-        email = 'mililuna3197@gmail.com';
-        password = '123456';
-        let paceinte1 = await this.authService.login({ email, password });
-        let paceinte1bd = await this.authService.getPacientesByUid(
-          paceinte1.user.uid
-        );
-        this.foto1 = paceinte1bd?.foto1;
-        await this.authService.logout();
-        break;
-      case 3:
-        email = 'nammiroppocre-8711@yopmail.com';
-        password = '123456';
-        let paceinte2 = await this.authService.login({ email, password });
-        let paceinte2bd = await this.authService.getPacientesByUid(
-          paceinte2.user.uid
-        );
-        this.foto2 = paceinte2bd?.foto1;
-        await this.authService.logout();
-        break;
-      case 4:
-        email = 'prefreufrissigoi-3375@yopmail.com';
-        password = '123456';
-        let paceinte3 = await this.authService.login({ email, password });
-        let paceinte3bd = await this.authService.getPacientesByUid(
-          paceinte3.user.uid
-        );
-        this.foto3 = paceinte3bd?.foto1;
-        await this.authService.logout();
-        break;
-      //esp
-      case 5:
-        email = 'tecukuxeufa-3067@yopmail.com';
-        password = '123456';
-        let esp1 = await this.authService.login({ email, password });
-        let esp1bd = await this.authService.getEspecialistasByUid(
-          esp1.user.uid
-        );
-        this.fotoE1 = esp1bd?.foto1;
-        await this.authService.logout();
-        break;
-      case 6:
-        email = 'sereiyutosseu-4719@yopmail.com';
-        password = '123456';
-        let esp2 = await this.authService.login({ email, password });
-        let esp2bd = await this.authService.getEspecialistasByUid(
-          esp2.user.uid
-        );
-        this.fotoE2 = esp2bd?.foto1;
-        await this.authService.logout();
-        break;
-    }
+  onButtonClick(event: any): void {
+    this.form.controls['email'].setValue(event.email);
+    this.form.controls['password'].setValue(event.password);
   }
-  async accesoRapido(number: number) {
-    switch (number) {
-      case 1:
-        this.form.controls['email'].setValue('milivictoria2004@gmail.com');
-        this.form.controls['password'].setValue('123456');
-        await this.authService.login(this.form.value);
-        break;
-      //pac
-      case 2:
-        this.form.controls['email'].setValue('mililuna3197@gmail.com');
-        this.form.controls['password'].setValue('123456');
-        await this.authService.login(this.form.value);
-        break;
-
-      case 3:
-        this.form.controls['email'].setValue('nammiroppocre-8711@yopmail.com');
-        this.form.controls['password'].setValue('123456');
-        await this.authService.login(this.form.value);
-        break;
-
-      case 4:
-        this.form.controls['email'].setValue(
-          'prefreufrissigoi-3375@yopmail.com'
-        );
-        this.form.controls['password'].setValue('123456');
-        await this.authService.login(this.form.value);
-        break;
-      //esp
-      case 5:
-        this.form.controls['email'].setValue('tecukuxeufa-3067@yopmail.com');
-        this.form.controls['password'].setValue('123456');
-        break;
-      case 6:
-        this.form.controls['email'].setValue('sereiyutosseu-4719@yopmail.com');
-        this.form.controls['password'].setValue('123456');
-        break;
-    }
+  async CargarAccesos() {
+    let adminSnapshot = await this.authService.getWhere(
+      'users',
+      'tipo',
+      'admins'
+    );
+    this.admins = adminSnapshot.docs.map((doc) => doc.data());
+    let pacientesSnapshot = await this.authService.getWhere(
+      'users',
+      'tipo',
+      'pacientes'
+    );
+    this.pacientes = pacientesSnapshot.docs.map((doc) => doc.data());
+    let especialistasSnapshot = await this.authService.getWhere(
+      'users',
+      'tipo',
+      'especialistas'
+    );
+    this.especialistas = especialistasSnapshot.docs.map((doc) => doc.data());
   }
   async onSubmit() {
     if (this.form.valid) {

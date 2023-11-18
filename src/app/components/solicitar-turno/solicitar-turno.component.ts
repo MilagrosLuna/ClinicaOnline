@@ -52,7 +52,7 @@ export class SolicitarTurnoComponent {
     let id = localStorage.getItem('logueado');
     this.esAdmin = localStorage.getItem('admin') === 'true';
     if (id) {
-      let admin = await this.authService.getAdminByUid(id);
+      let admin = await this.authService.getUserByUidAndType(id,'admins');
       if (admin != null) {
         this.esAdmin = true;
         this.cargarPacientes();

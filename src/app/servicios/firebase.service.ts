@@ -167,62 +167,64 @@ export class FirebaseService {
     }
   }
 
-  async getAdminByUid(uid: string | undefined): Promise<Admin | null> {
+  async getUserByUidAndType(uid: string, type: string): Promise<any> {
     try {
-      const q = query(collection(this.db, 'admins'), where('uid', '==', uid));
+      const q = query(collection(this.db, type), where('uid', '==', uid));
       const querySnapshot = await getDocs(q);
 
       if (querySnapshot.size === 0) {
-        console.log(
-          'No se encontró ningún administrador con el UID proporcionado'
-        );
+        //console.log(`No se encontró ningún ${type} con el UID proporcionado`);
         return null;
       }
-      const adminData = querySnapshot.docs[0].data();
-      const admin = new Admin(
-        adminData['uid'],
-        adminData['nombre'],
-        adminData['apellido'],
-        adminData['edad'],
-        adminData['dni'],
-        adminData['foto1']
-      );
-      return admin;
+
+      const userData = querySnapshot.docs[0].data();
+      let user;
+
+      switch (type) {
+        case 'admins':
+          user = new Admin(
+            userData['uid'],
+            userData['nombre'],
+            userData['apellido'],
+            userData['edad'],
+            userData['dni'],
+            userData['foto1']
+          );
+          break;
+        case 'pacientes':
+          user = new Paciente(
+            userData['uid'],
+            userData['nombre'],
+            userData['apellido'],
+            userData['edad'],
+            userData['dni'],
+            userData['obraSocial'],
+            userData['foto1'],
+            userData['foto2']
+          );
+          break;
+        case 'especialistas':
+          user = new Especialista(
+            userData['uid'],
+            userData['nombre'],
+            userData['apellido'],
+            userData['edad'],
+            userData['dni'],
+            userData['especialidades'],
+            userData['foto1'],
+            userData['verificado']
+          );
+          user.turnos = userData['turnos'];
+          break;
+      }
+
+      return user;
     } catch (error) {
-      console.error('Error al buscar el administrador por UID: ', error);
+      // console.error(`Error al buscar el ${type} por UID: `, error);
       return null;
     }
   }
 
-  async getPacientesByUid(uid: string): Promise<Paciente | null> {
-    try {
-      const q = query(
-        collection(this.db, 'pacientes'),
-        where('uid', '==', uid)
-      );
-      const querySnapshot = await getDocs(q);
-
-      if (querySnapshot.size === 0) {
-        console.log('No se encontró ningún paciente con el UID proporcionado');
-        return null;
-      }
-      const adminData = querySnapshot.docs[0].data();
-      const admin = new Paciente(
-        adminData['uid'],
-        adminData['nombre'],
-        adminData['apellido'],
-        adminData['edad'],
-        adminData['dni'],
-        adminData['obraSocial'],
-        adminData['foto1'],
-        adminData['foto2']
-      );
-      return admin;
-    } catch (error) {
-      console.error('Error al buscar el paciente por UID: ', error);
-      return null;
-    }
-  }
   async getAllPacientes(): Promise<Paciente[]> {
     try {
       const q = query(collection(this.db, 'pacientes'));
@@ -249,39 +251,6 @@ export class FirebaseService {
     } catch (error) {
       console.error('Error al obtener todos los pacientes: ', error);
       return [];
-    }
-  }
-
-  async getEspecialistasByUid(uid: string): Promise<Especialista | null> {
-    try {
-      const q = query(
-        collection(this.db, 'especialistas'),
-        where('uid', '==', uid)
-      );
-      const querySnapshot = await getDocs(q);
-
-      if (querySnapshot.size === 0) {
-        console.log(
-          'No se encontró ningún especialista con el UID proporcionado'
-        );
-        return null;
-      }
-      const especialistaData = querySnapshot.docs[0].data();
-      const admin = new Especialista(
-        especialistaData['uid'],
-        especialistaData['nombre'],
-        especialistaData['apellido'],
-        especialistaData['edad'],
-        especialistaData['dni'],
-        especialistaData['especialidades'],
-        especialistaData['foto1'],
-        especialistaData['verificado'],
-      );
-      admin.turnos = especialistaData['turnos'];
-      return admin;
-    } catch (error) {
-      console.error('Error al buscar el especialista por UID: ', error);
-      return null;
     }
   }
 
@@ -346,31 +315,34 @@ export class FirebaseService {
     }
   }
 
-  async actualizarHorariosEspecialista(uid: string, turnos: Horario[]): Promise<void> {
+  async actualizarHorariosEspecialista(
+    uid: string,
+    turnos: Horario[]
+  ): Promise<void> {
     try {
       const especialistasCollection = collection(this.db, 'especialistas');
       const querys = query(especialistasCollection, where('uid', '==', uid));
       const querySnapshot = await getDocs(querys);
-  
+
       if (querySnapshot.size === 0) {
-        console.log('No se encontró ningún especialista con el UID interno proporcionado');
+        console.log(
+          'No se encontró ningún especialista con el UID interno proporcionado'
+        );
         return;
       }
-  
+
       querySnapshot.forEach((docSnapshot) => {
         const especialistaRef = doc(this.db, 'especialistas', docSnapshot.id);
         updateDoc(especialistaRef, { turnos: turnos });
       });
     } catch (error) {
-      console.error('Error al actualizar los horarios del especialista: ', error);
+      console.error(
+        'Error al actualizar los horarios del especialista: ',
+        error
+      );
       throw error;
     }
   }
-  
-
-
-
-
 
   async guardarEspecialidad(especialidadNombre: string): Promise<void> {
     const especialidades = await this.obtenerEspecialidades();
@@ -426,32 +398,32 @@ export class FirebaseService {
     });
 
     return turnos;
-}
+  }
 
-public async obtenerTurnosDelPaciente(pacienteid: string): Promise<Turno[]> {
-  const q = query(
-    collection(this.db, 'turnos'),
-    where('paciente', '==', pacienteid)
-  );
-  const querySnapshot = await getDocs(q);
-  const turnos: Turno[] = [];
-
-  querySnapshot.forEach((doc) => {
-    const turnoData = doc.data();
-    const turno = new Turno(
-      doc.id,
-      turnoData['especialista'],
-      turnoData['especialidad'],
-      turnoData['paciente'],
-      turnoData['estado'],
-      turnoData['fecha'],
-      turnoData['hora']
+  public async obtenerTurnosDelPaciente(pacienteid: string): Promise<Turno[]> {
+    const q = query(
+      collection(this.db, 'turnos'),
+      where('paciente', '==', pacienteid)
     );
-    turnos.push(turno);
-  });
+    const querySnapshot = await getDocs(q);
+    const turnos: Turno[] = [];
 
-  return turnos;
-}
+    querySnapshot.forEach((doc) => {
+      const turnoData = doc.data();
+      const turno = new Turno(
+        doc.id,
+        turnoData['especialista'],
+        turnoData['especialidad'],
+        turnoData['paciente'],
+        turnoData['estado'],
+        turnoData['fecha'],
+        turnoData['hora']
+      );
+      turnos.push(turno);
+    });
+
+    return turnos;
+  }
 
   public async obtenerTurnos(especialistaId: string): Promise<Turno[]> {
     const q = query(
@@ -488,6 +460,13 @@ public async obtenerTurnosDelPaciente(pacienteid: string): Promise<Turno[]> {
     const observable = collectionData(col);
 
     return observable;
+  }
+
+  async getWhere(path: string, condicion: string, condicion2: string) {
+    const Collection = collection(this.db, path);
+    const Query = query(Collection, where(condicion, '==', condicion2));
+    const Snapshot = await getDocs(Query);
+    return Snapshot;
   }
 
   getDocument(path: string, documentId: string) {

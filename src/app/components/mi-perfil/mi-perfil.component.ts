@@ -50,7 +50,7 @@ export class MiPerfilComponent implements OnInit {
   async user() {
     let user = localStorage.getItem('logueado');
     if (user) {
-      const especialista = await this.authService.getEspecialistasByUid(user);
+      const especialista = await this.authService.getUserByUidAndType(user,'especialistas');
       if (especialista) {
         const especialidades = await this.authService.obtenerEspecialidades();
         this.identidad = 'especialista';
@@ -92,13 +92,13 @@ export class MiPerfilComponent implements OnInit {
 
         localStorage.setItem('identidad', 'especialista');
       } else {
-        const paciente = await this.authService.getPacientesByUid(user);
+        const paciente = await this.authService.getUserByUidAndType(user,'pacientes');
         if (paciente) {
           this.identidad = 'paciente';
           this.usuario = paciente;
           localStorage.setItem('identidad', 'paciente');
         } else {
-          const admin = await this.authService.getAdminByUid(user);
+          const admin = await this.authService.getUserByUidAndType(user,'admins');
           this.identidad = 'admin';
           this.usuario = admin;
           localStorage.setItem('identidad', 'admin');

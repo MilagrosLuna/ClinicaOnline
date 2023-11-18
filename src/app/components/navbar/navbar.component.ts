@@ -23,10 +23,10 @@ export class NavbarComponent implements OnInit {
   async user() {
     let user = this.authService.getCurrentUser();
     if (user) {
-      const especialista = await this.authService.getEspecialistasByUid(
-        user.uid
+      const especialista = await this.authService.getUserByUidAndType(
+        user.uid,'especialistas'
       );      
-      const paciente = await this.authService.getPacientesByUid(user.uid);
+      const paciente = await this.authService.getUserByUidAndType(user.uid,'pacientes');
       if (especialista) {
         this.esPaciente = false;
         this.usuario = especialista;

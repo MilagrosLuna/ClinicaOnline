@@ -15,6 +15,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { MiPerfilComponent } from './components/mi-perfil/mi-perfil.component';
+import { AccessButtonComponent } from './componentes/access-button/access-button.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,6 +27,7 @@ import { MiPerfilComponent } from './components/mi-perfil/mi-perfil.component';
     HomeComponent,
     NavbarComponent,
     MiPerfilComponent,
+    AccessButtonComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,6 +40,8 @@ import { MiPerfilComponent } from './components/mi-perfil/mi-perfil.component';
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     provideAuth(() => getAuth()),
+    BrowserAnimationsModule,
+    NgxSpinnerModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
