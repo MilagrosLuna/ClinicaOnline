@@ -15,7 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { MiPerfilComponent } from './components/mi-perfil/mi-perfil.component';
-import { AccessButtonComponent } from './componentes/access-button/access-button.component';
+import { AccessButtonComponent } from './components/access-button/access-button.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 

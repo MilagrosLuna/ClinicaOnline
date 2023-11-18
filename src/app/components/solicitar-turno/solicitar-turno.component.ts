@@ -60,8 +60,8 @@ export class SolicitarTurnoComponent {
       }
     }
   }
-  onEspecialidadChange(event: any) {
-    this.especialidadSeleccionada = this.form.controls['especialidad'].value;
+  onEspecialidadChange(uid: any) {
+    this.especialidadSeleccionada = uid;
     this.filtrarEspecialistas();
     this.especialista = undefined;
     this.fechaObtenida = false;
@@ -80,7 +80,8 @@ export class SolicitarTurnoComponent {
     this.especialidades = especialidadesData.map((especialidadData: any) => {
       const especialidad = new Especialidad(
         especialidadData.id,
-        especialidadData.nombre
+        especialidadData.nombre,
+        especialidadData.foto
       );
       return especialidad;
     });

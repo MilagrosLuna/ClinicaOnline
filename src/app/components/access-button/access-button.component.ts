@@ -9,7 +9,7 @@ import { FirebaseService } from 'src/app/servicios/firebase.service';
 })
 export class AccessButtonComponent implements OnInit {
   @Input() email: string = '';
-  @Input() tipo: string = ''; // New input for the user type
+  @Input() tipo: string = ''; 
   @Output() buttonClick: EventEmitter<{ email: string; password: string }> =
     new EventEmitter<{ email: string; password: string }>();
   foto: any;

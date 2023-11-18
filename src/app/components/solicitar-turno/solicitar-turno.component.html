@@ -2,7 +2,7 @@
   <h4 class="mb-3">Datos del turno</h4>
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
     <div class="row g-3">
-      <div class="col-sm-6">
+      <!-- <div class="col-sm-6">
         <label for="especialidad" class="form-label">Especialidad:</label>
         <select
           class="form-select"
@@ -31,7 +31,28 @@
             Debe seleccionar una especialidad.
           </small>
         </div>
+      </div> -->
+      <div class="col-sm-10">
+        <label for="especialidad" class="form-label">Especialidad:</label>
+        <div class="row">
+          <div *ngFor="let especialidad of especialidades" class="col-sm-3 m-1">
+            <button
+              class="btn btn-primary"
+              type="button"
+              id="{{ especialidad.uid }}"
+              (click)="onEspecialidadChange(especialidad.uid)"
+            >
+              <img
+                [src]="especialidad.foto || '../assets/especialidad.png'"
+                alt="Imagen de {{ especialidad.nombre }}"
+                class="img-fluid especialidad-img"
+              />
+            </button>
+          </div>
+        </div>
       </div>
+      
+      
 
       <div *ngIf="especialidadSeleccionada">
         <div class="col-sm-6">
@@ -90,7 +111,7 @@
                     [value]="paciente.uid"
                   >
                     {{ paciente.nombre }} {{ paciente.apellido }}
-                  </option> 
+                  </option>
                 </select>
                 <div *ngIf="form.controls['paciente'].errors != null">
                   <small

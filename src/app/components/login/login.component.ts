@@ -4,7 +4,6 @@ import { FirebaseService } from 'src/app/servicios/firebase.service';
 import Swal from 'sweetalert2';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/servicios/user.service';
-import { DocumentData } from '@angular/fire/firestore';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({

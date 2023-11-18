@@ -7,11 +7,8 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { Especialista } from 'src/app/clases/especialista';
 import { Turno } from 'src/app/clases/turno';
 import { FirebaseService } from 'src/app/servicios/firebase.service';
-import Swal from 'sweetalert2';
-
 @Component({
   selector: 'app-listado-dias-turno',
   templateUrl: './listado-dias-turno.component.html',
@@ -27,14 +24,13 @@ export class ListadoDiasTurnoComponent implements OnInit, OnChanges {
   selectedDay: Date | undefined;
   selectedHour: string | undefined;
   periodos = ['mañana', 'tarde'];
-
   constructor(private auth: FirebaseService) {}
-
   async ngOnInit(): Promise<void> {
     this.loading = true;
     if (this.especialista) {
       this.especialistaData = await this.auth.getUserByUidAndType(
-        this.especialista,'especialistas'
+        this.especialista,
+        'especialistas'
       );
     }
     this.diasDisponibles = await this.obtenerDiasDisponibles();
@@ -55,7 +51,8 @@ export class ListadoDiasTurnoComponent implements OnInit, OnChanges {
       this.loading = true;
       if (this.especialista) {
         this.especialistaData = await this.auth.getUserByUidAndType(
-          this.especialista,'especialistas'
+          this.especialista,
+          'especialistas'
         );
       }
       this.diasDisponibles = await this.obtenerDiasDisponibles();
@@ -94,16 +91,24 @@ export class ListadoDiasTurnoComponent implements OnInit, OnChanges {
     const todosLosTurnos = this.especialista
       ? await this.auth.obtenerTurnos(this.especialista)
       : [];
-    // Calcular los horarios disponibles para la 'mañana' y la 'tarde'
-    const horariosManana = this.obtenerHorariosDisponibles('mañana');
-    const horariosTarde = this.obtenerHorariosDisponibles('tarde');
-    const horariosPosibles = horariosManana.concat(horariosTarde);
-    if (horariosPosibles.length == 0) {
-      return [];
-    }
-    for (let i = 0; i < 15; i++) {
+
+    for (let i = 0; i < 16; i++) {
       const dia = new Date(today);
       dia.setDate(today.getDate() + i);
+
+      if (dia.getDay() === 0) {
+        continue;
+      }
+
+      // Si el día es sábado, ajustar los horarios disponibles
+      let horariosPosibles;
+      if (dia.getDay() === 6) {
+        horariosPosibles = this.obtenerHorariosDisponibles('sabado');
+      } else {
+        const horariosManana = this.obtenerHorariosDisponibles('mañana');
+        const horariosTarde = this.obtenerHorariosDisponibles('tarde');
+        horariosPosibles = horariosManana.concat(horariosTarde);
+      }
 
       // Filtrar los turnos del especialista para el día actual
       const turnosDelDia = todosLosTurnos.filter((turno) =>
@@ -162,7 +167,7 @@ export class ListadoDiasTurnoComponent implements OnInit, OnChanges {
       const turnoEspecialista = this.especialistaData.turnos.find(
         (turno: any) => turno.especialidad === this.especialidad
       );
-      if (turnoEspecialista && turnoEspecialista.turno === periodo) {
+      if (turnoEspecialista?.turno === periodo) {
         if (periodo === 'mañana') {
           horariosDisponibles = Array.from({ length: 6 }, (_, index) => {
             const hora = 8 + index;
@@ -173,9 +178,13 @@ export class ListadoDiasTurnoComponent implements OnInit, OnChanges {
             const hora = 14 + index;
             return `${hora}:00`;
           });
-        } else {
-          return [];
         }
+      }
+      if (periodo === 'sabado' && turnoEspecialista.turno === 'mañana') {
+        horariosDisponibles = Array.from({ length: 7 }, (_, index) => {
+          const hora = 8 + index;
+          return `${hora}:00`;
+        });
       }
     }
     return horariosDisponibles;
