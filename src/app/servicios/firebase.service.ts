@@ -269,7 +269,6 @@ export class FirebaseService {
       return [];
     }
   }
-
   async obtenerEspecialistas(): Promise<any[]> {
     try {
       const especialistasRef = collection(this.db, 'especialistas');

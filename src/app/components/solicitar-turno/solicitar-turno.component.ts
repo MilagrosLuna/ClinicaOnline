@@ -29,11 +29,11 @@ export class SolicitarTurnoComponent {
   especialistas: Especialista[] = [];
   especialistasFiltrados: Especialista[] = [];
   pacientes: Paciente[] = [];
-  especialidadSeleccionada: string = '';
+  especialidadSeleccionada: string | undefined = '';
   esAdmin: boolean = false;
   fechaObtenida: boolean = false;
   especialista: string | undefined = undefined;
-  especialistaFalso:boolean = false;
+  especialistaFalso: boolean = false;
   constructor(
     private authService: FirebaseService,
     private router: Router,
@@ -52,7 +52,7 @@ export class SolicitarTurnoComponent {
     let id = localStorage.getItem('logueado');
     this.esAdmin = localStorage.getItem('admin') === 'true';
     if (id) {
-      let admin = await this.authService.getUserByUidAndType(id,'admins');
+      let admin = await this.authService.getUserByUidAndType(id, 'admins');
       if (admin != null) {
         this.esAdmin = true;
         this.cargarPacientes();
@@ -62,13 +62,15 @@ export class SolicitarTurnoComponent {
   }
   onEspecialidadChange(uid: any) {
     this.especialidadSeleccionada = uid;
+    this.form.controls['especialidad'].setValue(uid);
     this.filtrarEspecialistas();
     this.especialista = undefined;
     this.fechaObtenida = false;
   }
-  onEspecialistaChange(event: any) {
-    this.especialista = undefined;
-    this.especialista = this.form.controls['especialista'].value;
+  onEspecialistaChange(uid: any) {
+    this.especialista = uid;
+    this.form.controls['especialista'].setValue(uid);
+    console.log(this.especialista);
     this.fechaObtenida = false;
     this.cdr.detectChanges();
   }
@@ -124,15 +126,15 @@ export class SolicitarTurnoComponent {
     );
   }
   onTurnoSeleccionado(turno: { dia: Date; hora: string }) {
-    if(turno.hora == ''){
+    if (turno.hora == '') {
       this.fechaObtenida = false;
       this.especialista = undefined;
-      this.especialistaFalso =  true;
+      this.especialistaFalso = true;
       Swal.fire({
         icon: 'error',
         title: 'Error, el especialista no tiene horarios cargados...',
         timer: 2500,
-      })
+      });
       return;
     }
     const fechaSeleccionada: Date = turno.dia;
@@ -236,6 +238,7 @@ export class SolicitarTurnoComponent {
       });
       this.form.reset();
       this.especialista = undefined;
+      this.especialidadSeleccionada = undefined;
       this.fechaObtenida = false;
     } catch (error: any) {
       Swal.fire({

@@ -7,6 +7,8 @@ import { TurnosPacienteComponent } from 'src/app/modulos/turnos/turnos-paciente/
 import { SolicitarTurnoComponent } from 'src/app/components/solicitar-turno/solicitar-turno.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ListadoDiasTurnoComponent } from './listado-dias-turno/listado-dias-turno.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,7 @@ import { ListadoDiasTurnoComponent } from './listado-dias-turno/listado-dias-tur
     TurnosRoutingModule,
     ReactiveFormsModule,
     FormsModule,
+    NgxSpinnerModule,
   ],
 })
 export class TurnosModule {}

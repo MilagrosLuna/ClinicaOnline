@@ -82,6 +82,7 @@ export class ListadoDiasTurnoComponent implements OnInit, OnChanges {
   seleccionarHora(dia: Date, hora: string): void {
     this.selectedDay = dia;
     this.selectedHour = hora;
+    this.seleccionarTurno();
   }
 
   async obtenerDiasDisponibles(): Promise<{ dia: Date; horarios: string[] }[]> {

@@ -51,38 +51,29 @@
           </div>
         </div>
       </div>
-      
-      
 
       <div *ngIf="especialidadSeleccionada">
-        <div class="col-sm-6">
+        <div class="col-sm-10">
           <label for="especialista" class="form-label">Especialista:</label>
-          <select
-            class="form-select"
-            id="especialista"
-            formControlName="especialista"
-            (ngModelChange)="onEspecialistaChange($event)"
-          >
-            <option value="" disabled selected>
-              Seleccione un especialista
-            </option>
-            <option
+          <div class="row">
+            <div
               *ngFor="let especialista of especialistasFiltrados"
-              [value]="especialista.uid"
+              class="col-sm-3 m-1"
             >
-              {{ especialista.nombre }}
-            </option>
-          </select>
-          <div *ngIf="form.controls['especialista'].errors != null">
-            <small
-              class="invalid"
-              *ngIf="
-                form.controls['especialista'].errors!['required'] &&
-                form.controls['especialista'].touched
-              "
-            >
-              Debe seleccionar un especialista.
-            </small>
+              <button
+                class="btn btn-primary"
+                type="button"
+                id="{{ especialista.uid }}"
+                (click)="onEspecialistaChange(especialista.uid)"
+              >
+             <p>{{especialista.nombre}}</p>
+                <img
+                  [src]="especialista.foto1"
+                  alt="Imagen de {{ especialista.nombre }}"
+                  class="img-fluid especialidad-img"
+                />
+              </button>
+            </div>
           </div>
         </div>
         <div *ngIf="especialista">

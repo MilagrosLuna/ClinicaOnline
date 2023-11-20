@@ -1,7 +1,9 @@
 export class Turno {
   uid: string;
   idEspecialista: string;
+  Especialista: string;
   idEspecialidad: string;
+  Especialidad: string;
   idPaciente: string;
   estado: string;
   fecha: string;
@@ -22,5 +24,7 @@ export class Turno {
     this.estado = estado;
     this.fecha = fecha;
     this.hora = hora;
+    this.Especialidad='';
+    this.Especialista='';
   }
 }
