@@ -9,6 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ListadoDiasTurnoComponent } from './listado-dias-turno/listado-dias-turno.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { EncuestaComponent } from './encuesta/encuesta.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     TurnosPacienteComponent,
     SolicitarTurnoComponent,    
     ListadoDiasTurnoComponent,
+    EncuestaComponent,
   ],
   imports: [
     CommonModule,

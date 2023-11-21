@@ -3,6 +3,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { FirebaseService } from 'src/app/servicios/firebase.service';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Turno } from 'src/app/clases/turno';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-turnos-especialista',
@@ -11,6 +13,15 @@ import { map } from 'rxjs/operators';
 })
 export class TurnosEspecialistaComponent {
   turnos: any[] = [];
+  turnoA: Turno | null = null;
+  comentario: boolean = false;
+  rechazo: boolean = false;
+  resena: boolean = false;
+  finalizar: boolean = false;
+  motivoCancelacion: string = '';
+  turnoFinalizado: string = '';
+  datoResena: string = '';
+  datoComentario: string = '';
   @Input() especialistaId: string = '';
 
   @ViewChild('filtroEspecialidad') filtroEspecialidad!: ElementRef;
@@ -26,9 +37,7 @@ export class TurnosEspecialistaComponent {
             turno.Especialidad.includes(
               this.filtroEspecialidad.nativeElement.value
             ) &&
-            turno.Paciente.includes(
-              this.filtroPaciente.nativeElement.value
-            )
+            turno.Paciente.includes(this.filtroPaciente.nativeElement.value)
         )
       )
     );
@@ -50,7 +59,8 @@ export class TurnosEspecialistaComponent {
   async cargarTurnos() {
     if (this.especialistaId !== '') {
       let turnos = await this.firestoreService.obtenerTurnosDelUsuario(
-        this.especialistaId,'especialista'
+        this.especialistaId,
+        'especialista'
       );
       let especialidades = await this.firestoreService.obtenerEspecialidades();
 
@@ -67,7 +77,7 @@ export class TurnosEspecialistaComponent {
         );
 
         turno.Paciente = Paciente.nombre + ' ' + Paciente.apellido;
-        turno.idPaciente = Paciente.id;
+        turno.idPaciente = Paciente.uid;
       }
 
       this._turnos.next(turnos);
@@ -83,11 +93,173 @@ export class TurnosEspecialistaComponent {
     return `${fechaFormateada} ${hora}`;
   }
 
-  async cancelarTurno() {}
+  async cancelarTurno() {
+    if (this.turnoA && this.motivoCancelacion !='') {
+      console.log(this.motivoCancelacion);
+      this.turnoA.estado = 'cancelado';
+      this.turnoA.comentario = this.motivoCancelacion;
+      try {
+        console.log(this.turnoA);
+        await this.firestoreService.modificarTurno(this.turnoA);
+        Swal.fire({
+          icon: 'success',
+          title: 'Turno cancelado',
+          text: 'el turno ha sido cancelado..',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Hubo un problema',
+          text: 'el turno no ha sido cancelado..',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+      this.turnoA = null;
+      this.comentario = false;
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Hubo un problema',
+        text: 'el turno no ha sido cancelado..',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      this.turnoA = null;
+      this.comentario = false;
+    }
+  }
 
-  verResena() {}
+  cargarComentario(turno: Turno, numero: number) {
+    this.motivoCancelacion = '';
+    if (numero == 1) {
+      this.rechazo = true;
+    } else {
+      this.rechazo = false;
+    }
+    this.turnoA = null;
+    this.comentario = true;
+    this.turnoA = turno;
+  }
 
-  completarEncuesta() {}
+  cargarResena(turno:Turno){
+    this.turnoA = null;
+    this.turnoA = turno;
+    this.finalizar = true;
+  }
 
-  calificarAtencion() {}
+  verResena(turno: Turno) {
+    this.turnoA = null;
+    this.comentario = false;
+    console.log(turno);
+    this.turnoA = turno;
+    this.resena = true;
+    this.datoResena = turno.resena;
+    this.datoComentario = turno.comentario;
+
+    console.log(this.turnoA);
+  }
+  ocultarResena() {
+    this.resena = false;
+  }
+  async rechazarTurno() {
+    if (this.turnoA && this.motivoCancelacion !='') {
+      console.log(this.motivoCancelacion);
+      this.turnoA.estado = 'rechazado';
+      this.turnoA.comentario = this.motivoCancelacion;
+      try {
+        console.log(this.turnoA);
+        await this.firestoreService.modificarTurno(this.turnoA);
+        Swal.fire({
+          icon: 'success',
+          title: 'Turno rechazado',
+          text: 'el turno ha sido rechazado..',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Hubo un problema',
+          text: 'el turno no ha sido rechazado..',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+      this.turnoA = null;
+      this.comentario = false;
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Hubo un problema',
+        text: 'el turno no ha sido rechazado..',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      this.turnoA = null;
+      this.comentario = false;
+    }
+  }
+  async aceptarTurno(turno: Turno) {
+    turno.estado = 'aceptado';
+    try {
+      console.log(turno);
+      await this.firestoreService.modificarTurno(turno);
+      Swal.fire({
+        icon: 'success',
+        title: 'Turno aceptado',
+        text: 'el turno ha sido aceptado..',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Hubo un problema',
+        text: 'el turno no ha sido aceptado..',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  }
+  async finalizarTurno() {
+    if (this.turnoA && this.turnoFinalizado !='') {
+      console.log(this.turnoFinalizado);
+      this.turnoA.estado = 'finalizado';
+      this.turnoA.resena = this.turnoFinalizado;
+      try {
+        console.log(this.turnoA);
+        await this.firestoreService.modificarTurno(this.turnoA);
+        Swal.fire({
+          icon: 'success',
+          title: 'Turno finalizado',
+          text: 'el turno ha sido finalizado..',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Hubo un problema',
+          text: 'el turno no ha sido finalizado..',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+      this.turnoA = null;
+      this.finalizar = false;
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Hubo un problema',
+        text: 'el turno no ha sido finalizado..',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      this.turnoA = null;
+      this.finalizar = false;
+    }
+  }
 }

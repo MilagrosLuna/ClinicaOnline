@@ -67,6 +67,7 @@
                 (click)="onEspecialistaChange(especialista.uid)"
               >
              <p>{{especialista.nombre}}</p>
+             <p>{{especialista.uid}}</p>
                 <img
                   [src]="especialista.foto1"
                   alt="Imagen de {{ especialista.nombre }}"
@@ -92,7 +93,6 @@
                   class="form-select"
                   id="paciente"
                   formControlName="paciente"
-                  (ngModelChange)="onEspecialistaChange($event)"
                 >
                   <option value="" disabled selected>
                     Seleccione un paciente

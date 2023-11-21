@@ -1,0 +1,109 @@
+<div class="container">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+    <div class="form-group">
+      <label for="puntajeClinica">Puntaje de la clínica (1-5):</label>
+      <input
+        type="number"
+        id="puntajeClinica"
+        formControlName="puntajeClinica"
+        class="form-control"
+      />
+      <div *ngIf="form.controls['puntajeClinica'].errors != null">
+        <small
+          class="invalid"
+          *ngIf="
+            form.controls['puntajeClinica'].errors!['required'] &&
+            form.controls['puntajeClinica'].errors!['required'] &&
+            form.controls['puntajeClinica'].touched
+          "
+          >Debe ingresar un puntaje para la clínica.
+        </small>
+        <small
+          class="invalid"
+          *ngIf="form.controls['puntajeClinica'].errors['min']"
+        >
+          el puntaje de la clínica debe ser mayor o igual a 1.
+        </small>
+        <small
+          class="invalid"
+          *ngIf="form.controls['puntajeClinica'].errors['max']"
+        >
+          el puntaje de la clínica debe ser menor o igual a 5.
+        </small>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="comentarioClinica">Comentario sobre la clínica:</label>
+      <textarea
+        id="comentarioClinica"
+        formControlName="comentarioClinica"
+        class="form-control"
+      ></textarea>
+      <div *ngIf="form.controls['comentarioClinica'].errors != null">
+        <small
+          class="invalid"
+          *ngIf="
+            form.controls['comentarioClinica'].errors!['required'] &&
+            form.controls['comentarioClinica'].touched
+          "
+          >Debe ingresar un comentario sobre la clínica..</small
+        >
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="puntajeEspecialista">Puntaje del especialista (1-5):</label>
+      <input
+        type="number"
+        id="puntajeEspecialista"
+        formControlName="puntajeEspecialista"
+        class="form-control"
+      />
+      <div *ngIf="form.controls['puntajeEspecialista'].errors != null">
+        <small
+          class="invalid"
+          *ngIf="
+            form.controls['puntajeEspecialista'].errors!['required'] &&
+            form.controls['puntajeEspecialista'].errors!['required'] &&
+            form.controls['puntajeEspecialista'].touched
+          "
+          >Debe ingresar un puntaje para el especialista.
+        </small>
+        <small
+          class="invalid"
+          *ngIf="form.controls['puntajeEspecialista'].errors['min']"
+        >
+          el puntaje del especialista debe ser mayor o igual a 1.
+        </small>
+        <small
+          class="invalid"
+          *ngIf="form.controls['puntajeEspecialista'].errors['max']"
+        >
+          el puntaje del especialista debe ser menor o igual a 5.
+        </small>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="comentarioEspecialista"
+        >Comentario sobre el especialista:</label
+      >
+      <textarea
+        id="comentarioEspecialista"
+        formControlName="comentarioEspecialista"
+        class="form-control"
+      ></textarea>
+      <div *ngIf="form.controls['comentarioEspecialista'].errors != null">
+        <small
+          class="invalid"
+          *ngIf="
+            form.controls['comentarioEspecialista'].errors!['required'] &&
+            form.controls['comentarioEspecialista'].touched
+          "
+          >Debe ingresar un comentario sobre el especialista..</small
+        >
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Enviar</button>
+  </form>
+</div>

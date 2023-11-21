@@ -33,6 +33,7 @@ export class SolicitarTurnoComponent {
   esAdmin: boolean = false;
   fechaObtenida: boolean = false;
   especialista: string | undefined = undefined;
+  paciente: string | undefined = undefined;
   especialistaFalso: boolean = false;
   constructor(
     private authService: FirebaseService,
@@ -74,6 +75,7 @@ export class SolicitarTurnoComponent {
     this.fechaObtenida = false;
     this.cdr.detectChanges();
   }
+  
   async cargarPacientes() {
     this.pacientes = await this.authService.getAllPacientes();
   }
@@ -228,6 +230,7 @@ export class SolicitarTurnoComponent {
         this.form.controls['fecha'].value,
         this.form.controls['hora'].value
       );
+      console.log(turno);
       await this.authService.guardarTurno(turno);
       Swal.fire({
         icon: 'success',

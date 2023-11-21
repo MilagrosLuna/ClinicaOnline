@@ -33,6 +33,7 @@ import { Paciente } from '../clases/paciente';
 import { Especialista } from '../clases/especialista';
 import { Turno } from '../clases/turno';
 import { Horario } from '../clases/horario';
+import { Encuesta } from '../clases/encuesta';
 @Injectable({
   providedIn: 'root',
 })
@@ -127,6 +128,22 @@ export class FirebaseService {
     }
   }
 
+  public async guardarEncuesta(encuesta: Encuesta) {
+    try {
+      const docRef = await addDoc(collection(this.db, 'encuestas'), {
+        puntajeClinica: encuesta.puntajeClinica,
+        comentarioClinica: encuesta.comentarioClinica,
+        puntajeEspecialista: encuesta.puntajeEspecialista,
+        comentarioEspecialista: encuesta.comentarioEspecialista,
+      });
+      console.log('Document written with ID: ', docRef.id);
+      return docRef.id;
+    } catch (e) {
+      console.error('Error adding document: ', e);
+      return false;
+    }
+  }
+
   public async guardarPacienteBD(paciente: Paciente) {
     try {
       const docRef = await addDoc(collection(this.db, 'pacientes'), {
@@ -173,7 +190,7 @@ export class FirebaseService {
       const querySnapshot = await getDocs(q);
 
       if (querySnapshot.size === 0) {
-        //console.log(`No se encontró ningún ${type} con el UID proporcionado`);
+        console.log(`No se encontró ningún ${type} con el UID proporcionado`);
         return null;
       }
 
@@ -378,6 +395,23 @@ export class FirebaseService {
     }
   }
 
+  public async modificarTurno(turno: Turno): Promise<void> {
+    const turnoRef = doc(this.db, 'turnos', turno.uid);
+
+    await updateDoc(turnoRef, {
+      especialidad: turno.idEspecialidad,
+      especialista: turno.idEspecialista,
+      paciente: turno.idPaciente,
+      estado: turno.estado,
+      fecha: turno.fecha,
+      hora: turno.hora,
+      resena: turno.resena,
+      comentario: turno.comentario,
+      atencion:turno.atencion,
+      encuesta:turno.encuesta
+    });
+  }
+
   public async obtenerTodosLosTurnos(): Promise<Turno[]> {
     const querySnapshot = await getDocs(collection(this.db, 'turnos'));
     const turnos: Turno[] = [];
@@ -407,10 +441,7 @@ export class FirebaseService {
     if (tipo == 'paciente') {
       condicion = 'paciente';
     }
-    const q = query(
-      collection(this.db, 'turnos'),
-      where(condicion, '==', uid)
-    );
+    const q = query(collection(this.db, 'turnos'), where(condicion, '==', uid));
     const querySnapshot = await getDocs(q);
     const turnos: Turno[] = [];
 
@@ -425,12 +456,17 @@ export class FirebaseService {
         turnoData['fecha'],
         turnoData['hora']
       );
+      if (turnoData['comentario']) {
+        turno.comentario = turnoData['comentario'];
+      }
+      if (turnoData['resena']) {
+        turno.resena = turnoData['resena'];
+      }
       turnos.push(turno);
     });
 
     return turnos;
   }
-
   public async obtenerTurnos(especialistaId: string): Promise<Turno[]> {
     const q = query(
       collection(this.db, 'turnos'),
@@ -456,27 +492,10 @@ export class FirebaseService {
     return turnos;
   }
 
-  save(data: any, path: string) {
-    const col = collection(this.db, path);
-    return addDoc(col, { ...data });
-  }
-
-  get(path: string) {
-    const col = collection(this.db, path);
-    const observable = collectionData(col);
-
-    return observable;
-  }
-
   async getWhere(path: string, condicion: string, condicion2: string) {
     const Collection = collection(this.db, path);
     const Query = query(Collection, where(condicion, '==', condicion2));
     const Snapshot = await getDocs(Query);
     return Snapshot;
-  }
-
-  getDocument(path: string, documentId: string) {
-    const documentRef = doc(this.db, path, documentId);
-    return getDoc(documentRef);
   }
 }
