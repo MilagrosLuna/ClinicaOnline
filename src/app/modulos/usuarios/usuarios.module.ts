@@ -6,6 +6,7 @@ import { AdmistradorComponent } from './admistrador/admistrador.component';
 import { AdmistrarEspecialistassComponent } from './admistrar-especialistass/admistrar-especialistass.component';
 import { NavbarAdmComponent } from './navbar-adm/navbar-adm.component';
 import { AdmistrarTurnosComponent } from './admistrar-turnos/admistrar-turnos.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -17,6 +18,8 @@ import { AdmistrarTurnosComponent } from './admistrar-turnos/admistrar-turnos.co
   ],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
     UsuariosRoutingModule
   ]
 })

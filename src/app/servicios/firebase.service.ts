@@ -420,13 +420,19 @@ export class FirebaseService {
       const turnoData = doc.data();
       const turno = new Turno(
         doc.id,
-        turnoData['especialidad'],
         turnoData['especialista'],
+        turnoData['especialidad'],
         turnoData['paciente'],
         turnoData['estado'],
         turnoData['fecha'],
         turnoData['hora']
       );
+      if (turnoData['comentario']) {
+        turno.comentario = turnoData['comentario'];
+      }
+      if (turnoData['resena']) {
+        turno.resena = turnoData['resena'];
+      }
       turnos.push(turno);
     });
 
