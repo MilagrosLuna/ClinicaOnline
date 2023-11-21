@@ -1,35 +1,82 @@
 <div class="container mt-3">
-    <div class="mb-3">
-      <label for="filtroEspecialidad" class="form-label"
-        >Filtrar por especialidad:</label
-      >
-      <input #filtroEspecialidad type="text" class="form-control" id="filtroEspecialidad" (input)="filtrarTurnos()" />
-    </div>
-    <div class="mb-3">
-      <label for="filtroEspecialista" class="form-label"
-        >Filtrar por especialista:</label
-      >
-      <input #filtroEspecialista type="text" class="form-control" id="filtroEspecialista" (input)="filtrarTurnos()" />
-    </div>
-  
-    <div style="height: 600px; overflow: auto">
-      <div *ngFor="let turno of turnosFiltrados | async">
-        <div class="card mb-3">
-          <div class="card-body">
-            <h5 class="card-title">
-              {{ obtenerFechaHoraFormateada(turno.fecha, turno.hora) }}
-            </h5>
-            <p class="card-text">Especialista: {{ turno.Especialista }}</p>
-            <p class="card-text">Especialidad: {{ turno.Especialidad }}</p>
-            <p class="card-text">Estado: {{ turno.estado }}</p>
-            <div class="d-flex justify-content-end">
-              <button class="btn btn-primary me-2">Botón 1</button>
-              <button class="btn btn-secondary me-2">Botón 2</button>
-              <button class="btn btn-success">Botón 3</button>
+  <div class="mb-3">
+    <label for="filtroEspecialidad" class="form-label"
+      >Filtrar por especialidad:</label
+    >
+    <input
+      #filtroEspecialidad
+      type="text"
+      class="form-control"
+      id="filtroEspecialidad"
+      (input)="filtrarTurnos()"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="filtroEspecialista" class="form-label"
+      >Filtrar por especialista:</label
+    >
+    <input
+      #filtroEspecialista
+      type="text"
+      class="form-control"
+      id="filtroEspecialista"
+      (input)="filtrarTurnos()"
+    />
+  </div>
+
+  <div style="height: 600px; overflow: auto">
+    <div *ngFor="let turno of turnosFiltrados | async">
+      <div class="card mb-3">
+        <div class="card-body">
+          <h4>
+            Estado del turno:
+            <span class="text-primary"> {{ turno.estado }}</span>
+          </h4>
+          <h6 class="card-title">
+            {{ obtenerFechaHoraFormateada(turno.fecha, turno.hora) }}
+          </h6>
+          <p class="card-text">Especialista: {{ turno.Especialista }}</p>
+          <p class="card-text">Especialidad: {{ turno.Especialidad }}</p>
+          <div class="d-flex justify-content-end">
+            <div *ngIf="turno.estado === 'realizado'">
+              <button
+                type="button"
+                class="btn btn-primary me-2"
+                (click)="calificarAtencion()"
+              >
+                Calificar atencion
+              </button>
+            </div>
+            <div *ngIf="turno.estado === 'realizado' && turno.resena != ''">
+              <button
+                type="button"
+                class="btn btn-success me-2"
+                (click)="completarEncuesta()"
+              >
+                Completar encuesta
+              </button>
+            </div>
+            <div *ngIf="turno.resena != '' && turno.comentario != ''">
+              <button
+                type="button"
+                class="btn btn-info me-2"
+                (click)="verResena()"
+              >
+                Ver reseña
+              </button>
+            </div>
+            <div *ngIf="turno.estado != 'realizado'">
+              <button
+                type="button"
+                class="btn btn-danger me-2"
+                (click)="cancelarTurno()"
+              >
+                Cancelar Turno
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
+</div>

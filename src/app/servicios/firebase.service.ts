@@ -399,10 +399,17 @@ export class FirebaseService {
     return turnos;
   }
 
-  public async obtenerTurnosDelPaciente(pacienteid: string): Promise<Turno[]> {
+  public async obtenerTurnosDelUsuario(
+    uid: string,
+    tipo: string
+  ): Promise<Turno[]> {
+    let condicion = 'especialista';
+    if (tipo == 'paciente') {
+      condicion = 'paciente';
+    }
     const q = query(
       collection(this.db, 'turnos'),
-      where('paciente', '==', pacienteid)
+      where(condicion, '==', uid)
     );
     const querySnapshot = await getDocs(q);
     const turnos: Turno[] = [];

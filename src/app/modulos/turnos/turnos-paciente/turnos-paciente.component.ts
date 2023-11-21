@@ -41,8 +41,8 @@ export class TurnosPacienteComponent {
 
   async cargarTurnos() {
     if (this.pacienteId !== '') {
-      let turnos = await this.firestoreService.obtenerTurnosDelPaciente(
-        this.pacienteId
+      let turnos = await this.firestoreService.obtenerTurnosDelUsuario(
+        this.pacienteId,'paciente'
       );
       let especialidades = await this.firestoreService.obtenerEspecialidades();
 
@@ -68,11 +68,27 @@ export class TurnosPacienteComponent {
 
   filtrarTurnos() {
     this._turnos.next(this._turnos.value);
-  }
-  
+  }  
 
   obtenerFechaHoraFormateada(fecha: any, hora: string): string {
     const fechaFormateada = fecha.toDate().toLocaleDateString('es-AR');
     return `${fechaFormateada} ${hora}`;
   }
+
+  async cancelarTurno(){
+
+  }
+
+  verResena(){
+
+  }
+
+  completarEncuesta(){
+
+  }
+
+  calificarAtencion(){
+
+  }
+
 }

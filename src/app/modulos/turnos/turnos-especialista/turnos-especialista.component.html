@@ -1,1 +1,84 @@
 <p>turnos-especialista works!</p>
+<div class="container mt-3">
+    <div class="mb-3">
+      <label for="filtroEspecialidad" class="form-label"
+        >Filtrar por especialidad:</label
+      >
+      <input
+        #filtroEspecialidad
+        type="text"
+        class="form-control"
+        id="filtroEspecialidad"
+        (input)="filtrarTurnos()"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="filtroPaciente" class="form-label"
+        >Filtrar por paciente:</label
+      >
+      <input
+        #filtroPaciente
+        type="text"
+        class="form-control"
+        id="filtroPaciente"
+        (input)="filtrarTurnos()"
+      />
+    </div>
+  
+    <div style="height: 600px; overflow: auto">
+      <div *ngFor="let turno of turnosFiltrados | async">
+        <div class="card mb-3">
+          <div class="card-body">
+            <h4>
+              Estado del turno:
+              <span class="text-primary"> {{ turno.estado }}</span>
+            </h4>
+            <h6 class="card-title">
+              {{ obtenerFechaHoraFormateada(turno.fecha, turno.hora) }}
+            </h6>
+            <p class="card-text">Paciente: {{ turno.Paciente }}</p>
+            <p class="card-text">Especialidad: {{ turno.Especialidad }}</p>
+            <div class="d-flex justify-content-end">
+              <div *ngIf="turno.estado === 'realizado'">
+                <button
+                  type="button"
+                  class="btn btn-primary me-2"
+                  (click)="calificarAtencion()"
+                >
+                  Calificar atencion
+                </button>
+              </div>
+              <div *ngIf="turno.estado === 'realizado' && turno.resena != ''">
+                <button
+                  type="button"
+                  class="btn btn-success me-2"
+                  (click)="completarEncuesta()"
+                >
+                  Completar encuesta
+                </button>
+              </div>
+              <div *ngIf="turno.resena != '' && turno.comentario != ''">
+                <button
+                  type="button"
+                  class="btn btn-info me-2"
+                  (click)="verResena()"
+                >
+                  Ver reseña
+                </button>
+              </div>
+              <div *ngIf="turno.estado != 'realizado'">
+                <button
+                  type="button"
+                  class="btn btn-danger me-2"
+                  (click)="cancelarTurno()"
+                >
+                  Cancelar Turno
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -1,12 +1,10 @@
 <main class="contenedor">
   <div>
     <div *ngIf="esPaciente">
-      <app-turnos-paciente
-      [pacienteId]="id"
-      ></app-turnos-paciente>
+      <app-turnos-paciente [pacienteId]="id"></app-turnos-paciente>
     </div>
     <div *ngIf="!esPaciente">
-      <app-turnos-especialista></app-turnos-especialista>
+      <app-turnos-especialista [especialistaId]="id"></app-turnos-especialista>
     </div>
   </div>
 </main>
