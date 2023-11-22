@@ -13,7 +13,7 @@ import { Encuesta } from 'src/app/clases/encuesta';
   styleUrls: ['./turnos-paciente.component.css'],
 })
 export class TurnosPacienteComponent {
-  turnos: any[] = []; 
+  turnos: any[] = [];
   turnoA: Turno | null = null;
   comentario: boolean = false;
   resena: boolean = false;
@@ -28,9 +28,7 @@ export class TurnosPacienteComponent {
   @ViewChild('filtro') filtro!: ElementRef;
 
   private _turnos = new BehaviorSubject<any[]>([]);
-  turnosFiltrados = this._turnos
-  .asObservable()
-  .pipe(
+  turnosFiltrados = this._turnos.asObservable().pipe(
     map((turnos) => {
       if (this.filtro && this.filtro.nativeElement) {
         const filtro = this.filtro.nativeElement.value.toLowerCase();
@@ -87,7 +85,6 @@ export class TurnosPacienteComponent {
   filtrarTurnos() {
     this._turnos.next(this._turnos.value);
   }
-
 
   obtenerFechaHoraFormateada(fecha: any, hora: string): string {
     const fechaFormateada = fecha.toDate().toLocaleDateString('es-AR');

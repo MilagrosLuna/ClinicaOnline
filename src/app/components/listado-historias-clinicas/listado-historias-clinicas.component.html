@@ -1,4 +1,7 @@
 <div class="container mt-3">
+
+  <!-- <button class="btn btn-primary" (click)="createPDF()">Crear pdf</button> -->
+
 <div *ngIf="historiasClinicas.length > 0; else noHistorias">
   <div *ngIf="identidad === 'especialista'" >
     <div *ngFor="let historia of historiasClinicas" class="card mb-3">
@@ -34,6 +37,7 @@
             <strong>{{ dato.key }}:</strong> {{ dato.value }}
           </p>
         </div>
+        <button class="btn btn-primary" (click)="createPDF(historia)">Descargar pdf</button>
       </div>
     </div>
   </div>

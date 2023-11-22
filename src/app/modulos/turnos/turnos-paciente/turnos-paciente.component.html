@@ -1,4 +1,13 @@
 <div class="container mt-3">
+  <ngx-spinner
+    bdColor="rgba(0, 0, 0, 0.8)"
+    size="medium"
+    color="#fff"
+    type="ball-scale-multiple"
+  >
+    <p style="font-size: 20px; color: white">Cargando turnos...</p>
+  </ngx-spinner>
+
   <div class="mb-3">
     <label for="filtro" class="form-label">Buscar:</label>
     <input
@@ -19,7 +28,7 @@
             <span class="text-primary"> {{ turno.estado }}</span>
           </h4>
           <h6 class="card-title">
-           Fecha: {{ turno.fecha }} a las  {{turno.hora}} hs.
+            Fecha: {{ turno.fecha }} a las {{ turno.hora }} hs.
           </h6>
           <p class="card-text">Especialista: {{ turno.Especialista }}</p>
           <p class="card-text">Especialidad: {{ turno.Especialidad }}</p>
@@ -129,7 +138,9 @@
             </div>
             <div
               *ngIf="
-                turno.estado != 'finalizado' && turno.estado !== 'cancelado' && turno.estado !== 'rechazado'
+                turno.estado != 'finalizado' &&
+                turno.estado !== 'cancelado' &&
+                turno.estado !== 'rechazado'
               "
             >
               <button
