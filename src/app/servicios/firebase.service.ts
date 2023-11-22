@@ -523,6 +523,12 @@ export class FirebaseService {
       if (turnoData['historiaClinica']) {
         turno.historiaClinica = turnoData['historiaClinica'];
       }
+      if (turnoData['encuesta']) {
+        turno.encuesta = turnoData['encuesta'];
+      }
+      if (turnoData['atencion']) {
+        turno.encuesta = turnoData['atencion'];
+      }
       turnos.push(turno);
     });
 

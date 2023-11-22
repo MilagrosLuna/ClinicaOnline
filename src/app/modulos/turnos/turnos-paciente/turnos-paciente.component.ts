@@ -205,7 +205,9 @@ export class TurnosPacienteComponent {
     this.encuesta = true;
     this.turnoA = turno;
   }
-
+TEST(turno:Turno){
+  console.log(turno);
+}
   async calificarAtencion() {
     if (this.turnoA && this.turnoCalificado != '') {
       console.log(this.turnoCalificado);

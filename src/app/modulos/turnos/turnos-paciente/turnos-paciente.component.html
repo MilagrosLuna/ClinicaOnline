@@ -109,7 +109,7 @@
           </div>
 
           <div class="d-flex justify-content-end">
-            <div *ngIf="turno.estado === 'finalizado'">
+            <div *ngIf="turno.estado === 'finalizado' && turno.atencion !== ''">
               <button
                 type="button"
                 class="btn btn-primary me-2"
@@ -118,7 +118,8 @@
                 Calificar atencion
               </button>
             </div>
-            <div *ngIf="turno.estado === 'finalizado' && turno.resena != ''">
+            <!-- <button type="button" (click)="TEST(turno)"></button> -->
+            <div *ngIf="turno.estado === 'finalizado' && turno.encuesta === ''">
               <button
                 type="button"
                 class="btn btn-success me-2"

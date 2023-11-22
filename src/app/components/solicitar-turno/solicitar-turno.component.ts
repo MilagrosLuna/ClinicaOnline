@@ -75,7 +75,7 @@ export class SolicitarTurnoComponent {
     this.fechaObtenida = false;
     this.cdr.detectChanges();
   }
-  
+
   async cargarPacientes() {
     this.pacientes = await this.authService.getAllPacientes();
   }
@@ -139,28 +139,14 @@ export class SolicitarTurnoComponent {
       });
       return;
     }
+
+    this.especialistaFalso = false;
     const fechaSeleccionada: string = turno.dia;
     const horaSeleccionada: string = turno.hora;
-    // const fechaCompleta: Date = new Date(
-    //   fechaSeleccionada.getFullYear(),
-    //   fechaSeleccionada.getMonth(),
-    //   fechaSeleccionada.getDate(),
-    //   parseInt(horaSeleccionada.split(':')[0]),
-    //   parseInt(horaSeleccionada.split(':')[1])
-    // );
+
     this.form.controls['fecha'].setValue(fechaSeleccionada);
     this.form.controls['hora'].setValue(horaSeleccionada);
     this.fechaObtenida = true;
-    // Formatear la fecha y la hora
-    // const fechaFormateada = fechaSeleccionada.toLocaleDateString('es-ES', {
-    //   day: '2-digit',
-    //   month: '2-digit',
-    //   year: 'numeric',
-    // });
-    // const horaFormateada = fechaCompleta.toLocaleTimeString('es-ES', {
-    //   hour: '2-digit',
-    //   minute: '2-digit',
-    // });
 
     Swal.fire({
       icon: 'warning',
@@ -199,7 +185,8 @@ export class SolicitarTurnoComponent {
     const especialidad = this.form.controls['especialidad'].value;
 
     const turnosDelPaciente = await this.authService.obtenerTurnosDelUsuario(
-      pacienteId,'paciente'
+      pacienteId,
+      'paciente'
     );
 
     const turnosEnLaMismaEspecialidad = turnosDelPaciente.filter(

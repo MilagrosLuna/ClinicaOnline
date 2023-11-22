@@ -32,6 +32,7 @@ export class ListadoDiasTurnoComponent implements OnInit, OnChanges {
         this.especialista,
         'especialistas'
       );
+      console.log(this.especialistaData);
     }
     this.diasDisponibles = await this.obtenerDiasDisponibles();
     if (this.diasDisponibles.length == 0) {
@@ -182,7 +183,7 @@ export class ListadoDiasTurnoComponent implements OnInit, OnChanges {
           });
         }
       }
-      if (periodo === 'sabado' && turnoEspecialista.turno === 'mañana') {
+      if (periodo === 'sabado' && turnoEspecialista?.turno === 'mañana') {
         horariosDisponibles = Array.from({ length: 7 }, (_, index) => {
           const hora = 8 + index;
           return `${hora}:00`;
