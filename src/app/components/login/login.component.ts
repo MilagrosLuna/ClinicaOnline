@@ -60,12 +60,12 @@ export class LoginComponent {
         'especialistas'
       );
       if (admin !== null) {
-        this.userservice.showSuccessMessageAndNavigate(['/homeAdmin']);
+        this.userservice.showSuccessMessageAndNavigate(['/homeAdmin/presentacion']);
         return;
       }
       if (especialista !== null) {
         if (especialista.verificado === 'true' && user.user.emailVerified) {
-          this.userservice.showSuccessMessageAndNavigate(['/home']);
+          this.userservice.showSuccessMessageAndNavigate(['/home/presentacion']);
           return;
         }
         if (especialista.verificado === 'null') {
@@ -77,7 +77,7 @@ export class LoginComponent {
           this.userservice.showVerifyEmailMessage();
         }
       } else if (user.user.emailVerified) {
-        this.userservice.showSuccessMessageAndNavigate(['/home']);
+        this.userservice.showSuccessMessageAndNavigate(['/home/presentacion']);
       } else {
         await this.authService.logout();
         this.userservice.showVerifyEmailMessage();

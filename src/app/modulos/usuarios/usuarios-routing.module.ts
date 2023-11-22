@@ -7,6 +7,7 @@ import { AdmistrarTurnosComponent } from './admistrar-turnos/admistrar-turnos.co
 import { SolicitarTurnoComponent } from 'src/app/components/solicitar-turno/solicitar-turno.component';
 import { MiPerfilComponent } from 'src/app/components/mi-perfil/mi-perfil.component';
 import { ListadoHistoriasClinicasComponent } from 'src/app/components/listado-historias-clinicas/listado-historias-clinicas.component';
+import { PresentacionComponent } from 'src/app/components/presentacion/presentacion.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'admin', pathMatch: 'full' },
@@ -22,7 +23,8 @@ const routes: Routes = [
       { path: 'administrar-turnos', component: AdmistrarTurnosComponent },
       { path: 'solicitar-turno', component: SolicitarTurnoComponent },
       { path: 'perfil', component: MiPerfilComponent },
-      { path: 'usuarios', component: ListadoHistoriasClinicasComponent },
+      { path: 'usuarios', component: ListadoHistoriasClinicasComponent },      
+      { path: 'presentacion', component: PresentacionComponent },
     ],
   },
 ];

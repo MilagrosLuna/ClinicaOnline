@@ -20,6 +20,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ListadoHistoriasClinicasComponent } from './components/listado-historias-clinicas/listado-historias-clinicas.component';
 import { GoHomeComponent } from './components/go-home/go-home.component';
+import { PresentacionComponent } from './components/presentacion/presentacion.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { GoHomeComponent } from './components/go-home/go-home.component';
     AccessButtonComponent,
     ListadoHistoriasClinicasComponent,
     GoHomeComponent,
+    PresentacionComponent,
   ],
   imports: [
     BrowserModule,

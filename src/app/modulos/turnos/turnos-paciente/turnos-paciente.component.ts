@@ -131,20 +131,35 @@ export class TurnosPacienteComponent {
   }
 
   cargarComentario(turno: Turno) {
+    this.comentario = false;
+    this.resena = false;
+    this.calificar = false;
+    this.encuesta = false;
+
     this.motivoCancelacion = '';
     this.comentario = true;
     this.turnoA = turno;
   }
 
+
   cargarAtencion(turno: Turno) {
+    this.comentario = false;
+    this.resena = false;
+    this.calificar = false;
+    this.encuesta = false;
+
     this.turnoCalificado = '';
     this.calificar = true;
     this.turnoA = turno;
   }
 
   verResena(turno: Turno) {
-    this.turnoA = null;
     this.comentario = false;
+    this.resena = false;
+    this.calificar = false;
+    this.encuesta = false;
+
+    this.turnoA = null;
     this.turnoA = turno;
     this.resena = true;
     this.datoResena = turno.resena;
@@ -182,6 +197,11 @@ export class TurnosPacienteComponent {
   }
 
   completarEncuesta(turno: Turno) {
+    this.comentario = false;
+    this.resena = false;
+    this.calificar = false;
+    this.encuesta = false;
+    
     this.encuesta = true;
     this.turnoA = turno;
   }

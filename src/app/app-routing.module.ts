@@ -5,6 +5,7 @@ import { BienvenidaComponent } from './components/bienvenida/bienvenida.componen
 import { HomeComponent } from './components/home/home.component';
 import { MiPerfilComponent } from './components/mi-perfil/mi-perfil.component';
 import { ListadoHistoriasClinicasComponent } from './components/listado-historias-clinicas/listado-historias-clinicas.component';
+import { PresentacionComponent } from './components/presentacion/presentacion.component';
 
 const routes: Routes = [
   { path: 'bienvenida', component: BienvenidaComponent , data: {animation: 'BienvenidaPage'}  },
@@ -21,6 +22,7 @@ const routes: Routes = [
       { path: 'perfil', component: MiPerfilComponent },
       { path: 'pacientes', component: ListadoHistoriasClinicasComponent },
       { path: 'historias', component: ListadoHistoriasClinicasComponent },
+      { path: 'presentacion', component: PresentacionComponent },
     ],
   },
   {

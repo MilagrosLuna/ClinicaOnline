@@ -15,18 +15,22 @@
   <button
     class="navbar-toggler"
     type="button"
-    data-toggle="collapse"
-    data-target="#navbarText"
-    aria-controls="navbarText"
+    data-bs-toggle="collapse"
+    data-bs-target="#navbarTextPaciente"
+    aria-controls="navbarTextPaciente"
     aria-expanded="false"
     aria-label="Toggle navigation"
   >
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div *ngIf="esPaciente" class="collapse navbar-collapse" id="navbarText">
+  <div
+    *ngIf="esPaciente"
+    class="collapse navbar-collapse"
+    id="navbarTextPaciente"
+  >
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="/home">Home (actual)</a>
+        <a class="nav-link" href="/home/presentacion">Home (actual)</a>
       </li>
       <li class="nav-item active">
         <a class="nav-link" href="/home/turnos/options">Mis turnos</a>
@@ -38,23 +42,40 @@
       </li>
       <li class="nav-item active">
         <a class="nav-link" href="/home/perfil">Mi perfil</a>
-      </li>   
+      </li>
     </ul>
   </div>
-  <div *ngIf="!esPaciente" class="collapse navbar-collapse" id="navbarText">
+
+  <button
+    *ngIf="!esPaciente"
+    class="navbar-toggler"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#navbarTextNoPaciente"
+    aria-controls="navbarTextNoPaciente"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div
+    *ngIf="!esPaciente"
+    class="collapse navbar-collapse"
+    id="navbarTextNoPaciente"
+  >
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="/home">Home (actual)</a>
+        <a class="nav-link" href="/home/presentacion">Home (actual)</a>
       </li>
       <li class="nav-item active">
         <a class="nav-link" href="/home/turnos/options">Mis turnos</a>
-      </li>     
+      </li>
       <li class="nav-item active">
         <a class="nav-link" href="/home/perfil">Mi perfil</a>
-      </li>    
+      </li>
       <li class="nav-item active">
         <a class="nav-link" href="/home/pacientes">Pacientes</a>
-      </li>   
+      </li>
     </ul>
   </div>
 
