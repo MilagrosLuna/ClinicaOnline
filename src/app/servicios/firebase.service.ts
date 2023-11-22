@@ -34,6 +34,7 @@ import { Especialista } from '../clases/especialista';
 import { Turno } from '../clases/turno';
 import { Horario } from '../clases/horario';
 import { Encuesta } from '../clases/encuesta';
+import { HistoriaClinica } from '../clases/historia-clinica';
 @Injectable({
   providedIn: 'root',
 })
@@ -183,6 +184,8 @@ export class FirebaseService {
       return false;
     }
   }
+
+ 
 
   async getUserByUidAndType(uid: string, type: string): Promise<any> {
     try {
@@ -395,6 +398,51 @@ export class FirebaseService {
     }
   }
 
+  public async obtenerTodasHistoriaClinica(): Promise<HistoriaClinica[]> {
+    const querySnapshot = await getDocs(
+      collection(this.db, 'historiasClinicas')
+    );
+    const historias: HistoriaClinica[] = [];
+    querySnapshot.forEach((doc) => {
+      const turnoData = doc.data();
+      const historia = new HistoriaClinica();
+      historia.altura = turnoData['altura'];
+      historia.peso = turnoData['peso'];
+      historia.temperatura = turnoData['temperatura'];
+      historia.presion = turnoData['presion'];
+      historia.datosDinamicos = turnoData['datosDinamicos'];
+      historia.idEspecialista = turnoData['idEspecialista'];
+      historia.idPaciente = turnoData['idPaciente'];
+      historia.Paciente = turnoData['Paciente'];
+      historia.Especialista = turnoData['Especialista'];
+      historias.push(historia);
+    });
+    return historias;
+  }
+
+  public async guardarHistoriaClinica(historia: HistoriaClinica) {
+    let paciente = await this.getUserByUidAndType(historia.idPaciente, 'pacientes');
+    let especialista = await this.getUserByUidAndType(historia.idEspecialista, 'especialistas');
+    try {
+      const docRef = await addDoc(collection(this.db, 'historiasClinicas'), {
+        altura: historia.altura,
+        peso: historia.peso,
+        temperatura: historia.temperatura,
+        idPaciente: historia.idPaciente,
+        presion: historia.presion,
+        datosDinamicos: historia.datosDinamicos,
+        idEspecialista: historia.idEspecialista,
+        Paciente:paciente.nombre,
+        Especialista:especialista.nombre
+      });
+      console.log('Document written with ID: ', docRef.id);
+      return docRef.id;
+    } catch (e) {
+      console.error('Error adding document: ', e);
+      return false;
+    }
+  }
+
   public async modificarTurno(turno: Turno): Promise<void> {
     const turnoRef = doc(this.db, 'turnos', turno.uid);
 
@@ -407,8 +455,9 @@ export class FirebaseService {
       hora: turno.hora,
       resena: turno.resena,
       comentario: turno.comentario,
-      atencion:turno.atencion,
-      encuesta:turno.encuesta
+      atencion: turno.atencion,
+      encuesta: turno.encuesta,
+      historiaClinica: turno.historiaClinica,
     });
   }
 
@@ -432,6 +481,9 @@ export class FirebaseService {
       }
       if (turnoData['resena']) {
         turno.resena = turnoData['resena'];
+      }
+      if (turnoData['historiaClinica']) {
+        turno.historiaClinica = turnoData['historiaClinica'];
       }
       turnos.push(turno);
     });
@@ -467,6 +519,9 @@ export class FirebaseService {
       }
       if (turnoData['resena']) {
         turno.resena = turnoData['resena'];
+      }
+      if (turnoData['historiaClinica']) {
+        turno.historiaClinica = turnoData['historiaClinica'];
       }
       turnos.push(turno);
     });

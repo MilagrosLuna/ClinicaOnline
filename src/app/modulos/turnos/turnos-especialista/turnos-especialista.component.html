@@ -1,24 +1,11 @@
-<p>turnos-especialista works!</p>
 <div class="container mt-3">
   <div class="mb-3">
-    <label for="filtroEspecialidad" class="form-label"
-      >Filtrar por especialidad:</label
-    >
+    <label for="filtro" class="form-label">Buscar:</label>
     <input
-      #filtroEspecialidad
+      #filtro
       type="text"
       class="form-control"
-      id="filtroEspecialidad"
-      (input)="filtrarTurnos()"
-    />
-  </div>
-  <div class="mb-3">
-    <label for="filtroPaciente" class="form-label">Filtrar por paciente:</label>
-    <input
-      #filtroPaciente
-      type="text"
-      class="form-control"
-      id="filtroPaciente"
+      id="filtro"
       (input)="filtrarTurnos()"
     />
   </div>
@@ -36,6 +23,7 @@
           </h6>
           <p class="card-text">Paciente: {{ turno.Paciente }}</p>
           <p class="card-text">Especialidad: {{ turno.Especialidad }}</p>
+
           <div class="form-group" *ngIf="resena && turno.uid == turnoA?.uid">
             <p class="card-text" *ngIf="datoResena !== ''">
               Reseña: {{ datoResena }}
@@ -114,6 +102,18 @@
             >
               Confirmar finalizar turno
             </button>
+          </div>
+
+          <div
+            class="form-group"
+            *ngIf="
+              turno?.estado === 'finalizado' && turno.historiaClinica === ''
+            "
+          >
+            <p class="card-text text-warning">
+              Debe completar la historia clinica del paciente...
+            </p>
+            <app-historia-clinica [turno]="turno"></app-historia-clinica>
           </div>
 
           <div class="d-flex justify-content-end">

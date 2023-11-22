@@ -18,6 +18,7 @@ import { MiPerfilComponent } from './components/mi-perfil/mi-perfil.component';
 import { AccessButtonComponent } from './components/access-button/access-button.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { ListadoHistoriasClinicasComponent } from './components/listado-historias-clinicas/listado-historias-clinicas.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
     NavbarComponent,
     MiPerfilComponent,
     AccessButtonComponent,
+    ListadoHistoriasClinicasComponent,
   ],
   imports: [
     BrowserModule,

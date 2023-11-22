@@ -13,7 +13,7 @@ import { Encuesta } from 'src/app/clases/encuesta';
   styleUrls: ['./turnos-paciente.component.css'],
 })
 export class TurnosPacienteComponent {
-  turnos: any[] = [];
+  turnos: any[] = []; 
   turnoA: Turno | null = null;
   comentario: boolean = false;
   resena: boolean = false;
@@ -25,23 +25,25 @@ export class TurnosPacienteComponent {
   datoComentario: string = '';
   @Input() pacienteId: string = '';
 
-  @ViewChild('filtroEspecialidad') filtroEspecialidad!: ElementRef;
-  @ViewChild('filtroEspecialista') filtroEspecialista!: ElementRef;
+  @ViewChild('filtro') filtro!: ElementRef;
 
   private _turnos = new BehaviorSubject<any[]>([]);
   turnosFiltrados = this._turnos
-    .asObservable()
-    .pipe(
-      map((turnos) =>
-        turnos.filter(
-          (turno) =>
-            turno.Especialidad.includes(
-              this.filtroEspecialidad.nativeElement.value
-            ) &&
-            turno.Paciente.includes(this.filtroEspecialista.nativeElement.value)
-        )
-      )
-    );
+  .asObservable()
+  .pipe(
+    map((turnos) => {
+      if (this.filtro && this.filtro.nativeElement) {
+        const filtro = this.filtro.nativeElement.value.toLowerCase();
+        return turnos.filter((turno) =>
+          Object.values(turno).some((val: any) =>
+            val.toString().toLowerCase().includes(filtro)
+          )
+        );
+      } else {
+        return turnos;
+      }
+    })
+  );
 
   constructor(
     private firestoreService: FirebaseService,
@@ -75,10 +77,8 @@ export class TurnosPacienteComponent {
           'especialistas'
         );
 
-
-        turno.Especialista = especialista.nombre + ' ' + especialista.apellido;
+        turno.Especialista = especialista.nombre;
         turno.idEspecialista = especialista.uid;
-
       }
       this._turnos.next(turnos);
     }
@@ -88,13 +88,14 @@ export class TurnosPacienteComponent {
     this._turnos.next(this._turnos.value);
   }
 
+
   obtenerFechaHoraFormateada(fecha: any, hora: string): string {
     const fechaFormateada = fecha.toDate().toLocaleDateString('es-AR');
     return `${fechaFormateada} ${hora}`;
   }
 
   async cancelarTurno() {
-    if (this.turnoA && this.motivoCancelacion !='') {
+    if (this.turnoA && this.motivoCancelacion != '') {
       console.log(this.motivoCancelacion);
       this.turnoA.estado = 'cancelado';
       this.turnoA.comentario = this.motivoCancelacion;
@@ -133,13 +134,13 @@ export class TurnosPacienteComponent {
   }
 
   cargarComentario(turno: Turno) {
-    this.motivoCancelacion = '';    
+    this.motivoCancelacion = '';
     this.comentario = true;
     this.turnoA = turno;
   }
 
-  cargarAtencion(turno:Turno){    
-    this.turnoCalificado = '';    
+  cargarAtencion(turno: Turno) {
+    this.turnoCalificado = '';
     this.calificar = true;
     this.turnoA = turno;
   }
@@ -158,7 +159,7 @@ export class TurnosPacienteComponent {
 
   async manejarEncuestaEnviada(id: string) {
     console.log('Encuesta enviada:', id);
-    if (this.turnoA ) {
+    if (this.turnoA) {
       this.turnoA.encuesta = id;
       try {
         console.log(this.turnoA);
@@ -183,13 +184,13 @@ export class TurnosPacienteComponent {
     }
   }
 
-  completarEncuesta(turno : Turno) {
+  completarEncuesta(turno: Turno) {
     this.encuesta = true;
     this.turnoA = turno;
   }
 
   async calificarAtencion() {
-    if (this.turnoA && this.turnoCalificado !='') {
+    if (this.turnoA && this.turnoCalificado != '') {
       console.log(this.turnoCalificado);
       this.turnoA.atencion = this.turnoCalificado;
       try {

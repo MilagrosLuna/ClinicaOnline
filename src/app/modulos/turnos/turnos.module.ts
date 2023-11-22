@@ -10,6 +10,7 @@ import { ListadoDiasTurnoComponent } from './listado-dias-turno/listado-dias-tur
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { EncuestaComponent } from './encuesta/encuesta.component';
+import { HistoriaClinicaComponent } from './historia-clinica/historia-clinica.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { EncuestaComponent } from './encuesta/encuesta.component';
     TurnosPacienteComponent,
     SolicitarTurnoComponent,    
     ListadoDiasTurnoComponent,
-    EncuestaComponent,
+    EncuestaComponent,    
+    HistoriaClinicaComponent
   ],
   imports: [
     CommonModule,

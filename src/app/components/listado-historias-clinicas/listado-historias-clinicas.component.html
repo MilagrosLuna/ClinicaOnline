@@ -1,0 +1,69 @@
+<div class="container mt-3">
+<div *ngIf="historiasClinicas.length > 0; else noHistorias">
+  <div *ngIf="identidad === 'especialista'" >
+    <div *ngFor="let historia of historiasClinicas" class="card mb-3">
+      <div class="card-header">
+        <h2>Historia Clínica Paciente: {{ historia.Paciente }}</h2>
+      </div>
+      <div class="card-body">
+        <p><strong>Altura:</strong> {{ historia.altura }} cm</p>
+        <p><strong>Peso:</strong> {{ historia.peso }} kg</p>
+        <p><strong>Temperatura:</strong> {{ historia.temperatura }} °C</p>
+        <p><strong>Presión:</strong> {{ historia.presion }}</p>
+        <div *ngFor="let dato of historia.datosDinamicos | keyvalue">
+          <p>
+            <strong>{{ dato.key }}:</strong> {{ dato.value }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="identidad === 'paciente'" >
+    <div *ngFor="let historia of historiasClinicas" class="card mb-3">
+      <div class="card-header">
+        <h2>Historia Clínica con el dr. {{ historia.Especialista }}</h2>
+      </div>
+      <div class="card-body">
+        <p><strong>Altura:</strong> {{ historia.altura }} cm</p>
+        <p><strong>Peso:</strong> {{ historia.peso }} kg</p>
+        <p><strong>Temperatura:</strong> {{ historia.temperatura }} °C</p>
+        <p><strong>Presión:</strong> {{ historia.presion }}</p>
+        <div *ngFor="let dato of historia.datosDinamicos | keyvalue">
+          <p>
+            <strong>{{ dato.key }}:</strong> {{ dato.value }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+  <div *ngIf="identidad === 'admin'" >
+    <div *ngFor="let historia of historiasClinicas" class="card mb-3">
+      <div class="card-header">
+        <h2>Historia Clínica</h2>
+        <h3>Especialista: {{ historia.Especialista }}</h3>
+        <h3>Paciente: {{ historia.Paciente }}</h3>
+      </div>
+      <div class="card-body">
+        <p><strong>Altura:</strong> {{ historia.altura }} cm</p>
+        <p><strong>Peso:</strong> {{ historia.peso }} kg</p>
+        <p><strong>Temperatura:</strong> {{ historia.temperatura }} °C</p>
+        <p><strong>Presión:</strong> {{ historia.presion }}</p>
+        <div *ngFor="let dato of historia.datosDinamicos | keyvalue">
+          <p>
+            <strong>{{ dato.key }}:</strong> {{ dato.value }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #noHistorias>
+  <div class="alert alert-info" role="alert">
+    No hay historias clínicas disponibles.
+  </div>
+</ng-template>
+</div>

@@ -6,6 +6,7 @@ import { AdmistrarEspecialistassComponent } from './admistrar-especialistass/adm
 import { AdmistrarTurnosComponent } from './admistrar-turnos/admistrar-turnos.component';
 import { SolicitarTurnoComponent } from 'src/app/components/solicitar-turno/solicitar-turno.component';
 import { MiPerfilComponent } from 'src/app/components/mi-perfil/mi-perfil.component';
+import { ListadoHistoriasClinicasComponent } from 'src/app/components/listado-historias-clinicas/listado-historias-clinicas.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'admin', pathMatch: 'full' },
@@ -21,6 +22,7 @@ const routes: Routes = [
       { path: 'administrar-turnos', component: AdmistrarTurnosComponent },
       { path: 'solicitar-turno', component: SolicitarTurnoComponent },
       { path: 'perfil', component: MiPerfilComponent },
+      { path: 'usuarios', component: ListadoHistoriasClinicasComponent },
     ],
   },
 ];

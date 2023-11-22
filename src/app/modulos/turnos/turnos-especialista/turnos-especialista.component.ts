@@ -24,23 +24,26 @@ export class TurnosEspecialistaComponent {
   datoComentario: string = '';
   @Input() especialistaId: string = '';
 
-  @ViewChild('filtroEspecialidad') filtroEspecialidad!: ElementRef;
-  @ViewChild('filtroPaciente') filtroPaciente!: ElementRef;
+  @ViewChild('filtro') filtro!: ElementRef;
 
   private _turnos = new BehaviorSubject<any[]>([]);
   turnosFiltrados = this._turnos
-    .asObservable()
-    .pipe(
-      map((turnos) =>
-        turnos.filter(
-          (turno) =>
-            turno.Especialidad.includes(
-              this.filtroEspecialidad.nativeElement.value
-            ) &&
-            turno.Paciente.includes(this.filtroPaciente.nativeElement.value)
-        )
-      )
-    );
+  .asObservable()
+  .pipe(
+    map((turnos) => {
+      if (this.filtro && this.filtro.nativeElement) {
+        const filtro = this.filtro.nativeElement.value.toLowerCase();
+        return turnos.filter((turno) =>
+          Object.values(turno).some((val: any) =>
+            val.toString().toLowerCase().includes(filtro)
+          )
+        );
+      } else {
+        return turnos;
+      }
+    })
+  );
+
 
   constructor(
     private firestoreService: FirebaseService,
@@ -55,6 +58,8 @@ export class TurnosEspecialistaComponent {
       this.spinner.hide();
     }, 2000);
   }
+ 
+  
 
   async cargarTurnos() {
     if (this.especialistaId !== '') {

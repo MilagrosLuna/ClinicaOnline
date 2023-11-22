@@ -1,25 +1,11 @@
 <div class="container mt-3">
   <div class="mb-3">
-    <label for="filtroEspecialidad" class="form-label"
-      >Filtrar por especialidad:</label
-    >
+    <label for="filtro" class="form-label">Buscar:</label>
     <input
-      #filtroEspecialidad
+      #filtro
       type="text"
       class="form-control"
-      id="filtroEspecialidad"
-      (input)="filtrarTurnos()"
-    />
-  </div>
-  <div class="mb-3">
-    <label for="filtroEspecialista" class="form-label"
-      >Filtrar por especialista:</label
-    >
-    <input
-      #filtroEspecialista
-      type="text"
-      class="form-control"
-      id="filtroEspecialista"
+      id="filtro"
       (input)="filtrarTurnos()"
     />
   </div>
@@ -108,7 +94,9 @@
           </div>
 
           <div *ngIf="encuesta && turno.uid === turnoA?.uid">
-            <app-encuesta (encuestaEnviada)="manejarEncuestaEnviada($event)"></app-encuesta>
+            <app-encuesta
+              (encuestaEnviada)="manejarEncuestaEnviada($event)"
+            ></app-encuesta>
           </div>
 
           <div class="d-flex justify-content-end">
@@ -141,7 +129,7 @@
             </div>
             <div
               *ngIf="
-                turno.estado != 'finalizado' && turno.estado !== 'cancelado'
+                turno.estado != 'finalizado' && turno.estado !== 'cancelado' && turno.estado !== 'rechazado'
               "
             >
               <button

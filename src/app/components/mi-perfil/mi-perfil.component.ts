@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Admin } from 'src/app/clases/admin';
 import { Especialista } from 'src/app/clases/especialista';
 import { Horario } from 'src/app/clases/horario';
@@ -18,7 +19,7 @@ export class MiPerfilComponent implements OnInit {
   estadoInicialHorarios: any;
 
 
-  constructor(private authService: FirebaseService) {}
+  constructor(private authService: FirebaseService, private router: Router) {}
 
   ngOnInit(): void {
     this.user();
@@ -47,6 +48,10 @@ export class MiPerfilComponent implements OnInit {
     return JSON.stringify(obj1) === JSON.stringify(obj2);
   }
   
+  verhistorias(){
+    this.router.navigate(['/home/historias']);
+  }
+
   async user() {
     let user = localStorage.getItem('logueado');
     if (user) {
