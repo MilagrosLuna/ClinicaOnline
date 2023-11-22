@@ -127,7 +127,7 @@ export class SolicitarTurnoComponent {
         especialista.especialidades.includes(this.especialidadSeleccionada)
     );
   }
-  onTurnoSeleccionado(turno: { dia: Date; hora: string }) {
+  onTurnoSeleccionado(turno: { dia: string; hora: string }) {
     if (turno.hora == '') {
       this.fechaObtenida = false;
       this.especialista = undefined;
@@ -139,36 +139,36 @@ export class SolicitarTurnoComponent {
       });
       return;
     }
-    const fechaSeleccionada: Date = turno.dia;
+    const fechaSeleccionada: string = turno.dia;
     const horaSeleccionada: string = turno.hora;
-    const fechaCompleta: Date = new Date(
-      fechaSeleccionada.getFullYear(),
-      fechaSeleccionada.getMonth(),
-      fechaSeleccionada.getDate(),
-      parseInt(horaSeleccionada.split(':')[0]),
-      parseInt(horaSeleccionada.split(':')[1])
-    );
-    this.form.controls['fecha'].setValue(fechaCompleta);
+    // const fechaCompleta: Date = new Date(
+    //   fechaSeleccionada.getFullYear(),
+    //   fechaSeleccionada.getMonth(),
+    //   fechaSeleccionada.getDate(),
+    //   parseInt(horaSeleccionada.split(':')[0]),
+    //   parseInt(horaSeleccionada.split(':')[1])
+    // );
+    this.form.controls['fecha'].setValue(fechaSeleccionada);
     this.form.controls['hora'].setValue(horaSeleccionada);
     this.fechaObtenida = true;
     // Formatear la fecha y la hora
-    const fechaFormateada = fechaCompleta.toLocaleDateString('es-ES', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
-    const horaFormateada = fechaCompleta.toLocaleTimeString('es-ES', {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+    // const fechaFormateada = fechaSeleccionada.toLocaleDateString('es-ES', {
+    //   day: '2-digit',
+    //   month: '2-digit',
+    //   year: 'numeric',
+    // });
+    // const horaFormateada = fechaCompleta.toLocaleTimeString('es-ES', {
+    //   hour: '2-digit',
+    //   minute: '2-digit',
+    // });
 
     Swal.fire({
       icon: 'warning',
       text:
         'La fecha seleccionada es ' +
-        fechaFormateada +
+        fechaSeleccionada +
         ' y la hora es ' +
-        horaFormateada,
+        horaSeleccionada,
       title: '¡Fecha!',
       showConfirmButton: false,
       timer: 2000,

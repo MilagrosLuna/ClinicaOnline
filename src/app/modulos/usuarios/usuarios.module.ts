@@ -7,6 +7,8 @@ import { AdmistrarEspecialistassComponent } from './admistrar-especialistass/adm
 import { NavbarAdmComponent } from './navbar-adm/navbar-adm.component';
 import { AdmistrarTurnosComponent } from './admistrar-turnos/admistrar-turnos.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 
 @NgModule({
@@ -20,7 +22,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    UsuariosRoutingModule
+    UsuariosRoutingModule,    
+    NgxSpinnerModule,
   ]
 })
 export class UsuariosModule { }

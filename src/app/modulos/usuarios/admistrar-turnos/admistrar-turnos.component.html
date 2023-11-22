@@ -1,28 +1,26 @@
 <div class="container mt-3">
+  <ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-scale-multiple"
+>
+  <p style="font-size: 20px; color: white">Cargando turnos...</p>
+</ngx-spinner>
+
   <div class="mb-3">
-    <label for="filtroEspecialidad" class="form-label"
-      >Filtrar por especialidad:</label
+    <label for="filtro" class="form-label"
+      >Filtrar por especialidad o especialista:</label
     >
     <input
-      #filtroEspecialidad
+      #filtro
       type="text"
       class="form-control"
-      id="filtroEspecialidad"
+      id="filtro"
       (input)="filtrarTurnos()"
     />
   </div>
-  <div class="mb-3">
-    <label for="filtroEspecialista" class="form-label"
-      >Filtrar por especialista:</label
-    >
-    <input
-      #filtroEspecialista
-      type="text"
-      class="form-control"
-      id="filtroEspecialista"
-      (input)="filtrarTurnos()"
-    />
-  </div>
+
 
   <div style="height: 600px; overflow: auto">
     <div *ngFor="let turno of turnosFiltrados | async">
@@ -33,7 +31,7 @@
             <span class="text-primary"> {{ turno.estado }}</span>
           </h4>
           <h6 class="card-title">
-            {{ obtenerFechaHoraFormateada(turno.fecha, turno.hora) }}
+            Fecha: {{ turno.fecha }} a las  {{turno.hora}} hs.
           </h6>
           <p class="card-text">Especialista: {{ turno.Especialista }}</p>
           <p class="card-text">Especialidad: {{ turno.Especialidad }}</p>

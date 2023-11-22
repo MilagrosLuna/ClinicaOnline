@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FirebaseService } from 'src/app/servicios/firebase.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Turno } from 'src/app/clases/turno';
 import Swal from 'sweetalert2';
@@ -15,26 +15,33 @@ export class AdmistrarTurnosComponent {
   turnos: any[] = [];
   turnoA: Turno | null = null;
   comentario: boolean = false;
-
   motivoCancelacion: string = '';
 
-  @ViewChild('filtroEspecialidad') filtroEspecialidad!: ElementRef;
-  @ViewChild('filtroEspecialista') filtroEspecialista!: ElementRef;
+  @ViewChild('filtro') filtro!: ElementRef;
 
   private _turnos = new BehaviorSubject<any[]>([]);
-  turnosFiltrados = this._turnos
-    .asObservable()
-    .pipe(
-      map((turnos) =>
-        turnos.filter(
-          (turno) =>
-            turno.Especialidad.includes(
-              this.filtroEspecialidad.nativeElement.value
-            ) &&
-            turno.Paciente.includes(this.filtroEspecialista.nativeElement.value)
-        )
-      )
-    );
+  turnosFiltrados!: Observable<any[]>;
+  
+  ngAfterViewInit() {
+    this.spinner.show();
+    setTimeout(() => {
+      this.turnosFiltrados = this._turnos
+        .asObservable()
+        .pipe(
+          map((turnos) => {
+            let filtro = this.filtro.nativeElement.value.toLowerCase();
+            return turnos.filter((turno) => {
+              let especialidad = turno.Especialidad.toLowerCase();
+              let especialista = turno.Especialista.toLowerCase();
+              return especialidad.includes(filtro) || especialista.includes(filtro);
+            });
+          })
+        );
+      this.spinner.hide();  
+    }, 4500);  
+  }
+  
+  
 
   constructor(
     private firestoreService: FirebaseService,
@@ -81,14 +88,14 @@ export class AdmistrarTurnosComponent {
     this._turnos.next(turnos);
   }
 
-  filtrarTurnos() {
+  filtrarTurnos() {    
     this._turnos.next(this._turnos.value);
   }
 
-  obtenerFechaHoraFormateada(fecha: any, hora: string): string {
-    const fechaFormateada = fecha.toDate().toLocaleDateString('es-AR');
-    return `${fechaFormateada} ${hora}`;
-  }
+  // obtenerFechaHoraFormateada(fecha: any, hora: string): string {
+  //   const fechaFormateada = fecha.toDate().toLocaleDateString('es-AR');
+  //   return `${fechaFormateada} ${hora}`;
+  // }
 
   async cancelarTurno() {
     if (this.turnoA && this.motivoCancelacion != '') {
