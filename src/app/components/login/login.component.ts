@@ -5,11 +5,21 @@ import Swal from 'sweetalert2';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/servicios/user.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import { slideInAnimation } from 'src/app/animation';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.css'],animations: [
+    slideInAnimation,
+  ]
 })
 export class LoginComponent {
   form!: FormGroup;

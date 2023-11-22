@@ -19,6 +19,7 @@ import { AccessButtonComponent } from './components/access-button/access-button.
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ListadoHistoriasClinicasComponent } from './components/listado-historias-clinicas/listado-historias-clinicas.component';
+import { GoHomeComponent } from './components/go-home/go-home.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { ListadoHistoriasClinicasComponent } from './components/listado-historia
     MiPerfilComponent,
     AccessButtonComponent,
     ListadoHistoriasClinicasComponent,
+    GoHomeComponent,
   ],
   imports: [
     BrowserModule,

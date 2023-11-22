@@ -1,11 +1,12 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
+
 import { FirebaseService } from 'src/app/servicios/firebase.service';
 
 @Component({
   selector: 'app-access-button',
   templateUrl: './access-button.component.html',
-  styleUrls: ['./access-button.component.css'],
+  styleUrls: ['./access-button.component.css']
 })
 export class AccessButtonComponent implements OnInit {
   @Input() email: string = '';

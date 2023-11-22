@@ -6,6 +6,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-listado-historias-clinicas',
@@ -44,6 +46,35 @@ export class ListadoHistoriasClinicasComponent {
       }, reject);
     });
   }
+
+  descargarHistoriaClinica(historiaClinica: HistoriaClinica) { 
+    // Crear una copia de historiaClinica para no modificar el objeto original
+    let historiaClinicaCopia: Partial<HistoriaClinica> = {...historiaClinica};
+
+    // Eliminar los campos que no quieres incluir
+    delete historiaClinicaCopia.idPaciente;
+    delete historiaClinicaCopia.idEspecialista;
+    delete historiaClinicaCopia.datosDinamicos;
+
+    // Desglosar el objeto datosDinamicos en propiedades individuales
+    let datosDinamicosDesglosados: {[clave: string]: any} = {};
+    for (let clave in historiaClinica.datosDinamicos) {
+        datosDinamicosDesglosados[clave] = historiaClinica.datosDinamicos[clave];
+    }
+
+    // Combinar historiaClinicaCopia y datosDinamicosDesglosados
+    let historiaClinicaFinal: HistoriaClinica = {...historiaClinicaCopia, ...datosDinamicosDesglosados} as HistoriaClinica;
+
+    // Convertir el objeto modificado en un array que contiene un solo objeto
+    const historiaClinicaArray = [historiaClinicaFinal];
+
+    const worksheet = XLSX.utils.json_to_sheet(historiaClinicaArray);
+    const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    
+    saveAs(new Blob([excelBuffer]), `${historiaClinica.Paciente}_historia_clinica.xlsx`);
+}
+
 
   async createPDF(historiapruebaPdf: HistoriaClinica) {
     let imagen = await this.convertImageToBase64('../assets/logoClinica.png');
