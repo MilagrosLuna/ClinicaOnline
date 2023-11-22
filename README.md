@@ -40,3 +40,43 @@ Se piden los datos necesarios para integrar un especialista al sistema, este deb
 Aca se ingresa el mail y contraseña, ademas contas con accesos rapidos.
 
 ![Inicio sesión](readme/accesoRapido.png)
+
+## Mi perfil
+
+Se ven los datos del usuario conectado.
+En el caso del paciente se puede acceder a la historia clinica y en el caso de los especialistas a sus horarios.
+
+![Mi perfil](readme/miperfil.png)
+
+## Historia Clinica
+
+Se ven las historias clinicas del paciente permitiendo descargar la informacion en formato pdf.
+En el caso del adminsitrador podra descargar las historias clinicas en formato xlsx (excel).
+
+![Historia Clinica](readme/HistoriaClinica.pdf)
+![Historia Clinica](readme/historiaclinica.png)
+
+## Solicitar turno
+
+A pedido de la consigna para solicitar turno se muestran las especialidades representadas en imagenes sin el nombre, una vez elegida se ven los especialistas que te pueden atender con foto y nombre y finalmente se muestran los horarios disponibles de hoy a 15 dias, de lunes a viernes de 8 a 19 hs y los sabados de 8 a 14 hs.
+En el caso del administrador se agrega el campo que muestra los pacientes para que este pueda elegir para quien es el turno.
+
+![Solicitar turno](readme/solicitar.png)
+![Solicitar turno](readme/solicitar2.png)
+![Solicitar turno](readme/solicitar3.png)
+
+## Mis turnos
+
+Se muestran todos los turnos permitiendo buscar por todos los campos del mismo, dia, hora, especialista, especialidad, etc.
+Tambien en caso de ser paciente se pueden cancelar, calificar, ver reseña/comentario y completar una encuesta, y en el
+caso de ser especialista se puede aceptar o rechazar, una vez aceptado se puede cancelar, finalizar, una vez que el turno finaliza el especialista debera 
+completar la historia clinica y dar una reseña.
+
+![Mis turnos](readme/calificar.png)
+![Mis turnos](readme/cancelar.png)
+![Mis turnos](readme/encuesta.png)
+![Mis turnos](readme/turnosFinalizados.png)
+
+## Administrar turnos
+
+Se muestran todos los turnos permitiendo buscar por especialidad o especialista, el administrador podra cancelar los turnos y dejar un comentario sobre eso.
