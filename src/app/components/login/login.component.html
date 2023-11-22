@@ -9,31 +9,27 @@
     <p style="font-size: 20px; color: white">Cargando Usuarios...</p>
   </ngx-spinner>
 
-  <div>
-    <div class="row">
-      <div class="col-md-4" *ngFor="let paciente of pacientes">
-        <app-access-button
-          [email]="paciente.email"
-          [tipo]="paciente.tipo"
-          (buttonClick)="onButtonClick($event)"
-        ></app-access-button>
-      </div>
+  <div class="row">
+    <div class="col-md-2" *ngFor="let paciente of pacientes">
+      <app-access-button
+        [email]="paciente.email"
+        [tipo]="paciente.tipo"
+        (buttonClick)="onButtonClick($event)"
+      ></app-access-button>
     </div>
-    <div class="row">
-      <div class="col-md-4" *ngFor="let especialista of especialistas">
-        <app-access-button
-          [email]="especialista.email"
-          [tipo]="especialista.tipo"
-          (buttonClick)="onButtonClick($event)"
-        ></app-access-button>
-      </div>
-      <div class="col-md-4" *ngFor="let admin of admins">
-        <app-access-button
-          [email]="admin.email"
-          [tipo]="admin.tipo"
-          (buttonClick)="onButtonClick($event)"
-        ></app-access-button>
-      </div>
+    <div class="col-md-2" *ngFor="let especialista of especialistas">
+      <app-access-button
+        [email]="especialista.email"
+        [tipo]="especialista.tipo"
+        (buttonClick)="onButtonClick($event)"
+      ></app-access-button>
+    </div>
+    <div class="col-md-2" *ngFor="let admin of admins">
+      <app-access-button
+        [email]="admin.email"
+        [tipo]="admin.tipo"
+        (buttonClick)="onButtonClick($event)"
+      ></app-access-button>
     </div>
   </div>
 
