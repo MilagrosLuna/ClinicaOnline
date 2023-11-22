@@ -60,7 +60,7 @@ export class LoginComponent {
         'especialistas'
       );
       if (admin !== null) {
-        this.userservice.showSuccessMessageAndNavigate(['/homeAdmin/presentacion']);
+        this.userservice.showSuccessMessageAndNavigate(['/homeAdmin/admin/presentacion']);
         return;
       }
       if (especialista !== null) {

@@ -225,6 +225,7 @@
         <label for="fotoPaciente">1° Foto del paciente:</label>
         <input
           type="file"
+          accept=".jpg, .jpeg, .png"
           id="fotoPaciente"
           formControlName="fotoPaciente"
           (change)="onImageSelected($event, 1)"
@@ -236,6 +237,7 @@
         <label for="fotoPaciente2">2° Foto del paciente:</label>
         <input
           type="file"
+          accept=".jpg, .jpeg, .png"
           id="fotoPaciente2"
           formControlName="fotoPaciente2"
           (change)="onImageSelected($event, 2)"

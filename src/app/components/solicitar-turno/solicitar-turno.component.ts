@@ -124,7 +124,8 @@ export class SolicitarTurnoComponent {
   filtrarEspecialistas() {
     this.especialistasFiltrados = this.especialistas.filter(
       (especialista: any) =>
-        especialista.especialidades.includes(this.especialidadSeleccionada)
+        especialista.especialidades.includes(this.especialidadSeleccionada) &&
+        especialista.verificado == 'true'
     );
   }
   onTurnoSeleccionado(turno: { dia: string; hora: string }) {
