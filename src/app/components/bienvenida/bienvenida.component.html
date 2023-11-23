@@ -1,5 +1,5 @@
 <app-go-home></app-go-home>
-<main class="contenedor">
+<main [@slideInAnimation] class="contenedor">
   <form class="form-signin">
     <img
       class="mb-4"
@@ -10,12 +10,44 @@
     />
     <h1 class="h3 mb-3 fw-normal">Bienvenido</h1>
 
-    <button class="w-100 btn btn-lg btn-primary mb-3" (click)="goToLogin()">
+    <button class="w-100 btn btn-lg btn-info mb-3" (click)="goToLogin()">
       Inicio de Sesión
     </button>
 
-    <button class="w-100 btn btn-lg btn-primary" (click)="goToRegister()">
+    <button class="w-100 btn btn-lg btn-info" (click)="goToRegister()">
       Registro
     </button>
   </form>
 </main>
+
+
+
+<div class="fab-container">
+  <div class="fab shadow">
+    <div class="fab-content">     
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+      </svg>      
+    </div>
+  </div>
+  <div class="sub-button shadow">
+    <a href="google.com" target="_blank">
+      <span class="material-icons">ez</span>
+    </a>
+  </div>
+  <div class="sub-button shadow">
+    <a href="google.com" target="_blank">
+      <span class="material-icons">aaa</span>
+    </a>
+  </div>
+  <div class="sub-button shadow">
+    <a href="google.com" target="_blank">
+      <span class="material-icons">bb</span>
+    </a>
+  </div>
+  <div class="sub-button shadow">
+    <a href="google.com" target="_blank">
+      <span class="material-icons">cc</span>
+    </a>
+  </div>
+</div>

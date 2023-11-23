@@ -8,8 +8,8 @@ import { ListadoHistoriasClinicasComponent } from './components/listado-historia
 import { PresentacionComponent } from './components/presentacion/presentacion.component';
 
 const routes: Routes = [
-  { path: 'bienvenida', component: BienvenidaComponent , data: {animation: 'BienvenidaPage'}  },
-  { path: 'login', component: LoginComponent, data: { animation: 'HomeLoginPagePage' } },
+  { path: 'bienvenida', component: BienvenidaComponent },
+  { path: 'login', component: LoginComponent },
   {
     path: 'home',
     component: HomeComponent,
