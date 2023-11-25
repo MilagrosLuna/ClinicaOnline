@@ -411,8 +411,6 @@ export class FirebaseService {
       historia.temperatura = turnoData['temperatura'];
       historia.presion = turnoData['presion'];
       historia.datosDinamicos = turnoData['datosDinamicos'];
-      historia.idEspecialista = turnoData['idEspecialista'];
-      historia.idPaciente = turnoData['idPaciente'];
       historia.Paciente = turnoData['Paciente'];
       historia.Especialista = turnoData['Especialista'];
       historias.push(historia);
@@ -421,19 +419,13 @@ export class FirebaseService {
   }
 
   public async guardarHistoriaClinica(historia: HistoriaClinica) {
-    let paciente = await this.getUserByUidAndType(historia.idPaciente, 'pacientes');
-    let especialista = await this.getUserByUidAndType(historia.idEspecialista, 'especialistas');
     try {
       const docRef = await addDoc(collection(this.db, 'historiasClinicas'), {
         altura: historia.altura,
         peso: historia.peso,
         temperatura: historia.temperatura,
-        idPaciente: historia.idPaciente,
         presion: historia.presion,
         datosDinamicos: historia.datosDinamicos,
-        idEspecialista: historia.idEspecialista,
-        Paciente:paciente.nombre,
-        Especialista:especialista.nombre
       });
       console.log('Document written with ID: ', docRef.id);
       return docRef.id;

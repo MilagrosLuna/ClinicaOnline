@@ -1,0 +1,34 @@
+.button-style {
+  width: 100px; /* ajusta el ancho según tu preferencia */
+  height: 100px; /* ajusta el alto según tu preferencia */
+  border-radius: 100px;
+  background-size: cover; /* asegura que la imagen cubra completamente el fondo */
+  background-position: center; /* centra la imagen */
+  text-align: center; /* centra el texto dentro del botón */
+
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.a {
+    display: flex; /* Usa flexbox para los elementos hijos */
+    flex-direction: row; /* Dispón los elementos en filas */
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan a la siguiente línea */
+    align-items: center; /* Centra los elementos verticalmente en cada fila */
+    justify-content: center; /* Centra los elementos horizontalmente en cada fila */
+    margin-bottom: 10px; /* Espaciado entre las filas */
+  }
+  
+.diva {
+  width: 100px;
+}
+.button-style:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+}
+
+.texto {
+  margin-top: 10px;
+  color: rgb(0, 0, 0);
+  text-align: center;
+  font-size: 16px;
+  background-color: aliceblue;
+  border-radius: 5px;
+}

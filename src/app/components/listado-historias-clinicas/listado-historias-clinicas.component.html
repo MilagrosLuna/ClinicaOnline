@@ -1,74 +1,177 @@
 <div class="container mt-3">
+  <div *ngIf="identidad === 'especialista'">
+    <div class="row">
+      <ng-container *ngFor="let historia of historiasClinicas">
+        <div *ngIf="historia.Paciente !== 'Repetido'" class="col">
+          <div class="diva">
+            <button
+              class="btn btn-light button-style"
+              (click)="mostrarHistoriasClinicasDePaciente(historia.idPaciente)"
+              [style.backgroundImage]="'url(' + historia.fotoPaciente + ')'"
+            ></button>
+            <p class="texto">{{ historia.Paciente }}</p>
+          </div>
+        </div>
+      </ng-container>      
+    </div>
 
-  <!-- <button class="btn btn-primary" (click)="createPDF()">Crear pdf</button> -->
-
-<div *ngIf="historiasClinicas.length > 0; else noHistorias">
-  <div *ngIf="identidad === 'especialista'" >
-    <div *ngFor="let historia of historiasClinicas" class="card mb-3">
-      <div class="card-header">
-        <h2>Historia Clínica Paciente: {{ historia.Paciente }}</h2>
-      </div>
-      <div class="card-body">
-        <p><strong>Altura:</strong> {{ historia.altura }} cm</p>
-        <p><strong>Peso:</strong> {{ historia.peso }} kg</p>
-        <p><strong>Temperatura:</strong> {{ historia.temperatura }} °C</p>
-        <p><strong>Presión:</strong> {{ historia.presion }}</p>
-        <div *ngFor="let dato of historia.datosDinamicos | keyvalue">
+    <div *ngIf="historiasClinicasPorPaciente.length > 0; else noHistorias">
+      <div
+        *ngFor="let historia of historiasClinicasPorPaciente"
+        class="card mb-3"
+      >
+        <div class="card-header">
+          <h2>Historia Clínica</h2>
+          <h4>Especialidad atendida: {{ historia.Especialidad }}</h4>
+          <h4>Fecha: {{ historia.fecha }}</h4>
+        </div>
+        <div class="card-body">
           <p>
-            <strong>{{ dato.key }}:</strong> {{ dato.value }}
+            <strong>Altura:</strong> {{ historia.historiaClinica?.altura }} cm
           </p>
+          <p><strong>Peso:</strong> {{ historia.historiaClinica?.peso }} kg</p>
+          <p>
+            <strong>Temperatura:</strong>
+            {{ historia.historiaClinica?.temperatura }} °C
+          </p>
+          <p>
+            <strong>Presión:</strong> {{ historia.historiaClinica?.presion }}
+          </p>
+          <div
+            *ngFor="
+              let dato of historia.historiaClinica?.datosDinamicos | keyvalue
+            "
+          >
+            <p>
+              <strong>{{ dato.key }}:</strong> {{ dato.value }}
+            </p>
+          </div>
+
+          <label for="aa">Ver Reseña:</label>
+          <input [defaultChecked]="false" id="aa" type="checkbox" [(ngModel)]="mostrar" />
+
+          <!-- Muestra la reseña solo si el checkbox está marcado -->
+          <p *ngIf="mostrar">
+            <strong>Reseña:</strong>
+            {{ historia.resena }}
+          </p>
+
         </div>
       </div>
     </div>
   </div>
 
-  <div *ngIf="identidad === 'paciente'" >
-    <div *ngFor="let historia of historiasClinicas" class="card mb-3">
-      <div class="card-header">
-        <h2>Historia Clínica con el dr. {{ historia.Especialista }}</h2>
-      </div>
-      <div class="card-body">
-        <p><strong>Altura:</strong> {{ historia.altura }} cm</p>
-        <p><strong>Peso:</strong> {{ historia.peso }} kg</p>
-        <p><strong>Temperatura:</strong> {{ historia.temperatura }} °C</p>
-        <p><strong>Presión:</strong> {{ historia.presion }}</p>
-        <div *ngFor="let dato of historia.datosDinamicos | keyvalue">
-          <p>
-            <strong>{{ dato.key }}:</strong> {{ dato.value }}
-          </p>
+  <!-- <div *ngIf="historiasClinicas.length > 0; else noHistorias">
+    <div *ngIf="identidad === 'especialista'">
+      <div *ngFor="let historia of historiasClinicas" class="card mb-3">
+        <div class="card-header">
+          <h2>Historia Clínica Paciente: {{ historia.Paciente }}</h2>
+          <h4>Especialidad atendida: {{ historia.Especialidad }}</h4>
+          <h4>Fecha: {{ historia.fecha }}</h4>
         </div>
-        <button class="btn btn-primary" (click)="createPDF(historia)">Descargar pdf</button>
-      </div>
-    </div>
-  </div>
- 
-  <div *ngIf="identidad === 'admin'" >
-    <div *ngFor="let historia of historiasClinicas" class="card mb-3">
-      <div class="card-header">
-        <h2>Historia Clínica</h2>
-        <h3>Especialista: {{ historia.Especialista }}</h3>
-        <h3>Paciente: {{ historia.Paciente }}</h3>
-      </div>
-      <div class="card-body">
-        <p><strong>Altura:</strong> {{ historia.altura }} cm</p>
-        <p><strong>Peso:</strong> {{ historia.peso }} kg</p>
-        <p><strong>Temperatura:</strong> {{ historia.temperatura }} °C</p>
-        <p><strong>Presión:</strong> {{ historia.presion }}</p>
-        <div *ngFor="let dato of historia.datosDinamicos | keyvalue">
+        <div class="card-body">
           <p>
-            <strong>{{ dato.key }}:</strong> {{ dato.value }}
+            <strong>Altura:</strong> {{ historia.historiaClinica?.altura }} cm
           </p>
-        </div>        
-        <button class="btn btn-primary" (click)="descargarHistoriaClinica(historia)">Descargar excel</button>
+          <p><strong>Peso:</strong> {{ historia.historiaClinica?.peso }} kg</p>
+          <p>
+            <strong>Temperatura:</strong>
+            {{ historia.historiaClinica?.temperatura }} °C
+          </p>
+          <p>
+            <strong>Presión:</strong> {{ historia.historiaClinica?.presion }}
+          </p>
+          <div
+            *ngFor="
+              let dato of historia.historiaClinica?.datosDinamicos | keyvalue
+            "
+          >
+            <p>
+              <strong>{{ dato.key }}:</strong> {{ dato.value }}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-</div>
+    <div *ngIf="identidad === 'paciente'">
+      <div *ngFor="let historia of historiasClinicas" class="card mb-3">
+        <div class="card-header">
+          <h2>Historia Clínica con el dr. {{ historia.Especialista }}</h2>
+        </div>
+        <div class="card-body">
+          <p>
+            <strong>Altura:</strong> {{ historia.historiaClinica?.altura }} cm
+          </p>
+          <p><strong>Peso:</strong> {{ historia.historiaClinica?.peso }} kg</p>
+          <p>
+            <strong>Temperatura:</strong>
+            {{ historia.historiaClinica?.temperatura }} °C
+          </p>
+          <p>
+            <strong>Presión:</strong> {{ historia.historiaClinica?.presion }}
+          </p>
+          <div
+            *ngFor="
+              let dato of historia.historiaClinica?.datosDinamicos | keyvalue
+            "
+          >
+            <p>
+              <strong>{{ dato.key }}:</strong> {{ dato.value }}
+            </p>
+          </div>
+          <button
+            class="btn btn-primary"
+            (click)="createPDF(historia.historiaClinica)"
+          >
+            Descargar pdf
+          </button>
+        </div>
+      </div>
+    </div>
 
-<ng-template #noHistorias>
-  <div class="alert alert-info" role="alert">
-    No hay historias clínicas disponibles.
-  </div>
-</ng-template>
+    <div *ngIf="identidad === 'admin'">
+      <div *ngFor="let historia of historiasClinicas" class="card mb-3">
+        <div class="card-header">
+          <h2>Historia Clínica</h2>
+          <h3>Especialista: {{ historia.Especialista }}</h3>
+          <h3>Paciente: {{ historia.Paciente }}</h3>
+        </div>
+        <div class="card-body">
+          <p>
+            <strong>Altura:</strong> {{ historia.historiaClinica?.altura }} cm
+          </p>
+          <p><strong>Peso:</strong> {{ historia.historiaClinica?.peso }} kg</p>
+          <p>
+            <strong>Temperatura:</strong>
+            {{ historia.historiaClinica?.temperatura }} °C
+          </p>
+          <p>
+            <strong>Presión:</strong> {{ historia.historiaClinica?.presion }}
+          </p>
+          <div
+            *ngFor="
+              let dato of historia.historiaClinica?.datosDinamicos | keyvalue
+            "
+          >
+            <p>
+              <strong>{{ dato.key }}:</strong> {{ dato.value }}
+            </p>
+          </div>
+          <button
+            class="btn btn-primary"
+            (click)="descargarHistoriaClinica(historia.historiaClinica)"
+          >
+            Descargar excel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <ng-template #noHistorias>
+    <div class="alert alert-info" role="alert">
+      No hay historias clínicas disponibles.
+    </div>
+  </ng-template>
 </div>

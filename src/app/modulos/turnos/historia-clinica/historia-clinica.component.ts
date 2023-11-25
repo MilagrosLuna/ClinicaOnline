@@ -83,8 +83,6 @@ export class HistoriaClinicaComponent {
 
       this.historiaClinica.datosDinamicos = datosDinamicosObj;
 
-      this.historiaClinica.idPaciente = this.turno.idPaciente;
-      this.historiaClinica.idEspecialista = this.turno.idEspecialista;
       console.log(this.historiaClinica);
       let id = await this.firestoreService.guardarHistoriaClinica(
         this.historiaClinica

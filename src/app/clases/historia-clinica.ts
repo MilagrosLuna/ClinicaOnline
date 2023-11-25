@@ -3,10 +3,8 @@ export class HistoriaClinica {
   peso: number;
   temperatura: number;
   presion: string;
-  idPaciente: string;
   Paciente: string;
   Especialista: string;
-  idEspecialista: string;
   datosDinamicos: { [clave: string]: string };
 
   constructor() {
@@ -14,8 +12,6 @@ export class HistoriaClinica {
     this.peso = 0;
     this.temperatura = 0;
     this.presion = '';
-    this.idPaciente = '';
-    this.idEspecialista = '';
     this.Paciente = '';
     this.Especialista = '';
     this.datosDinamicos = {};

@@ -15,6 +15,7 @@ export class Turno {
   comentario: string;
   atencion: string;
   encuesta: string;
+  fotoPaciente: string;
   historiaClinica: HistoriaClinica | null;
   constructor(
     uid: string,
@@ -38,6 +39,7 @@ export class Turno {
     this.resena = '';
     this.comentario = '';
     this.atencion = '';
+    this.fotoPaciente = '';
     this.encuesta = '';
     this.historiaClinica = null;
   }
