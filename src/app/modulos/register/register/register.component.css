@@ -4,12 +4,15 @@
   align-items: center;
   justify-content: center;
   align-content: center;
-  min-height: 100vh;
-  background-color: lightgray;
+  min-height: 92vh;
+  /* background-color: lightgray;  */
+  background-image: url("../../../../assets/aa.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.btn{
-margin: 10px;
+.btn {
+  margin: 10px;
 }
 
 .form-signin {

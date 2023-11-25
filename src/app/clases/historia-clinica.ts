@@ -7,7 +7,7 @@ export class HistoriaClinica {
   Paciente: string;
   Especialista: string;
   idEspecialista: string;
-  datosDinamicos: { [clave: string]: any };
+  datosDinamicos: { [clave: string]: string };
 
   constructor() {
     this.altura = 0;

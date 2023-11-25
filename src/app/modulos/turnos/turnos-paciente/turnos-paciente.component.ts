@@ -28,15 +28,34 @@ export class TurnosPacienteComponent {
   @ViewChild('filtro') filtro!: ElementRef;
 
   private _turnos = new BehaviorSubject<any[]>([]);
-  turnosFiltrados = this._turnos.asObservable().pipe(
+  turnosFiltrados = this._turnos
+  .asObservable()
+  .pipe(
     map((turnos) => {
       if (this.filtro && this.filtro.nativeElement) {
         const filtro = this.filtro.nativeElement.value.toLowerCase();
-        return turnos.filter((turno) =>
-          Object.values(turno).some((val: any) =>
-            val.toString().toLowerCase().includes(filtro)
-          )
-        );
+        return turnos.filter((turno) => {
+          return Object.keys(turno).some((key) => {
+            const val = turno[key];
+            if (key === 'historiaClinica' && val !== null && typeof val === 'object') {
+              // Buscar dentro del objeto de historia clínica
+              return Object.values(val).some((clinicaVal: any) => {
+                if (clinicaVal && typeof clinicaVal === 'object') {
+                  // Si es un objeto (clave-valor), buscar dentro de los valores
+                  return Object.values(clinicaVal).some((nestedVal: any) =>
+                    nestedVal.toString().toLowerCase().includes(filtro)
+                  );
+                } else {
+                  // Si no es un objeto, buscar normalmente
+                  return clinicaVal.toString().toLowerCase().includes(filtro);
+                }
+              });
+            } else {
+              // Buscar en otros valores del turno
+              return val && val.toString().toLowerCase().includes(filtro);
+            }
+          });
+        });
       } else {
         return turnos;
       }

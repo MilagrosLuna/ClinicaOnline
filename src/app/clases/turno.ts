@@ -1,3 +1,5 @@
+import { HistoriaClinica } from './historia-clinica';
+
 export class Turno {
   uid: string;
   idEspecialista: string;
@@ -13,7 +15,7 @@ export class Turno {
   comentario: string;
   atencion: string;
   encuesta: string;
-  historiaClinica: string;
+  historiaClinica: HistoriaClinica | null;
   constructor(
     uid: string,
     idEspecialista: string,
@@ -21,7 +23,7 @@ export class Turno {
     idPaciente: string,
     estado: string,
     fecha: string,
-    hora: string,
+    hora: string
   ) {
     this.uid = uid;
     this.idEspecialista = idEspecialista;
@@ -30,13 +32,13 @@ export class Turno {
     this.estado = estado;
     this.fecha = fecha;
     this.hora = hora;
-    this.Especialidad='';
-    this.Especialista='';
-    this.Paciente='';
-    this.resena='';
-    this.comentario='';
-    this.atencion='';
-    this.encuesta='';
-    this.historiaClinica='';
+    this.Especialidad = '';
+    this.Especialista = '';
+    this.Paciente = '';
+    this.resena = '';
+    this.comentario = '';
+    this.atencion = '';
+    this.encuesta = '';
+    this.historiaClinica = null;
   }
 }

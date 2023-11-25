@@ -1,3 +1,9 @@
 .invalid {
-    color: red;
-  }
+  color: red;
+}
+
+.container {
+  background-color: lightgray;
+  border-radius: 25px;
+  padding: 20px;
+}
