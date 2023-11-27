@@ -9,7 +9,7 @@ import { AdmistrarTurnosComponent } from './admistrar-turnos/admistrar-turnos.co
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxSpinnerModule } from 'ngx-spinner';
-
+import { GraficosComponent } from './graficos/graficos.component';
 
 @NgModule({
   declarations: [
@@ -17,13 +17,14 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     AdmistrarEspecialistassComponent,
     NavbarAdmComponent,
     AdmistrarTurnosComponent,
+    GraficosComponent,
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    UsuariosRoutingModule,    
+    UsuariosRoutingModule,
     NgxSpinnerModule,
-  ]
+  ],
 })
-export class UsuariosModule { }
+export class UsuariosModule {}

@@ -198,7 +198,7 @@ export class FirebaseService {
       }
 
       const userData = querySnapshot.docs[0].data();
-      let user;
+      let user= null;
 
       switch (type) {
         case 'admins':

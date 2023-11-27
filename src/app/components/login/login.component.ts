@@ -12,14 +12,13 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { slideInAnimation } from 'src/app/animation';
+import { slideInAnimation2 } from 'src/app/animation';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],animations: [
-    slideInAnimation,
-  ]
+  styleUrls: ['./login.component.css'],
+  animations: [slideInAnimation2],
 })
 export class LoginComponent {
   form!: FormGroup;
@@ -60,12 +59,16 @@ export class LoginComponent {
         'especialistas'
       );
       if (admin !== null) {
-        this.userservice.showSuccessMessageAndNavigate(['/homeAdmin/admin/presentacion']);
+        this.userservice.showSuccessMessageAndNavigate([
+          '/homeAdmin/admin/presentacion',
+        ]);
         return;
       }
       if (especialista !== null) {
         if (especialista.verificado === 'true' && user.user.emailVerified) {
-          this.userservice.showSuccessMessageAndNavigate(['/home/presentacion']);
+          this.userservice.showSuccessMessageAndNavigate([
+            '/home/presentacion',
+          ]);
           return;
         }
         if (especialista.verificado === 'null') {

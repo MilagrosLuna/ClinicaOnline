@@ -1,9 +1,10 @@
 <div class="container mt-3">
   <div *ngIf="identidad === 'especialista'">
-    <div class="row">
-      <ng-container *ngFor="let historia of historiasClinicas">
-        <div *ngIf="historia.Paciente !== 'Repetido'" class="col">
-          <div class="diva">
+    <!-- fab por cada paciente -->
+    <div class="fab-container">
+      <ng-container *ngFor="let historia of historiasClinicasUnicas">
+        <div class="fab">
+          <div class="fab-content">
             <button
               class="btn btn-light button-style"
               (click)="mostrarHistoriasClinicasDePaciente(historia.idPaciente)"
@@ -12,9 +13,9 @@
             <p class="texto">{{ historia.Paciente }}</p>
           </div>
         </div>
-      </ng-container>      
+      </ng-container>
     </div>
-
+    <!-- historia del paciente seleccionado -->
     <div *ngIf="historiasClinicasPorPaciente.length > 0; else noHistorias">
       <div
         *ngFor="let historia of historiasClinicasPorPaciente"
@@ -47,19 +48,87 @@
             </p>
           </div>
 
-          <label for="aa">Ver Reseña:</label>
-          <input [defaultChecked]="false" id="aa" type="checkbox" [(ngModel)]="mostrar" />
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              value=""
+              id="aa"
+              (change)="mostrarResena(historia, $event)"
+            />
+            <label class="form-check-label" for="aa"> Ver Reseña: </label>
+          </div>
 
-          <!-- Muestra la reseña solo si el checkbox está marcado -->
-          <p *ngIf="mostrar">
+          <!-- Muestra la reseña solo si el checkbox está marcado y el uid de la historia clínica es igual al uid seleccionado -->
+          <div
+            *ngIf="mostrar && historia.uid === uidSeleccionado"
+            class="alert alert-info mt-3"
+            role="alert"
+          >
             <strong>Reseña:</strong>
             {{ historia.resena }}
-          </p>
-
+          </div>
         </div>
       </div>
     </div>
   </div>
+
+  <div *ngIf="identidad === 'admin'">
+    <div class="fab-container">
+      <ng-container *ngFor="let historia of historiasClinicasUnicas">
+        <div class="fab">
+          <div class="fab-content">
+            <button
+              class="btn btn-light button-style"
+              (click)="
+                mostraryDescargarHistoriasClinicasDePaciente(
+                  historia.idPaciente
+                )
+              "
+              [style.backgroundImage]="'url(' + historia.fotoPaciente + ')'"
+            ></button>
+            <p class="texto">{{ historia.Paciente }}</p>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div *ngIf="historiasClinicasPorPaciente.length > 0; else noHistorias">
+      <div
+        *ngFor="let historia of historiasClinicasPorPaciente"
+        class="card mb-3"
+      >
+        <div class="card-header">
+          <h2>Historia Clínica</h2>
+          <h4>Especialidad atendida: {{ historia.Especialidad }}</h4>
+          <h4>Fecha: {{ historia.fecha }}</h4>
+        </div>
+        <div class="card-body">
+          <p>
+            <strong>Altura:</strong> {{ historia.historiaClinica?.altura }} cm
+          </p>
+          <p><strong>Peso:</strong> {{ historia.historiaClinica?.peso }} kg</p>
+          <p>
+            <strong>Temperatura:</strong>
+            {{ historia.historiaClinica?.temperatura }} °C
+          </p>
+          <p>
+            <strong>Presión:</strong> {{ historia.historiaClinica?.presion }}
+          </p>
+          <div
+            *ngFor="
+              let dato of historia.historiaClinica?.datosDinamicos | keyvalue
+            "
+          >
+            <p>
+              <strong>{{ dato.key }}:</strong> {{ dato.value }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
 
   <!-- <div *ngIf="historiasClinicas.length > 0; else noHistorias">
     <div *ngIf="identidad === 'especialista'">
@@ -171,7 +240,7 @@
 
   <ng-template #noHistorias>
     <div class="alert alert-info" role="alert">
-      No hay historias clínicas disponibles.
+      No hay historias clínicas disponibles. Seleccione un paciente....
     </div>
   </ng-template>
 </div>

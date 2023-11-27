@@ -1,11 +1,6 @@
 import { Component } from '@angular/core';
 import { HistoriaClinica } from 'src/app/clases/historia-clinica';
 import { FirebaseService } from 'src/app/servicios/firebase.service';
-import { HttpClient } from '@angular/common/http';
-import { DomSanitizer } from '@angular/platform-browser';
-import * as pdfMake from 'pdfmake/build/pdfmake';
-import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-(pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 import { Turno } from 'src/app/clases/turno';
@@ -24,11 +19,7 @@ export class ListadoHistoriasClinicasComponent {
   historiaVer: boolean = false;
   mostrar: boolean = false;
   historiapruebaPdf: HistoriaClinica = new HistoriaClinica();
-  constructor(
-    private authService: FirebaseService,
-    private http: HttpClient,
-    private sanitizer: DomSanitizer
-  ) {}
+  constructor(private authService: FirebaseService) {}
 
   async ngOnInit(): Promise<void> {
     await this.user();
@@ -42,132 +33,50 @@ export class ListadoHistoriasClinicasComponent {
     this.turno = turno;
   }
 
-  convertImageToBase64(imagen: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      this.http.get(imagen, { responseType: 'blob' }).subscribe((blob) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const base64data = reader.result;
-          resolve(base64data as string);
-        };
-        reader.onerror = () => {
-          reject('Error al leer la imagen');
-        };
-        reader.readAsDataURL(blob);
-      }, reject);
-    });
-  }
-  descargarHistoriaClinica(historiaClinica: HistoriaClinica | null) {
-    if (historiaClinica !== null) {
+  descargarHistoriasClinicas(Turnos: Turno[]) {
+    // Convertir cada historia clínica en un objeto que se pueda convertir a Excel
+    const historiasClinicasArray = Turnos.map((turno) => {
       // Crear una copia de historiaClinica para no modificar el objeto original
-      let historiaClinicaCopia: Partial<HistoriaClinica> = {
-        ...historiaClinica,
+      let historiaClinicaCopia: Partial<Turno> = {
+        ...turno,
       };
 
       // Eliminar los campos que no quieres incluir
 
       // Desglosar el objeto datosDinamicos en propiedades individuales
       let datosDinamicosDesglosados: { [clave: string]: any } = {};
-      for (let clave in historiaClinica.datosDinamicos) {
+      for (let clave in turno.historiaClinica?.datosDinamicos) {
         datosDinamicosDesglosados[clave] =
-          historiaClinica.datosDinamicos[clave];
+          turno.historiaClinica.datosDinamicos[clave];
       }
 
       // Combinar historiaClinicaCopia y datosDinamicosDesglosados
-      let historiaClinicaFinal: HistoriaClinica = {
-        ...historiaClinicaCopia,
+      return {
+        Especialidad: turno.Especialidad,
+        Especialista: turno.Especialista,
+        Paciente: turno.Paciente,
+        fecha: turno.fecha,
+        altura: turno.historiaClinica?.altura,
+        peso: turno.historiaClinica?.peso,
+        presion: turno.historiaClinica?.presion,
+        temperatura: turno.historiaClinica?.temperatura,
         ...datosDinamicosDesglosados,
-      } as HistoriaClinica;
+      } as any;
+    });
 
-      // Convertir el objeto modificado en un array que contiene un solo objeto
-      const historiaClinicaArray = [historiaClinicaFinal];
+    const worksheet = XLSX.utils.json_to_sheet(historiasClinicasArray);
+    const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: 'xlsx',
+      type: 'array',
+    });
 
-      const worksheet = XLSX.utils.json_to_sheet(historiaClinicaArray);
-      const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
-      const excelBuffer = XLSX.write(workbook, {
-        bookType: 'xlsx',
-        type: 'array',
-      });
-
-      saveAs(
-        new Blob([excelBuffer]),
-        `${historiaClinica.Paciente}_historia_clinica.xlsx`
-      );
-    }
+    saveAs(
+      new Blob([excelBuffer]),
+      `${Turnos[0].Paciente}_historias_clinicas.xlsx`
+    );
   }
-  async createPDF(historiapruebaPdf: HistoriaClinica | null) {
-    if (historiapruebaPdf !== null) {
-      let imagen = await this.convertImageToBase64('../assets/logoClinica.png');
-      let now = new Date();
-      let fechaEmision = `${now.getDate()}/${
-        now.getMonth() + 1
-      }/${now.getFullYear()} a las ${now.getHours()}:${now.getMinutes()} hs`;
-      const pdfDefinition: any = {
-        watermark: {
-          text: 'Clinica online Milagros Luna',
-          color: 'blue',
-          opacity: 0.1,
-          bold: true,
-          italics: false,
-        },
-        content: [
-          {
-            image: imagen,
-            width: 300,
-            alignment: 'center',
-          },
-          {
-            text: 'Historia Clínica',
-            fontSize: 30,
-            color: 'blue',
-            bold: true,
-            margin: [0, 20, 0, 20],
-          },
-          { text: `Fecha de emisión: ${fechaEmision}`, fontSize: 20 },
-          {
-            text: `Especialista: ${historiapruebaPdf.Especialista}`,
-            fontSize: 20,
-            margin: [0, 10, 0, 0],
-          },
-          {
-            text: `Paciente: ${historiapruebaPdf.Paciente}`,
-            fontSize: 20,
-            margin: [0, 10, 0, 0],
-          },
-          {
-            text: `Altura: ${historiapruebaPdf.altura} cm`,
-            fontSize: 20,
-            margin: [0, 10, 0, 0],
-          },
-          {
-            text: `Peso: ${historiapruebaPdf.peso} kg`,
-            fontSize: 20,
-            margin: [0, 10, 0, 0],
-          },
-          {
-            text: `Presión: ${historiapruebaPdf.presion}`,
-            fontSize: 20,
-            margin: [0, 10, 0, 0],
-          },
-          {
-            text: `Temperatura: ${historiapruebaPdf.temperatura} °C`,
-            fontSize: 20,
-            margin: [0, 10, 0, 0],
-          },
-          ...Object.entries(historiapruebaPdf.datosDinamicos).map(
-            ([key, value]) => ({
-              text: `${key}: ${value}`,
-              fontSize: 20,
-              margin: [0, 10, 0, 0],
-            })
-          ),
-        ],
-      };
-      const pdf = pdfMake.createPdf(pdfDefinition);
-      pdf.download('HistoriaClinica');
-    }
-  }
-
+  historiasClinicasUnicas: Turno[] = [];
   async obtenerHistorias() {
     let historiasClinicasA: Turno[] = [];
     let pacientes = await this.authService.getAllPacientes();
@@ -190,7 +99,7 @@ export class ListadoHistoriasClinicasComponent {
         historiasClinicasA = await this.authService.obtenerTodosLosTurnos();
         break;
     }
-    const nombresMostrados: string[] = [];
+
     for (const historia of historiasClinicasA) {
       const pacienteEncontrado = pacientes.find(
         (p) => p.uid === historia.idPaciente
@@ -200,16 +109,19 @@ export class ListadoHistoriasClinicasComponent {
         const nombrePaciente = pacienteEncontrado.nombre;
         const fotoPaciente = pacienteEncontrado.foto1;
 
-        if (!nombresMostrados.includes(nombrePaciente)) {
-          historia.Paciente = nombrePaciente;
-          historia.fotoPaciente = fotoPaciente;
-          nombresMostrados.push(nombrePaciente);
-        } else {
-          historia.Paciente = 'Repetido';
-        }
+        historia.Paciente = nombrePaciente;
+        historia.fotoPaciente = fotoPaciente;
       } else {
         historia.Paciente = 'Desconocido';
       }
+      if (
+        !this.historiasClinicasUnicas.some(
+          (h) => h.Paciente === historia.Paciente
+        )
+      ) {
+        this.historiasClinicasUnicas.push(historia);
+      }
+
       historia.Especialista =
         especialistas.find((e) => e.uid === historia.idEspecialista)?.nombre ||
         'Desconocido';
@@ -217,16 +129,38 @@ export class ListadoHistoriasClinicasComponent {
         especialidades.find((e) => e.id === historia.idEspecialidad)?.nombre ||
         'Desconocido';
     }
-
     this.historiasClinicas = historiasClinicasA.filter(
       (historia) => historia.historiaClinica !== null
     );
-  }
 
+    console.log(this.historiasClinicas);
+  }
   mostrarHistoriasClinicasDePaciente(idPaciente: string) {
     this.historiasClinicasPorPaciente = this.historiasClinicas.filter(
       (historia) => historia.idPaciente === idPaciente
     );
+  }
+  mostraryDescargarHistoriasClinicasDePaciente(idPaciente: string) {
+    this.historiasClinicasPorPaciente = this.historiasClinicas.filter(
+      (historia) => historia.idPaciente === idPaciente
+    );
+    this.descargarHistoriasClinicas(this.historiasClinicasPorPaciente);
+  }
+
+  uidSeleccionado: string = '';
+
+  checkboxSeleccionado: any;
+
+  mostrarResena(historia: Turno, event: any) {
+    if (
+      this.checkboxSeleccionado &&
+      this.checkboxSeleccionado !== event.target
+    ) {
+      this.checkboxSeleccionado.checked = false;
+    }
+    this.checkboxSeleccionado = event.target;
+    this.mostrar = event.target.checked;
+    this.uidSeleccionado = historia.uid;
   }
 
   async user() {
