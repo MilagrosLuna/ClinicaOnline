@@ -18,14 +18,17 @@ export class ListadoHistoriasClinicasComponent {
   turno: Turno | null = null;
   historiaVer: boolean = false;
   mostrar: boolean = false;
+  loading: boolean = false;
   historiapruebaPdf: HistoriaClinica = new HistoriaClinica();
   constructor(private authService: FirebaseService) {}
 
   async ngOnInit(): Promise<void> {
+    this.loading = true;
     await this.user();
     this.identidad = localStorage.getItem('identidad');
     await this.obtenerHistorias();
     console.log(this.historiasClinicas);
+    this.loading=false;
   }
 
   mostrarHistoria(turno: Turno) {
@@ -135,10 +138,15 @@ export class ListadoHistoriasClinicasComponent {
     console.log(this.historiasClinicas);
   }
   mostrarHistoriasClinicasDePaciente(idPaciente: string) {
+    
+    console.log(idPaciente);
+    console.log('idPacienteidPacienteidPacienteidPaciente');
+
     this.historiasClinicasPorPaciente = this.historiasClinicas.filter(
       (historia) => historia.idPaciente === idPaciente
     );
   }
+  //gjB9xASvWXW4VnR396N4vfWL8Lm1
   mostraryDescargarHistoriasClinicasDePaciente(idPaciente: string) {
     this.historiasClinicasPorPaciente = this.historiasClinicas.filter(
       (historia) => historia.idPaciente === idPaciente

@@ -35,6 +35,8 @@ export class SolicitarTurnoComponent {
   especialista: string | undefined = undefined;
   paciente: string | undefined = undefined;
   especialistaFalso: boolean = false;
+  loading: boolean = false;
+
   constructor(
     private authService: FirebaseService,
     private router: Router,
@@ -42,6 +44,7 @@ export class SolicitarTurnoComponent {
   ) {}
 
   async ngOnInit(): Promise<void> {
+    this.loading = true;
     this.form = new FormGroup({
       especialidad: new FormControl('', [Validators.required]),
       especialista: new FormControl('', [Validators.required]),
@@ -49,7 +52,7 @@ export class SolicitarTurnoComponent {
       hora: new FormControl('', [Validators.required]),
       fecha: new FormControl('', [Validators.required]),
     });
-    this.cargarEspecialidades();
+    await this.cargarEspecialidades();
     let id = localStorage.getItem('logueado');
     this.esAdmin = localStorage.getItem('admin') === 'true';
     if (id) {
@@ -60,6 +63,7 @@ export class SolicitarTurnoComponent {
         localStorage.setItem('admin', 'true');
       }
     }
+    this.loading = false;
   }
   onEspecialidadChange(uid: any) {
     this.especialidadSeleccionada = uid;
@@ -151,12 +155,11 @@ export class SolicitarTurnoComponent {
 
     Swal.fire({
       icon: 'warning',
-      text:
-        'La fecha seleccionada es ' +
+      title:
+        'La fecha seleccionada: ' +
         fechaSeleccionada +
-        ' y la hora es ' +
+        ' a las ' +
         horaSeleccionada,
-      title: '¡Fecha!',
       showConfirmButton: false,
       timer: 2000,
     });

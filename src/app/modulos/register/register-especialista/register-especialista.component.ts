@@ -35,7 +35,7 @@ export class RegisterEspecialistaComponent {
       especialistaEdad: new FormControl('', [
         Validators.required,
         Validators.min(1),
-        Validators.max(110),
+        Validators.max(105),
       ]),
       especialistaDni: new FormControl('', [
         Validators.required,

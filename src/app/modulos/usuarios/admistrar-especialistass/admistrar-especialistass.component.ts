@@ -9,38 +9,45 @@ import { FirebaseService } from 'src/app/servicios/firebase.service';
 })
 export class AdmistrarEspecialistassComponent {
   especialistas: Especialista[] = [];
-
+  loading: boolean = false;
   constructor(private authService: FirebaseService) {}
 
-  ngOnInit(): void {
-    this.cargarEspecialistas();
+  async ngOnInit(): Promise<void> {
+    this.loading = true;
+    await this.cargarEspecialistas();
+    this.loading = false;
   }
 
   async cargarEspecialistas() {
     const especialistasData = await this.authService.obtenerEspecialistas();
     const especialidades = await this.authService.obtenerEspecialidades();
-  
+
     this.especialistas = especialistasData.map((especialistaData: any) => {
-      const especialidadesDelEspecialista = Array.isArray(especialistaData.especialidades)
+      const especialidadesDelEspecialista = Array.isArray(
+        especialistaData.especialidades
+      )
         ? especialistaData.especialidades.map((especialidadId: string) => {
-            const especialidad = especialidades.find((esp: any) => esp.id === especialidadId);
-            return especialidad ? especialidad.nombre : 'Especialidad Desconocida';
+            const especialidad = especialidades.find(
+              (esp: any) => esp.id === especialidadId
+            );
+            return especialidad
+              ? especialidad.nombre
+              : 'Especialidad Desconocida';
           })
         : [];
-  
+
       return new Especialista(
         especialistaData.uid,
         especialistaData.nombre,
         especialistaData.apellido,
         especialistaData.edad,
         especialistaData.dni,
-        especialidadesDelEspecialista, 
+        especialidadesDelEspecialista,
         especialistaData.foto1,
         especialistaData.verificado
       );
     });
   }
-  
 
   async aceptarEspecialista(especialista: Especialista): Promise<void> {
     try {
