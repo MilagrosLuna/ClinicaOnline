@@ -50,7 +50,6 @@ export class ListadoHistoriasClinicasComponent {
           turno.historiaClinica.datosDinamicos[clave];
       }
 
-      // Combinar historiaClinicaCopia y datosDinamicosDesglosados
       return {
         Especialidad: turno.Especialidad,
         Especialista: turno.Especialista,

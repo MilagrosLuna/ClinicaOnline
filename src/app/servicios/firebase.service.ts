@@ -111,6 +111,33 @@ export class FirebaseService {
     return signOut(this.auth);
   }
 
+  public async guardarLog(logueo: any) {
+    try {
+      const docRef = await addDoc(collection(this.db, 'logueos'), logueo);
+      console.log('Document written with ID: ', docRef.id);
+      return true;
+    } catch (e) {
+      console.error('Error adding document: ', e);
+      return false;
+    }
+  }
+
+  public async obtenerLogs() {
+    try {
+      const Ref = collection(this.db, 'logueos');
+      const querySnapshot = await getDocs(Ref);
+
+      const logs = querySnapshot.docs.map((doc) => {
+        return { id: doc.id, ...doc.data() };
+      });
+
+      return logs;
+    } catch (error) {
+      console.error('Error al obtener los logs: ', error);
+      return [];
+    }
+  }
+
   public async guardarAdminBD(admin: Admin) {
     try {
       const docRef = await addDoc(collection(this.db, 'admins'), {
@@ -185,8 +212,6 @@ export class FirebaseService {
     }
   }
 
- 
-
   async getUserByUidAndType(uid: string, type: string): Promise<any> {
     try {
       const q = query(collection(this.db, type), where('uid', '==', uid));
@@ -198,7 +223,7 @@ export class FirebaseService {
       }
 
       const userData = querySnapshot.docs[0].data();
-      let user= null;
+      let user = null;
 
       switch (type) {
         case 'admins':

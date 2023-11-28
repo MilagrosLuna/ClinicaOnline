@@ -7,10 +7,10 @@ import { AdmistrarEspecialistassComponent } from './admistrar-especialistass/adm
 import { NavbarAdmComponent } from './navbar-adm/navbar-adm.component';
 import { AdmistrarTurnosComponent } from './admistrar-turnos/admistrar-turnos.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { GraficosComponent } from './graficos/graficos.component';
-
+import { NgxEchartsModule } from 'ngx-echarts';
+import * as echarts from 'echarts';
 @NgModule({
   declarations: [
     AdmistradorComponent,
@@ -25,6 +25,7 @@ import { GraficosComponent } from './graficos/graficos.component';
     FormsModule,
     UsuariosRoutingModule,
     NgxSpinnerModule,
+    NgxEchartsModule.forRoot({ echarts }),
   ],
 })
 export class UsuariosModule {}

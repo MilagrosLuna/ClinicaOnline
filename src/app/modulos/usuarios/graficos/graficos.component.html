@@ -1,1 +1,85 @@
-<p>graficos works!</p>
+<!-- <div class="container mt-3">
+  <div class="card mb-3">
+    <div class="card-body">
+      <div echarts [options]="chartOption" id="1" class="demo-chart"></div>
+      <button class="btn btn-primary mt-3" (click)="exportPDF('1')">
+        Descargar como PDF
+      </button>
+    </div>
+  </div>
+  <div class="card mb-3">
+    <div class="card-body">
+      <div echarts [options]="chartOption2" id="2" class="demo-chart"></div>
+      <button class="btn btn-primary mt-3" (click)="exportPDF('2')">
+        Descargar como PDF
+      </button>
+    </div>
+  </div>
+  <div class="card mb-3">
+    <div class="card-body">
+      <div echarts [options]="chartOption3" id="3" class="demo-chart"></div>
+      <button class="btn btn-primary mt-3" (click)="exportPDF('3')">
+        Descargar como PDF
+      </button>
+    </div>
+  </div>
+  <div class="card mb-3">
+    <div class="card-body">
+      <div echarts [options]="chartOption4" id="4" class="demo-chart"></div>
+      <input type="date" [(ngModel)]="fechaInicio" (change)="createChart4()" />
+      <input type="date" [(ngModel)]="fechaFin" (change)="createChart4()" />
+      <button class="btn btn-primary mt-3" (click)="exportPDF('4')">
+        Descargar como PDF
+      </button>
+    </div>
+  </div>
+  <div class="card mb-3">
+    <div class="card-body">
+      <div echarts [options]="chartOption5" id="5" class="demo-chart"></div>
+      <input type="date" [(ngModel)]="fechaInicio2" (change)="createChart5()" />
+      <input type="date" [(ngModel)]="fechaFin2" (change)="createChart5()" />
+      <button class="btn btn-primary mt-3" (click)="exportPDF('5')">
+        Descargar como PDF
+      </button>
+    </div>
+  </div>
+</div> -->
+
+<div class="container mt-3" *ngIf="!loading">
+  <div class="row">
+    <div class="col-lg-12 mb-4" *ngFor="let chart of charts">
+      <div class="card h-100">
+        <div class="card-body">
+          <h2 class="card-title">{{ chart.Titulo }}</h2>
+          <div
+            echarts
+            [options]="chart.chartOption"
+            [id]="chart.id"
+            class="demo-chart"
+          ></div>
+          <input
+            *ngIf="chart.hasDateFilter && chart.createChart"
+            type="date"
+            [(ngModel)]="fechaInicio"
+            (change)="createChart()"
+            class="form-control"
+          />
+          <input
+            *ngIf="chart.hasDateFilter && chart.createChart"
+            type="date"
+            [(ngModel)]="fechaFin"
+            (change)="createChart()"
+            class="mt-3 form-control"
+          />
+          <button
+            *ngIf="exportPDF"
+            class="btn btn-primary mt-3"
+            (click)="exportPDF(chart.id)"
+          >
+            Descargar como PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

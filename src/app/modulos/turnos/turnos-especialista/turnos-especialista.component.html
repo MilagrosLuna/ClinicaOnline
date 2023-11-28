@@ -30,7 +30,7 @@
           <h6 class="card-title">
             Fecha: {{ turno.fecha }} a las {{ turno.hora }} hs.
           </h6>
-          <p class="card-text">Paciente: {{ turno.Paciente }}</p>
+          <p class="card-text">Paciente: {{ turno.Paciente | uppercase }}</p>
           <p class="card-text">Especialidad: {{ turno.Especialidad }}</p>
 
           <div  class="card mb-3" *ngIf="turno.historiaClinica !== null">

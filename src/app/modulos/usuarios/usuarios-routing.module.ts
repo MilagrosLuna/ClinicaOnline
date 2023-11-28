@@ -8,6 +8,7 @@ import { SolicitarTurnoComponent } from 'src/app/components/solicitar-turno/soli
 import { MiPerfilComponent } from 'src/app/components/mi-perfil/mi-perfil.component';
 import { ListadoHistoriasClinicasComponent } from 'src/app/components/listado-historias-clinicas/listado-historias-clinicas.component';
 import { PresentacionComponent } from 'src/app/components/presentacion/presentacion.component';
+import { GraficosComponent } from './graficos/graficos.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'admin', pathMatch: 'full' },
@@ -25,6 +26,7 @@ const routes: Routes = [
       { path: 'perfil', component: MiPerfilComponent },
       { path: 'usuarios', component: ListadoHistoriasClinicasComponent },      
       { path: 'presentacion', component: PresentacionComponent },
+      { path: 'graficos', component: GraficosComponent },
     ],
   },
 ];

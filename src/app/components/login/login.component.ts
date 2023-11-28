@@ -48,6 +48,23 @@ export class LoginComponent {
     }, 2000);
   }
 
+  async guardarLogueos(id: any) {
+    const now = new Date();
+    const dia = `${String(now.getDate()).padStart(2, '0')}/${String(
+      now.getMonth() + 1
+    ).padStart(2, '0')}/${now.getFullYear()}`;
+    const hora = `${String(now.getHours()).padStart(2, '0')}:${String(
+      now.getMinutes()
+    ).padStart(2, '0')}`;
+
+    const log = {
+      dia: dia,
+      hora: hora,
+      usuario: id,
+    };
+    await this.authService.guardarLog(log);
+  }
+
   async verificarMails(user: any) {
     try {
       const admin = await this.authService.getUserByUidAndType(
@@ -59,6 +76,7 @@ export class LoginComponent {
         'especialistas'
       );
       if (admin !== null) {
+        await this.guardarLogueos(user.user.email);
         this.userservice.showSuccessMessageAndNavigate([
           '/homeAdmin/admin/presentacion',
         ]);
@@ -66,6 +84,7 @@ export class LoginComponent {
       }
       if (especialista !== null) {
         if (especialista.verificado === 'true' && user.user.emailVerified) {
+          await this.guardarLogueos(user.user.email);
           this.userservice.showSuccessMessageAndNavigate([
             '/home/presentacion',
           ]);
@@ -80,6 +99,7 @@ export class LoginComponent {
           this.userservice.showVerifyEmailMessage();
         }
       } else if (user.user.emailVerified) {
+        await this.guardarLogueos(user.user.email);
         this.userservice.showSuccessMessageAndNavigate(['/home/presentacion']);
       } else {
         await this.authService.logout();
