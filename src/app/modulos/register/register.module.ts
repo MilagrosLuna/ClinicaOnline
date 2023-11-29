@@ -15,6 +15,7 @@ import { MiDirectivaColorDirective } from 'src/app/mi-directiva-color.directive'
     RegisterPacienteComponent,
     RegisterAdministradorComponent,
     MiDirectivaColorDirective,
+    
   ],
   imports: [
     CommonModule,

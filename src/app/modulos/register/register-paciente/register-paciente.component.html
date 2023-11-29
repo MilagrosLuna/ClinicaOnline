@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container mb-3">
   <h4 class="mb-3">Datos del paciente</h4>
   <form (ngSubmit)="onSubmit()" [formGroup]="form" class="needs-validation">
     <div class="row g-3">
@@ -246,7 +246,11 @@
       </div>
     </div>
     <hr class="my-4" />
-    <re-captcha (resolved)="resolved($event)" formControlName="recaptchaReactive" siteKey="6LdYHgspAAAAAPVxSSPCpsGIT3QAgCb9M72CbOEB"></re-captcha>
+    <re-captcha
+      (resolved)="resolved($event)"
+      formControlName="recaptchaReactive"
+      siteKey={{captcha}}
+    ></re-captcha>
     <button class="w-100 btn btn-primary btn-lg" type="submit">
       Registrar paciente
     </button>

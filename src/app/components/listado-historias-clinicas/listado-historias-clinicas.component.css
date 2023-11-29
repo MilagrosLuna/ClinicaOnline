@@ -6,6 +6,9 @@
   z-index: 10;
   flex-direction: column-reverse;
 }
+.container {
+  min-height: 100vh;
+}
 
 .fab {
   width: 70px;

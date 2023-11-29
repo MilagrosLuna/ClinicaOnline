@@ -1,12 +1,12 @@
 <div class="container mt-3">
   <ngx-spinner
-  bdColor="rgba(0, 0, 0, 0.8)"
-  size="medium"
-  color="#fff"
-  type="ball-scale-multiple"
->
-  <p style="font-size: 20px; color: white">Cargando turnos...</p>
-</ngx-spinner>
+    bdColor="rgba(0, 0, 0, 0.8)"
+    size="medium"
+    color="#fff"
+    type="ball-scale-multiple"
+  >
+    <p style="font-size: 20px; color: white">Cargando turnos...</p>
+  </ngx-spinner>
 
   <div class="mb-3">
     <label for="filtro" class="form-label"
@@ -21,8 +21,7 @@
     />
   </div>
 
-
-  <div style="height: 600px; overflow: auto">
+  <div style="height: 600px; overflow: auto; margin-bottom: 3%;">
     <div *ngFor="let turno of turnosFiltrados | async">
       <div class="card mb-3">
         <div class="card-body">
@@ -31,11 +30,38 @@
             <span class="text-primary"> {{ turno.estado }}</span>
           </h4>
           <h6 class="card-title">
-            Fecha: {{ turno.fecha }} a las  {{turno.hora}} hs.
+            Fecha: {{ turno.fecha }} a las {{ turno.hora }} hs.
           </h6>
           <p class="card-text">Especialista: {{ turno.Especialista }}</p>
           <p class="card-text">Especialidad: {{ turno.Especialidad }}</p>
           <p class="card-text">Paciente: {{ turno.Paciente }}</p>
+          <div class="card mb-3" *ngIf="turno.historiaClinica !== null">
+            <div class="card-header">
+              <h2>Historia Clínica</h2>
+            </div>
+            <div class="card-body">
+              <p>
+                <strong>Altura:</strong> {{ turno.historiaClinica.altura }} cm
+              </p>
+              <p><strong>Peso:</strong> {{ turno.historiaClinica.peso }} kg</p>
+              <p>
+                <strong>Temperatura:</strong>
+                {{ turno.historiaClinica.temperatura }} °C
+              </p>
+              <p>
+                <strong>Presión:</strong> {{ turno.historiaClinica.presion }}
+              </p>
+              <div
+                *ngFor="
+                  let dato of turno.historiaClinica.datosDinamicos | keyvalue
+                "
+              >
+                <p>
+                  <strong>{{ dato.key }}:</strong> {{ dato.value }}
+                </p>
+              </div>
+            </div>
+          </div>
           <div
             class="form-group"
             *ngIf="comentario && turno.uid == turnoA?.uid"

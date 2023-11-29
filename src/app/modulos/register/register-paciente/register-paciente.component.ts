@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { Paciente } from 'src/app/clases/paciente';
 import { FirebaseService } from 'src/app/servicios/firebase.service';
 import Swal from 'sweetalert2';
+import { CAPTCHA } from 'src/environments/environment';
 @Component({
   selector: 'app-register-paciente',
   templateUrl: './register-paciente.component.html',
@@ -23,6 +24,7 @@ export class RegisterPacienteComponent {
   errorCheck: boolean = false;
   Message: string = '';
   user: any;
+  captcha = CAPTCHA;
 
   constructor(private authService: FirebaseService, private router: Router) {}
 
@@ -149,6 +151,7 @@ export class RegisterPacienteComponent {
   }
 
   resolved(captchaResponse: string) {
+    this.form.controls['recaptchaReactive'].setValue(captchaResponse);
   }
 
 }

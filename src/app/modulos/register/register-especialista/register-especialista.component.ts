@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { Especialidad } from 'src/app/clases/especialidad';
 import { Especialista } from 'src/app/clases/especialista';
 import { FirebaseService } from 'src/app/servicios/firebase.service';
+import { CAPTCHA } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 @Component({
   selector: 'app-register-especialista',
@@ -25,6 +26,7 @@ export class RegisterEspecialistaComponent {
   especialidadesSeleccionadas: Especialidad[] = [];
   nuevaEspecialidad: string = '';
   especialidades: Especialidad[] = [];
+  captcha = CAPTCHA;
 
   constructor(private authService: FirebaseService, private router: Router) {}
 
@@ -83,8 +85,15 @@ export class RegisterEspecialistaComponent {
   async cargarEspecialidades() {
     const especialidadesData = await this.authService.obtenerEspecialidades();
     this.especialidades = especialidadesData.map((especialidadData: any) => {
-      const especialidad = new Especialidad(especialidadData.id, especialidadData.nombre,especialidadData.foto);
-      this.form.addControl(`especialidad_${especialidad.uid}`, new FormControl(false));
+      const especialidad = new Especialidad(
+        especialidadData.id,
+        especialidadData.nombre,
+        especialidadData.foto
+      );
+      this.form.addControl(
+        `especialidad_${especialidad.uid}`,
+        new FormControl(false)
+      );
       return especialidad;
     });
   }
@@ -92,7 +101,7 @@ export class RegisterEspecialistaComponent {
     const especialidadNombre =
       this.form.controls['OtraEspecialidad'].value.trim();
     if (especialidadNombre !== '') {
-       await this.authService.guardarEspecialidad(especialidadNombre);
+      await this.authService.guardarEspecialidad(especialidadNombre);
       this.form.controls['OtraEspecialidad'].setValue('');
     } else {
       Swal.fire({
@@ -105,9 +114,10 @@ export class RegisterEspecialistaComponent {
     this.cargarEspecialidades();
   }
 
-  
   onSubmit() {
-    const especialidadesSeleccionadas = this.especialidades.filter(especialidad => this.form.get(`especialidad_${especialidad.uid}`)?.value);
+    const especialidadesSeleccionadas = this.especialidades.filter(
+      (especialidad) => this.form.get(`especialidad_${especialidad.uid}`)?.value
+    );
     console.log(especialidadesSeleccionadas);
     if (this.form.valid) {
       this.cargarUsuario();
@@ -122,7 +132,10 @@ export class RegisterEspecialistaComponent {
 
   async cargarUsuario() {
     try {
-      const especialidadesSeleccionadas = this.especialidades.filter(especialidad => this.form.get(`especialidad_${especialidad.uid}`)?.value);
+      const especialidadesSeleccionadas = this.especialidades.filter(
+        (especialidad) =>
+          this.form.get(`especialidad_${especialidad.uid}`)?.value
+      );
       let data = {
         email: this.form.controls['especialistaEmail'].value,
         password: this.form.controls['especialistaClave'].value,
@@ -136,7 +149,7 @@ export class RegisterEspecialistaComponent {
         this.form.controls['especialistaApellido'].value,
         this.form.controls['especialistaEdad'].value,
         this.form.controls['especialistaDni'].value,
-        especialidadesSeleccionadas.map(especialidad => especialidad.uid), 
+        especialidadesSeleccionadas.map((especialidad) => especialidad.uid),
         this.imagenURL,
         'false'
       );
@@ -167,6 +180,5 @@ export class RegisterEspecialistaComponent {
       });
     }
   }
-  resolved(captchaResponse: string) {
-  }
+  resolved(captchaResponse: string) {}
 }

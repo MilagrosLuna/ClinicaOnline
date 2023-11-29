@@ -21,27 +21,25 @@ export class AdmistrarTurnosComponent {
 
   private _turnos = new BehaviorSubject<any[]>([]);
   turnosFiltrados!: Observable<any[]>;
-  
+
   ngAfterViewInit() {
     this.spinner.show();
     setTimeout(() => {
-      this.turnosFiltrados = this._turnos
-        .asObservable()
-        .pipe(
-          map((turnos) => {
-            let filtro = this.filtro.nativeElement.value.toLowerCase();
-            return turnos.filter((turno) => {
-              let especialidad = turno.Especialidad.toLowerCase();
-              let especialista = turno.Especialista.toLowerCase();
-              return especialidad.includes(filtro) || especialista.includes(filtro);
-            });
-          })
-        );
-      this.spinner.hide();  
-    }, 4500);  
+      this.turnosFiltrados = this._turnos.asObservable().pipe(
+        map((turnos) => {
+          let filtro = this.filtro.nativeElement.value.toLowerCase();
+          return turnos.filter((turno) => {
+            let especialidad = turno.Especialidad.toLowerCase();
+            let especialista = turno.Especialista.toLowerCase();
+            return (
+              especialidad.includes(filtro) || especialista.includes(filtro)
+            );
+          });
+        })
+      );
+      this.spinner.hide();
+    }, 4500);
   }
-  
-  
 
   constructor(
     private firestoreService: FirebaseService,
@@ -59,6 +57,18 @@ export class AdmistrarTurnosComponent {
   async cargarTurnos() {
     let turnos = await this.firestoreService.obtenerTodosLosTurnos();
     let especialidades = await this.firestoreService.obtenerEspecialidades();
+    let especialistas = await this.firestoreService.obtenerEspecialistas();
+    let pacientes = await this.firestoreService.getAllPacientes();
+    let mapEspecialistas: { [key: string]: any } = {};
+    let mapPacientes: { [key: string]: any } = {};
+
+    especialistas.forEach((especialista) => {
+      mapEspecialistas[especialista.uid] = especialista;
+    });
+
+    pacientes.forEach((paciente: any) => {
+      mapPacientes[paciente.uid] = paciente;
+    });
 
     for (let turno of turnos) {
       let especialidad = especialidades.find(
@@ -67,28 +77,19 @@ export class AdmistrarTurnosComponent {
       turno.Especialidad = especialidad.nombre;
       turno.idEspecialidad = especialidad.id;
 
-      let especialista = await this.firestoreService.getUserByUidAndType(
-        turno.idEspecialista,
-        'especialistas'
-      );
-
+      let especialista = mapEspecialistas[turno.idEspecialista];
       turno.Especialista = especialista.nombre + ' ' + especialista.apellido;
       turno.idEspecialista = especialista.uid;
 
-      let paciente = await this.firestoreService.getUserByUidAndType(
-        turno.idPaciente,
-        'pacientes'
-      );
-
+      let paciente = mapPacientes[turno.idPaciente];
       turno.Paciente = paciente.nombre + ' ' + paciente.apellido;
       turno.idPaciente = paciente.uid;
-
-
     }
+
     this._turnos.next(turnos);
   }
 
-  filtrarTurnos() {    
+  filtrarTurnos() {
     this._turnos.next(this._turnos.value);
   }
 

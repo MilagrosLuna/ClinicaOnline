@@ -12,7 +12,13 @@
   border-radius: 25px;
   padding: 20px;
 }
-
+.my-drop-zone {
+  border: dotted 3px lightgray;
+  border-radius: 5px;
+  padding: 20px;
+  text-align: center;
+  color: gray;
+}
 
 .form-signin {
   width: 100%;  

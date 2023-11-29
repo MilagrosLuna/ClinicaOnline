@@ -194,7 +194,6 @@ export class GraficosComponent implements OnInit {
   }
 
   async createChart2() {
-    // Primero, vamos a contar la cantidad de turnos por cada especialidad
     let conteo = this.Especialidades.map((esp) => {
       let cantidad = this.EspecialidadesxTurno.filter(
         (turno) => turno.idEspecialidad === esp.uid
@@ -237,6 +236,7 @@ export class GraficosComponent implements OnInit {
       },
       yAxis: {
         type: 'value',
+        interval: 1, 
       },
       series: seriesData,
     };
@@ -283,6 +283,7 @@ export class GraficosComponent implements OnInit {
       },
       yAxis: {
         type: 'value',
+        interval: 1, 
       },
       series: seriesData,
     };
@@ -339,6 +340,7 @@ export class GraficosComponent implements OnInit {
       },
       yAxis: {
         type: 'value',
+        interval: 1, 
       },
       series: [
         {
@@ -408,6 +410,7 @@ export class GraficosComponent implements OnInit {
       },
       yAxis: {
         type: 'value',
+        interval: 1, 
       },
       series: [
         {

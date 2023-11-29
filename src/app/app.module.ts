@@ -39,7 +39,7 @@ import { TextColorDirective } from './directiva3.directive';
     PresentacionComponent,
     FooterComponent,
     ScaleOnHoverDirective,
-    TextColorDirective
+    TextColorDirective,
   ],
   imports: [
     BrowserModule,
