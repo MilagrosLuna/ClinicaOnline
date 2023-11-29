@@ -17,11 +17,13 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { MiPerfilComponent } from './components/mi-perfil/mi-perfil.component';
 import { AccessButtonComponent } from './components/access-button/access-button.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ListadoHistoriasClinicasComponent } from './components/listado-historias-clinicas/listado-historias-clinicas.component';
 import { GoHomeComponent } from './components/go-home/go-home.component';
 import { PresentacionComponent } from './components/presentacion/presentacion.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { ScaleOnHoverDirective } from './directiva.directive';
+import { TextColorDirective } from './directiva3.directive';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,8 @@ import { FooterComponent } from './components/footer/footer.component';
     GoHomeComponent,
     PresentacionComponent,
     FooterComponent,
+    ScaleOnHoverDirective,
+    TextColorDirective
   ],
   imports: [
     BrowserModule,

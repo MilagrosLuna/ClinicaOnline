@@ -1,6 +1,6 @@
 <app-go-home></app-go-home>
 <main [@slideInAnimation] class="contenedor">
-  <form class="form-signin">
+  <form class="form-signin" appScaleOnHover>
     <img
       class="mb-4"
       src="../assets/logoClinica.png"
@@ -8,7 +8,7 @@
       width="200"
       height="80"
     />
-    <h1 class="h3 mb-3 fw-normal">Bienvenido</h1>
+    <h1 appTextColor class="h3 mb-3 fw-normal">Bienvenido</h1>
 
     <button class="w-100 btn btn-lg btn-info mb-3" (click)="goToLogin()">
       Inicio de Sesión
