@@ -21,6 +21,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ListadoHistoriasClinicasComponent } from './components/listado-historias-clinicas/listado-historias-clinicas.component';
 import { GoHomeComponent } from './components/go-home/go-home.component';
 import { PresentacionComponent } from './components/presentacion/presentacion.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { PresentacionComponent } from './components/presentacion/presentacion.co
     ListadoHistoriasClinicasComponent,
     GoHomeComponent,
     PresentacionComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,

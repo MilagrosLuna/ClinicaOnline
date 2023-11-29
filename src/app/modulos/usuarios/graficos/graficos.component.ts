@@ -6,6 +6,7 @@ import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import * as echarts from 'echarts';
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
+import * as XLSX from 'xlsx';
 import { NgZone } from '@angular/core';
 @Component({
   selector: 'app-graficos',
@@ -101,11 +102,25 @@ export class GraficosComponent implements OnInit {
             ],
           };
 
-          pdfMake.createPdf(docDefinition).open();
+          pdfMake.createPdf(docDefinition).download('grafico');
         }
       }
     }
   }
+
+  base64ToBlob(base64: string, type: string): Blob {
+    const binStr = atob(base64.split(',')[1]);
+    const len = binStr.length;
+    const arr = new Uint8Array(len);
+
+    for (let i = 0; i < len; i++) {
+      arr[i] = binStr.charCodeAt(i);
+    }
+
+    return new Blob([arr], { type: type });
+  }
+ 
+
   async cargar() {
     this.logs = await this.firestoreService.obtenerLogs();
     this.Especialidades = await this.firestoreService.obtenerEspecialidades();
@@ -121,26 +136,30 @@ export class GraficosComponent implements OnInit {
   }
   async createChart() {
     const sortedLogs = this.logs.slice().sort((a, b) => {
-      const dateA: any = new Date(a.dia.split('/').reverse().join('-') + ' ' + a.hora);
-      const dateB: any = new Date(b.dia.split('/').reverse().join('-') + ' ' + b.hora);
+      const dateA: any = new Date(
+        a.dia.split('/').reverse().join('-') + ' ' + a.hora
+      );
+      const dateB: any = new Date(
+        b.dia.split('/').reverse().join('-') + ' ' + b.hora
+      );
       return dateA - dateB;
     });
-    
+
     const counts: any = {};
-    
+
     sortedLogs.forEach((log: any) => {
       const key = log.dia;
       counts[key] = (counts[key] || 0) + 1;
     });
-    
+
     const seriesData: echarts.SeriesOption = {
       name: 'Todos los usuarios',
       type: 'line',
       data: Object.keys(counts).map((day) => counts[day]),
     };
-    
+
     const xAxisData: string[] = Object.keys(counts);
-    
+
     this.chartOption1 = {
       tooltip: {
         trigger: 'axis',

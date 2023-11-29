@@ -9,3 +9,7 @@ export const environment = {
     appId: '1:265073803747:web:32d8c685f9688989b460d6',
   },
 };
+
+export const SERVICE_ID='service_1jbcodu';
+export const TEMPLATE_ID='template_lbtq95w';
+export const USER_ID='c27M8Q4FXi0vsbfvL';

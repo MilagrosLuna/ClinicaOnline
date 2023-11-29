@@ -1,0 +1,46 @@
+<footer class="footer mt-auto py-3 bg-light">
+  <div class="container mt-3">
+    <div class="row">
+      <div class="col">
+        <h5 class="text-uppercase">Clinica Online</h5>
+        <p>123 Av. Scaloni, Scaloneta, Buenos Aires.</p>
+        <p>Teléfono: (333) 1812-2023</p>
+        <p>Email: clinica@clinica.com</p>
+        <img
+          class="navbar-brand"
+          src="../assets/logoClinica.png"
+          alt=""
+          width="130"
+          height="60"
+        />
+      </div>
+
+      <div class="col">
+        <h5 class="text-uppercase">Contacto</h5>
+        <form [formGroup]="contactForm" (ngSubmit)="onSubmit($event)">
+          <input
+            formControlName="name"
+            type="text"
+            class="form-control mb-2"
+            placeholder="Tu nombre"
+            required
+          />
+          <input
+            formControlName="email"
+            type="email"
+            class="form-control mb-2"
+            placeholder="Tu correo electrónico"
+            required
+          />
+          <textarea
+            formControlName="message"
+            class="form-control mb-2"
+            placeholder="Tu mensaje"
+            required
+          ></textarea>
+          <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</footer>

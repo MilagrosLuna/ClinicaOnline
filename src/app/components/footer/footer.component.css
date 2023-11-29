@@ -1,0 +1,18 @@
+.footer h5 {
+  margin-bottom: 15px;
+}
+
+.footer form {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer form input,
+.footer form textarea {
+  margin-bottom: 10px;
+  padding: 5px;
+}
+
+.footer form input[type="submit"] {
+  cursor: pointer;
+}

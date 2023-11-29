@@ -26,6 +26,7 @@
     "bootstrap-icons": "^1.11.1",
     "chart.js": "^3.1.1",
     "echarts": "^5.4.3",
+    "emailjs-com": "^3.2.0",
     "file-saver": "^2.0.5",
     "ng-recaptcha": "^12.0.2",
     "ngx-echarts": "^17.1.0",
