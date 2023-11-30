@@ -81,7 +81,7 @@ export class GraficosComponent implements OnInit {
     });
   }
 
-  exportPDF(id: string) {
+  exportPDF(id: string, titulo: string) {
     let chartElement = document.getElementById(id); // Asegúrate de que este es el id correcto
     let myChart: echarts.ECharts | undefined;
     if (chartElement) {
@@ -92,14 +92,20 @@ export class GraficosComponent implements OnInit {
           pixelRatio: 2,
           backgroundColor: '#fff',
         });
+        let a = 'Grafico:' + titulo;
         if (base64) {
-          let docDefinition = {
+          let docDefinition: {
+            content: (string | { image: string; width: number })[];
+            pageOrientation: 'landscape' | 'portrait';
+          } = {
             content: [
+              a,
               {
                 image: base64,
-                width: 500,
+                width: 750,
               },
             ],
+            pageOrientation: 'landscape',
           };
 
           pdfMake.createPdf(docDefinition).download('grafico');
@@ -119,7 +125,6 @@ export class GraficosComponent implements OnInit {
 
     return new Blob([arr], { type: type });
   }
- 
 
   async cargar() {
     this.logs = await this.firestoreService.obtenerLogs();
@@ -236,7 +241,7 @@ export class GraficosComponent implements OnInit {
       },
       yAxis: {
         type: 'value',
-        interval: 1, 
+        interval: 1,
       },
       series: seriesData,
     };
@@ -283,7 +288,7 @@ export class GraficosComponent implements OnInit {
       },
       yAxis: {
         type: 'value',
-        interval: 1, 
+        interval: 1,
       },
       series: seriesData,
     };
@@ -340,7 +345,7 @@ export class GraficosComponent implements OnInit {
       },
       yAxis: {
         type: 'value',
-        interval: 1, 
+        interval: 1,
       },
       series: [
         {
@@ -410,7 +415,7 @@ export class GraficosComponent implements OnInit {
       },
       yAxis: {
         type: 'value',
-        interval: 1, 
+        interval: 1,
       },
       series: [
         {

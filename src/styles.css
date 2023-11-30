@@ -4,7 +4,9 @@
   flex-direction: column;
   min-height: 120vh;
 }
-
+ 
 .footer {
   margin-top: auto;
-} */
+  background-color: #e3f2fd;
+}
+*/

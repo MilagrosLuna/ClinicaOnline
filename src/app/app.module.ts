@@ -24,6 +24,7 @@ import { PresentacionComponent } from './components/presentacion/presentacion.co
 import { FooterComponent } from './components/footer/footer.component';
 import { ScaleOnHoverDirective } from './directiva.directive';
 import { TextColorDirective } from './directiva3.directive';
+import { TraceCursorDirective } from './directiva4.directive';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { TextColorDirective } from './directiva3.directive';
     FooterComponent,
     ScaleOnHoverDirective,
     TextColorDirective,
+    TraceCursorDirective
   ],
   imports: [
     BrowserModule,
