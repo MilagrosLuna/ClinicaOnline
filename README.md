@@ -80,3 +80,25 @@ completar la historia clinica y dar una reseña.
 ## Administrar turnos
 
 Se muestran todos los turnos permitiendo buscar por especialidad o especialista, el administrador podra cancelar los turnos y dejar un comentario sobre eso.
+
+## Graficos
+
+Se muestran todos los graficos solicitados.
+![Graficos](readme/turnosFinalizados.png)
+![Graficos](readme/turnosxdia.png)
+![Graficos](readme/turnosxespe.png)
+![Graficos](readme/turnosxmedicoS.png)
+![Graficos](readme/turnosxmedicoF.png)
+
+## Directivas
+
+Se utilizan las siguientes
+![Directivas](readme/d1.png)
+![Directivas](readme/d2.png)
+![Directivas](readme/d3.png)
+
+## Pipes
+
+Se utilizan las siguientes
+![Pipes](readme/async.png)
+![Pipes](readme/keyvalue.png)
