@@ -84,7 +84,8 @@ Se muestran todos los turnos permitiendo buscar por especialidad o especialista,
 ## Graficos
 
 Se muestran todos los graficos solicitados.
-![Graficos](readme/turnosFinalizados.png)
+
+![Graficos](readme/ingresos.png)
 ![Graficos](readme/turnosxdia.png)
 ![Graficos](readme/turnosxespe.png)
 ![Graficos](readme/turnosxmedicoS.png)
@@ -93,6 +94,7 @@ Se muestran todos los graficos solicitados.
 ## Directivas
 
 Se utilizan las siguientes
+
 ![Directivas](readme/d1.png)
 ![Directivas](readme/d2.png)
 ![Directivas](readme/d3.png)
@@ -100,5 +102,6 @@ Se utilizan las siguientes
 ## Pipes
 
 Se utilizan las siguientes
+
 ![Pipes](readme/async.png)
 ![Pipes](readme/keyvalue.png)
