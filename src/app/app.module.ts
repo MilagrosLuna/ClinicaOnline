@@ -22,9 +22,9 @@ import { ListadoHistoriasClinicasComponent } from './components/listado-historia
 import { GoHomeComponent } from './components/go-home/go-home.component';
 import { PresentacionComponent } from './components/presentacion/presentacion.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { ScaleOnHoverDirective } from './directiva.directive';
-import { TextColorDirective } from './directiva3.directive';
-import { TraceCursorDirective } from './directiva4.directive';
+import { ScaleOnHoverDirective } from './scale-on-hover.directive';
+import { TextColorDirective } from './text-color.directive';
+import { TraceCursorDirective } from './trace-cursor.directive';
 
 @NgModule({
   declarations: [

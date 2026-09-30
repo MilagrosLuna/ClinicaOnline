@@ -6,6 +6,7 @@ import { HomeComponent } from './components/home/home.component';
 import { MiPerfilComponent } from './components/mi-perfil/mi-perfil.component';
 import { ListadoHistoriasClinicasComponent } from './components/listado-historias-clinicas/listado-historias-clinicas.component';
 import { PresentacionComponent } from './components/presentacion/presentacion.component';
+import { adminGuard, authGuard } from './guards/auth.guards';
 
 const routes: Routes = [
   { path: 'bienvenida', component: BienvenidaComponent },
@@ -13,6 +14,7 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+    canActivate: [authGuard],
     children: [
       {
         path: 'turnos',
@@ -27,6 +29,7 @@ const routes: Routes = [
   },
   {
     path: 'homeAdmin',
+    canActivate: [adminGuard],
     loadChildren: () =>
       import('./modulos/usuarios/usuarios.module').then(
         (m) => m.UsuariosModule
