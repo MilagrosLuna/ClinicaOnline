@@ -1,0 +1,29 @@
+rules_version = '2';
+
+// Base mínima: todo requiere sesión iniciada, salvo lo que la app lee antes del login.
+// Revisalo contra las reglas publicadas hoy en la consola antes de hacer deploy.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Accesos rápidos del login (se leen sin sesión).
+    match /users/{docId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    // Listado de especialidades en el registro de especialistas (sin sesión).
+    match /especialidades/{docId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    // admins, pacientes, especialistas, turnos, historiasClinicas, encuestas, logueos, etc.
+    match /{document=**} {
+      allow read, write: if isSignedIn();
+    }
+  }
+}
